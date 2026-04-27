@@ -28,7 +28,6 @@ export default function EditProductClient({
   );
   const [fileError, setFileError] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);
-  const [productType, setProductType] = useState<'artwork' | 'print'>('artwork');
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -74,11 +73,6 @@ export default function EditProductClient({
     const timer = setTimeout(() => setSavedAt(null), 3000);
     return () => clearTimeout(timer);
   }, [savedAt]);
-
-  // Sync productType with selected product
-  useEffect(() => {
-    if (selected) setProductType(selected.type ?? 'artwork');
-  }, [selected]);
 
   function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -285,27 +279,6 @@ export default function EditProductClient({
               className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
             />
           </label>
-
-          <div className="block">
-            <span className="text-sm font-medium">Type *</span>
-            <input type="hidden" name="type" value={productType} />
-            <div className="mt-1 flex gap-2">
-              <button
-                type="button"
-                onClick={() => setProductType('artwork')}
-                className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${productType === 'artwork' ? 'bg-foreground text-background border-foreground' : 'border-muted bg-background text-foreground'}`}
-              >
-                Artwork
-              </button>
-              <button
-                type="button"
-                onClick={() => setProductType('print')}
-                className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${productType === 'print' ? 'bg-foreground text-background border-foreground' : 'border-muted bg-background text-foreground'}`}
-              >
-                Print
-              </button>
-            </div>
-          </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">

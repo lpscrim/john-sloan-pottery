@@ -2,7 +2,7 @@
 import { revalidatePath } from 'next/cache';
 import { createServerSupabase } from '@/app/_lib/supabase';
 import { requireAdminUser } from '@/app/_lib/adminAuth';
-import type { ShippingRegion } from '@/app/_lib/shippingSettings';
+import { SHIPPING_RATE_KEYS, type ShippingRegion } from '@/app/_lib/shippingSettings';
 
 async function upsertSetting(key: string, pence: number) {
   await requireAdminUser();
@@ -15,33 +15,21 @@ async function upsertSetting(key: string, pence: number) {
   revalidatePath('/admin/settings');
 }
 
-export async function updatePrintShippingRate(pence: number) {
-  await upsertSetting('print_shipping_rate_pence', pence);
+export async function updateGbShippingRate(pence: number) {
+  await upsertSetting(SHIPPING_RATE_KEYS.gb, pence);
 }
 
-export async function updateArtworkShippingRate(pence: number) {
-  await upsertSetting('artwork_shipping_rate_pence', pence);
+export async function updateEuShippingRate(pence: number) {
+  await upsertSetting(SHIPPING_RATE_KEYS.eu, pence);
 }
 
-export async function updateEuPrintShippingRate(pence: number) {
-  await upsertSetting('eu_print_shipping_rate_pence', pence);
-}
-
-export async function updateEuArtworkShippingRate(pence: number) {
-  await upsertSetting('eu_artwork_shipping_rate_pence', pence);
-}
-
-export async function updateIntPrintShippingRate(pence: number) {
-  await upsertSetting('int_print_shipping_rate_pence', pence);
-}
-
-export async function updateIntArtworkShippingRate(pence: number) {
-  await upsertSetting('int_artwork_shipping_rate_pence', pence);
+export async function updateIntShippingRate(pence: number) {
+  await upsertSetting(SHIPPING_RATE_KEYS.int, pence);
 }
 
 /** @deprecated kept for compatibility */
 export async function updateShippingRate(pence: number) {
-  await updateArtworkShippingRate(pence);
+  await updateGbShippingRate(pence);
 }
 
 export async function updateShippingRegion(region: ShippingRegion) {

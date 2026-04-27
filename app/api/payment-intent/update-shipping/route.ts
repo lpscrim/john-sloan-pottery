@@ -38,17 +38,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Payment intent cannot be updated' }, { status: 400 });
     }
 
-    // Parse item types from reserved_items metadata
-    let itemTypes: string[] = [];
-    try {
-      const reserved = JSON.parse(pi.metadata.reserved_items ?? '[]') as { type?: string }[];
-      itemTypes = reserved.map((r) => r.type ?? 'artwork');
-    } catch {
-      // default empty — will use artwork rate
-    }
-
     const rates = await getShippingRates();
-    const newShippingRate = resolveRateForCountry(rates, itemTypes, country);
+    const newShippingRate = resolveRateForCountry(rates, country);
     const prevShipping = parseInt(pi.metadata.shipping_amount ?? '0', 10);
     const subtotal = pi.amount - prevShipping;
     const newTotal = subtotal + newShippingRate;

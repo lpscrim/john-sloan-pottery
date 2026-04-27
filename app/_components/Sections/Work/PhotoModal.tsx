@@ -25,7 +25,6 @@ interface PhotoModalProps {
   stripePriceId: string | null;
   stockLevel: number;
   priceHw: number;
-  productType?: 'artwork' | 'print';
 }
 
 export const PhotoModal: React.FC<PhotoModalProps> = ({
@@ -48,7 +47,6 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   stripePriceId,
   stockLevel,
   priceHw,
-  productType,
 }) => {
   // Refs for thumbnails
   const stripRef = useRef<HTMLDivElement | null>(null);

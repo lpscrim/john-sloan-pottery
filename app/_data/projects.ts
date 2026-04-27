@@ -13,7 +13,6 @@ export interface Project {
   price_hw: number;       // price in cents
   stock_level: number;
   stripe_price_id: string | null;
-  type: 'artwork' | 'print';
 }
 
 function getSupabaseClient() {
@@ -68,7 +67,6 @@ export async function getProjects(): Promise<Project[]> {
         price_hw: product.price_hw ?? 0,
         stock_level: product.stock_level ?? 0,
         stripe_price_id: product.stripe_price_id ?? null,
-        type: (product.type === 'print' ? 'print' : 'artwork') as 'artwork' | 'print',
       };
     })
   );

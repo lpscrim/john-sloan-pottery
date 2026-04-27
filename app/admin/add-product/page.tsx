@@ -16,7 +16,6 @@ export default function AddProductPage() {
   const [secondaryPreviews, setSecondaryPreviews] = useState<(string | null)[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);
-  const [productType, setProductType] = useState<'artwork' | 'print'>('artwork');
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -166,28 +165,6 @@ export default function AddProductPage() {
               className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
-
-          {/* Type */}
-          <div className="block">
-            <span className="text-sm font-medium">Type *</span>
-            <input type="hidden" name="type" value={productType} />
-            <div className="mt-1 flex gap-2">
-              <button
-                type="button"
-                onClick={() => setProductType('artwork')}
-                className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${productType === 'artwork' ? 'bg-foreground text-background border-foreground' : 'border-muted bg-background text-foreground'}`}
-              >
-                Artwork
-              </button>
-              <button
-                type="button"
-                onClick={() => setProductType('print')}
-                className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${productType === 'print' ? 'bg-foreground text-background border-foreground' : 'border-muted bg-background text-foreground'}`}
-              >
-                Print
-              </button>
-            </div>
-          </div>
 
           {/* Categories */}
           <label className="block">

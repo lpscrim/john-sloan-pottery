@@ -79,28 +79,16 @@ export async function POST(req: NextRequest) {
       lineItems.map((item) => stripe.prices.retrieve(item.priceId, { expand: ['product'] }))
     );
 
-    const priceIds = lineItems.map((item) => item.priceId);
-    const { data: productRows } = await supabase
-      .from('products')
-      .select('stripe_price_id, type')
-      .in('stripe_price_id', priceIds);
-    const typeByPriceId = new Map<string, string>();
-    for (const row of productRows ?? []) {
-      if (row.stripe_price_id) typeByPriceId.set(row.stripe_price_id, row.type ?? 'artwork');
-    }
-
     const enrichedReservations = reservations.map((r, i) => ({
       ...r,
       title: (prices[i].product as Stripe.Product)?.name ?? 'Unknown',
       price: (prices[i].unit_amount ?? 0) * lineItems[i].quantity,
       image: ((prices[i].product as Stripe.Product)?.images?.[0] ?? '') as string,
-      type: typeByPriceId.get(r.stripe_price_id) ?? 'artwork',
     }));
 
     // ── Calculate totals ────────────────────────────────────────────
     const shippingRates = await getShippingRates();
-    const itemTypes = enrichedReservations.map((r) => r.type);
-    const shippingRatePence = collect ? 0 : resolveShippingRate(shippingRates, itemTypes);
+    const shippingRatePence = collect ? 0 : resolveShippingRate(shippingRates);
     const subtotal = prices.reduce((sum, price, i) => {
       return sum + (price.unit_amount ?? 0) * lineItems[i].quantity;
     }, 0);

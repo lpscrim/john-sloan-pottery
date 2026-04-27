@@ -1,15 +1,9 @@
 import { createServerSupabase } from './supabase';
 
 export interface ShippingRates {
-  // GB rates
-  printRate: number;
-  artworkRate: number;
-  // EU / EEA rates
-  euPrintRate: number;
-  euArtworkRate: number;
-  // International rates
-  intPrintRate: number;
-  intArtworkRate: number;
+  gbRate: number;
+  euRate: number;
+  intRate: number;
 }
 
 // EU/EEA countries (excluding GB) — used to bucket a customer's country
@@ -48,53 +42,46 @@ export async function getShippingRegion(): Promise<ShippingRegion> {
   return 'gb';
 }
 
+// Canonical setting keys. The historic `artwork_*` keys are reused so existing
+// DB rows continue to work without a migration.
+export const SHIPPING_RATE_KEYS = {
+  gb: 'artwork_shipping_rate_pence',
+  eu: 'eu_artwork_shipping_rate_pence',
+  int: 'int_artwork_shipping_rate_pence',
+} as const;
+
 export async function getShippingRates(): Promise<ShippingRates> {
   const supabase = createServerSupabase();
   const { data } = await supabase
     .from('settings')
     .select('key, value')
-    .in('key', [
-      'print_shipping_rate_pence',
-      'artwork_shipping_rate_pence',
-      'eu_print_shipping_rate_pence',
-      'eu_artwork_shipping_rate_pence',
-      'int_print_shipping_rate_pence',
-      'int_artwork_shipping_rate_pence',
-    ]);
+    .in('key', [SHIPPING_RATE_KEYS.gb, SHIPPING_RATE_KEYS.eu, SHIPPING_RATE_KEYS.int]);
 
   const map = new Map((data ?? []).map((r) => [r.key, r.value]));
   const parse = (key: string) => map.has(key) ? parseInt(map.get(key)!, 10) : 0;
   return {
-    printRate:      parse('print_shipping_rate_pence'),
-    artworkRate:    parse('artwork_shipping_rate_pence'),
-    euPrintRate:    parse('eu_print_shipping_rate_pence'),
-    euArtworkRate:  parse('eu_artwork_shipping_rate_pence'),
-    intPrintRate:   parse('int_print_shipping_rate_pence'),
-    intArtworkRate: parse('int_artwork_shipping_rate_pence'),
+    gbRate:  parse(SHIPPING_RATE_KEYS.gb),
+    euRate:  parse(SHIPPING_RATE_KEYS.eu),
+    intRate: parse(SHIPPING_RATE_KEYS.int),
   };
 }
 
 /** Returns the GB shipping rate (used at PI creation time before country is known). */
-export function resolveShippingRate(rates: ShippingRates, itemTypes: string[]): number {
-  return resolveRateForCountry(rates, itemTypes, 'GB');
+export function resolveShippingRate(rates: ShippingRates): number {
+  return resolveRateForCountry(rates, 'GB');
 }
 
 /** Returns the shipping rate for a specific destination country. */
-export function resolveRateForCountry(
-  rates: ShippingRates,
-  itemTypes: string[],
-  country: string,
-): number {
-  const hasArtwork = itemTypes.some((t) => t !== 'print');
-  if (country === 'GB') return hasArtwork ? rates.artworkRate    : rates.printRate;
-  if (EU_COUNTRY_SET.has(country)) return hasArtwork ? rates.euArtworkRate  : rates.euPrintRate;
-  return hasArtwork ? rates.intArtworkRate : rates.intPrintRate;
+export function resolveRateForCountry(rates: ShippingRates, country: string): number {
+  if (country === 'GB') return rates.gbRate;
+  if (EU_COUNTRY_SET.has(country)) return rates.euRate;
+  return rates.intRate;
 }
 
 /** @deprecated Use getShippingRates + resolveShippingRate instead */
 export async function getShippingRatePence(): Promise<number> {
   const rates = await getShippingRates();
-  return rates.artworkRate;
+  return rates.gbRate;
 }
 
 export async function getCategoriesVisible(): Promise<boolean> {

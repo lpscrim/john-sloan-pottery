@@ -15,7 +15,6 @@ interface Project {
   price_hw: number;
   stock_level: number;
   stripe_price_id: string | null;
-  type: 'artwork' | 'print';
 }
 
 export interface MainGalleryProps {
@@ -30,10 +29,6 @@ export interface MainGalleryProps {
   toggleCategory: (cat: string) => void;
   onCardClick: (index: number, project: Project) => void;
   getStockLevel: (project: Project) => number;
-  selectedType: 'artwork' | 'print' | null;
-  onTypeToggle: (type: 'artwork' | 'print') => void;
-  artworkCount: number;
-  printCount: number;
   showCategories: boolean;
 }
 
@@ -49,10 +44,6 @@ export function MainGallery({
   toggleCategory,
   onCardClick,
   getStockLevel,
-  selectedType,
-  onTypeToggle,
-  artworkCount,
-  printCount,
   showCategories,
 }: MainGalleryProps) {
   return (
@@ -76,20 +67,6 @@ export function MainGallery({
               className={`cursor-crosshair transition-opacity ${inStockOnly ? "text-foreground font-semibold" : "text-foreground/50"}`}
             >
               Available [{inStockCount}]
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-2">
-            <button
-              onClick={() => onTypeToggle('artwork')}
-              className={`cursor-crosshair transition-opacity ${selectedType === 'artwork' ? 'text-foreground font-semibold' : 'text-foreground/50'}`}
-            >
-              Artwork [{artworkCount}]
-            </button>
-            <button
-              onClick={() => onTypeToggle('print')}
-              className={`cursor-crosshair transition-opacity ${selectedType === 'print' ? 'text-foreground font-semibold' : 'text-foreground/50'}`}
-            >
-              Print [{printCount}]
             </button>
           </div>
           {showCategories && (

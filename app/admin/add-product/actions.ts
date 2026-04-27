@@ -41,7 +41,6 @@ export async function addProduct(
     const medium = formData.get('medium') as string | null;
     const dimensions = formData.get('dimensions') as string | null;
     const year = formData.get('year') as string | null;
-    const typeRaw = formData.get('type') as string | null;
     const imageFile = formData.get('image') as File | null;
     const secondaryFiles = formData.getAll('secondary') as File[];
 
@@ -118,7 +117,7 @@ export async function addProduct(
         medium: (medium ?? '').trim(),
         dimensions: (dimensions ?? '').trim(),
         year: year?.trim() || new Date().getFullYear().toString(),
-        type: typeRaw === 'print' ? 'print' : 'artwork',
+        type: 'pottery',
       })
       .select()
       .single();

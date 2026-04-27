@@ -1,12 +1,9 @@
 'use client';
 import { useState } from 'react';
 import {
-  updatePrintShippingRate,
-  updateArtworkShippingRate,
-  updateEuPrintShippingRate,
-  updateEuArtworkShippingRate,
-  updateIntPrintShippingRate,
-  updateIntArtworkShippingRate,
+  updateGbShippingRate,
+  updateEuShippingRate,
+  updateIntShippingRate,
 } from './actions';
 import type { ShippingRates } from '@/app/_lib/shippingSettings';
 
@@ -78,17 +75,13 @@ function RateField({
 function RegionSection({
   title,
   description,
-  printRate,
-  artworkRate,
-  onSavePrint,
-  onSaveArtwork,
+  rate,
+  onSave,
 }: {
   title: string;
   description: string;
-  printRate: number;
-  artworkRate: number;
-  onSavePrint: (pence: number) => Promise<void>;
-  onSaveArtwork: (pence: number) => Promise<void>;
+  rate: number;
+  onSave: (pence: number) => Promise<void>;
 }) {
   return (
     <div className="space-y-3">
@@ -96,8 +89,7 @@ function RegionSection({
         <p className="text-base font-medium">{title}</p>
         <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
       </div>
-      <RateField label="Prints" initialPence={printRate} onSave={onSavePrint} />
-      <RateField label="Artwork / paintings" initialPence={artworkRate} onSave={onSaveArtwork} />
+      <RateField label="Shipping rate" initialPence={rate} onSave={onSave} />
     </div>
   );
 }
@@ -108,29 +100,23 @@ export function ShippingForm({ rates }: { rates: ShippingRates }) {
       <RegionSection
         title="UK"
         description="Applied for orders shipping within the UK. Also shown in the cart before the customer's country is known."
-        printRate={rates.printRate}
-        artworkRate={rates.artworkRate}
-        onSavePrint={updatePrintShippingRate}
-        onSaveArtwork={updateArtworkShippingRate}
+        rate={rates.gbRate}
+        onSave={updateGbShippingRate}
       />
       <div className="border-t border-muted/50 pt-6">
         <RegionSection
           title="EU / EEA"
           description="Applied when the customer's shipping country is within the EU or EEA (Austria, France, Germany, etc.)."
-          printRate={rates.euPrintRate}
-          artworkRate={rates.euArtworkRate}
-          onSavePrint={updateEuPrintShippingRate}
-          onSaveArtwork={updateEuArtworkShippingRate}
+          rate={rates.euRate}
+          onSave={updateEuShippingRate}
         />
       </div>
       <div className="border-t border-muted/50 pt-6">
         <RegionSection
           title="International"
           description="Applied for all other countries (US, Canada, Australia, Japan, etc.)."
-          printRate={rates.intPrintRate}
-          artworkRate={rates.intArtworkRate}
-          onSavePrint={updateIntPrintShippingRate}
-          onSaveArtwork={updateIntArtworkShippingRate}
+          rate={rates.intRate}
+          onSave={updateIntShippingRate}
         />
       </div>
     </div>
