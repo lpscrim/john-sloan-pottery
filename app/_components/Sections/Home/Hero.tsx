@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { useRef, useCallback } from 'react';
 
 export function Hero() {
@@ -31,29 +30,13 @@ export function Hero() {
           onEnded={() => handleEnded(desktopVideoRef.current)}
           className="object-cover object-center h-auto min-h-full w-full"
         />
-        {/* Animated mask overlays that shrink to reveal image */}
-        <motion.div
-          className="absolute left-0 right-0 top-0 bg-background"
-          initial={{ height: 'calc(50% - 13.5svw)' }}
-          animate={{ height: 0 }}
-          transition={{ duration: 2, ease: 'easeInOut', delay: 1.5 }}
-        />
-        <motion.div
-          className="absolute left-0 right-0 bottom-0 bg-background"
-          initial={{ height: 'calc(50% - 13.5svw)' }}
-          animate={{ height: 0 }}
-          transition={{ duration: 2, ease: 'easeInOut', delay: 1.5 }}
-        />
-        <motion.h2 
-          className="absolute inset-0 flex items-center text-center font-medium justify-center text-[3vw]/[3vw] tracking-wide text-card z-20 flex-col"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.95 }}
-          transition={{ duration: 7, delay: 0.15 }}
+        <h2 
+          className="absolute inset-0 flex items-center text-center font-medium justify-center text-[3vw]/[3vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
           <span className='mb-4'>[ARTIST NAME] <div className="w-1/2 mx-auto border-b-2 border-card pb-4 " /></span>{/* TODO: Replace [ARTIST NAME] */}
           
           <span className='text-[1.5vw]/[1.5vw]'>ARTIST</span>{/* TODO: Replace tagline */}
-        </motion.h2>
+        </h2>
       </div>
       {/* Mobile */}
       <div className="flex md:hidden w-full h-svh relative overflow-hidden justify-center items-center">
@@ -66,28 +49,13 @@ export function Hero() {
           onEnded={() => handleEnded(mobileVideoRef.current)}
           className="object-cover object-center h-auto min-h-full w-full"
         />
-        <motion.div
-          className="absolute left-0 right-0 top-0 bg-background"
-          initial={{ height: 'calc(50% - 13.5svw)' }}
-          animate={{ height: 0 }}
-          transition={{ duration: 2, ease: 'easeInOut', delay: 1.5 }}
-        />
-        <motion.div
-          className="absolute left-0 right-0 bottom-0 bg-background"
-          initial={{ height: 'calc(50% - 13.5svw)' }}
-          animate={{ height: 0 }}
-          transition={{ duration: 2, ease: 'easeInOut', delay: 1.5 }}
-        />
-        <motion.h2 
-          className="absolute inset-0 flex items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-widest text-card z-20 flex-col"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.95 }}
-          transition={{ duration: 7, delay: 0.15 }}
+        <h2 
+          className="absolute inset-0 flex items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-widest text-card z-20 flex-col opacity-[0.95]"
         >
           <span className='mb-4'>[ARTIST NAME] <div className="w-1/2 mx-auto border-b-1 border-card pb-4 " /></span>{/* TODO: Replace [ARTIST NAME] */}
           
           <span className='text-[3vw]/[3vw]'>ARTIST</span>{/* TODO: Replace tagline */}
-        </motion.h2>
+        </h2>
       </div>
 
     </section>
