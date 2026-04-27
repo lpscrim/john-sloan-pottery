@@ -45,6 +45,12 @@ export default function AdminHomePage() {
           >
             Settings
           </Link>
+          <Link
+            href="/admin/etsy"
+            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
+          >
+            Etsy sync
+          </Link>
         </div>
       </div>
     </div>

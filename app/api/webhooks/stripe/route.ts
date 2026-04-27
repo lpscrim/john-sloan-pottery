@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/app/_lib/stripe';
 import { createServerSupabase } from '@/app/_lib/supabase';
+import { updateListingInventory } from '@/app/_lib/etsy';
 import type Stripe from 'stripe';
 import { Resend } from 'resend';
 
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
       currency: charge.currency,
     });
     await notifyClientFromCharge(charge, stripe);
+    await syncEtsyStockAfterSale(charge, stripe);
   }
 
   if (event.type === 'payment_intent.canceled') {
@@ -116,7 +118,7 @@ async function notifyClientFromCharge(charge: Stripe.Charge, stripe: ReturnType<
     ? parseInt(pi.metadata.shipping_amount, 10)
     : null;
   const subtotal = shippingCost !== null ? amountTotal - shippingCost : null;
-  const platformFee = Math.round(amountTotal * 0.01);
+  const platformFee = Math.round(amountTotal * 0.05);
   const stripeFee = balanceTx?.fee ?? null;
   const netToClient = stripeFee !== null ? amountTotal - platformFee - stripeFee : null;
 
@@ -188,5 +190,61 @@ async function notifyClientFromCharge(charge: Stripe.Charge, stripe: ReturnType<
     console.log('[NOTIFY EMAIL RESULT]', JSON.stringify(result));
   } catch (err) {
     console.error('[NOTIFY EMAIL FAILED]', err);
+  }
+}
+
+/**
+ * After a confirmed sale, push the updated stock level to any linked Etsy listings.
+ * Stock is already decremented in Supabase by the time charge.succeeded fires.
+ */
+async function syncEtsyStockAfterSale(
+  charge: Stripe.Charge,
+  stripe: ReturnType<typeof import('@/app/_lib/stripe').getStripe>,
+): Promise<void> {
+  const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
+  const stripeOpts = clientAccountId ? { stripeAccount: clientAccountId } : undefined;
+
+  let pi: Stripe.PaymentIntent | null = null;
+  if (charge.payment_intent && typeof charge.payment_intent === 'string') {
+    try {
+      pi = await stripe.paymentIntents.retrieve(charge.payment_intent, undefined, stripeOpts);
+    } catch {
+      return; // No PI metadata — nothing to sync
+    }
+  }
+
+  const raw = pi?.metadata?.reserved_items;
+  if (!raw) return;
+
+  let reserved: { stripe_price_id: string; qty: number }[];
+  try {
+    reserved = JSON.parse(raw);
+  } catch {
+    return;
+  }
+
+  const supabase = createServerSupabase();
+  const priceIds = reserved.map((r) => r.stripe_price_id);
+
+  const { data: products } = await supabase
+    .from('products')
+    .select('stock_level, etsy_listing_id, stripe_price_id')
+    .in('stripe_price_id', priceIds)
+    .not('etsy_listing_id', 'is', null);
+
+  if (!products || products.length === 0) return;
+
+  for (const product of products) {
+    try {
+      await updateListingInventory(
+        parseInt(product.etsy_listing_id as string, 10),
+        product.stock_level ?? 0,
+      );
+      console.log(
+        `[ETSY SYNC] Updated listing ${product.etsy_listing_id} → qty ${product.stock_level}`,
+      );
+    } catch (err) {
+      console.error(`[ETSY SYNC] Failed to update listing ${product.etsy_listing_id}:`, err);
+    }
   }
 }

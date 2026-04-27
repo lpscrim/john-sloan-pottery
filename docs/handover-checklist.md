@@ -10,6 +10,7 @@ Everything required to deploy and hand over this project to a new owner or clien
 - [ ] **Supabase** — create a new project. Note the project URL and keys
 - [ ] **Stripe** — create account (platform). Complete identity verification for live payouts
 - [ ] **Stripe Connect** — artist creates their own Stripe account and connects it (or use Express onboarding)
+- [ ] **Etsy** — create an Etsy developer account and app at https://www.etsy.com/developers/register
 - [ ] **Resend** — create account, verify the sending domain
 - [ ] **GitHub** — transfer repo ownership or add the new owner as a collaborator
 
@@ -35,7 +36,8 @@ CREATE TABLE products (
   image_url text,
   stripe_product_id text,
   stripe_price_id text,
-  type text NOT NULL DEFAULT 'pottery'
+  type text NOT NULL DEFAULT 'pottery',
+  etsy_listing_id text
 );
 
 -- Settings table (key-value store)
@@ -180,6 +182,30 @@ All payments are **direct charges** on the artist's connected account. Stripe fe
 
 ---
 
+## 3a. Etsy Setup
+
+### Create an Etsy developer app
+
+1. Go to https://www.etsy.com/developers/register and create a new app
+2. Set the **Redirect URI** to `https://yourdomain.com/api/etsy/auth/callback` (must match exactly)
+3. Copy the **Keystring** → `ETSY_API_KEY`
+4. Copy the **Shared secret** → `ETSY_API_SECRET`
+5. Find your **Shop ID** — visit `https://www.etsy.com/shop/YourShopName` and note the numeric ID in the URL, or use the Etsy API explorer at `GET /application/shops?shop_name=YourShopName` → `ETSY_SHOP_ID`
+
+### Connect the Etsy account (first-time only)
+
+- Log in to the admin panel, go to **Etsy sync**, and click **Connect Etsy**
+- Authorise the app in the Etsy OAuth screen
+- Tokens are stored automatically in the Supabase `settings` table and refreshed silently
+
+### How sync works
+
+- **App sale → Etsy**: When a Stripe payment is confirmed, the updated stock level is pushed to the linked Etsy listing immediately via the webhook
+- **Etsy sale → App**: A Vercel Cron job polls `/api/etsy/poll` every 10 minutes. If Etsy stock is lower than app stock, the app stock is reduced to match
+- **Cron note**: Vercel Cron requires a Pro plan. On the free plan you can trigger `/api/etsy/poll` manually from the admin Etsy Sync page
+
+---
+
 ## 4. Resend Setup
 
 - [ ] Create account at resend.com
@@ -209,6 +235,10 @@ Set all of the following in Vercel → Project → Settings → Environment Vari
 | `NOTIFY_EMAIL` | e.g. `artist@example.com` |
 | `ADMIN_EMAIL_ALLOWLIST` | e.g. `artist@example.com,admin@example.com` |
 | `NEXT_PUBLIC_SITE_URL` | e.g. `https://yourdomain.com` |
+| `ETSY_API_KEY` | Keystring from Etsy developer app |
+| `ETSY_API_SECRET` | Shared secret from Etsy developer app |
+| `ETSY_SHOP_ID` | Numeric shop ID (visible in the Etsy shop URL) |
+| `CRON_SECRET` | Any random string — protects the `/api/etsy/poll` cron endpoint |
 
 ---
 
