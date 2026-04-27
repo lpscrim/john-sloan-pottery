@@ -201,7 +201,7 @@ All payments are **direct charges** on the artist's connected account. Stripe fe
 ### How sync works
 
 - **App sale → Etsy**: When a Stripe payment is confirmed, the updated stock level is pushed to the linked Etsy listing immediately via the webhook
-- **Etsy sale → App**: A Vercel Cron job polls `/api/etsy/poll` every 10 minutes. If Etsy stock is lower than app stock, the app stock is reduced to match
+- **Etsy sale → App**: A Vercel Cron job polls `/api/etsy/poll` every 5 minutes. If Etsy stock is lower than app stock, the app stock is reduced to match
 - **Cron note**: Vercel Cron requires a Pro plan. On the free plan you can trigger `/api/etsy/poll` manually from the admin Etsy Sync page
 
 ---
