@@ -191,27 +191,15 @@ export default function AddProductPage() {
             />
           </label>
 
-          {/* Dimensions */}
-          <label className="block">
-            <span className="text-sm font-medium">Dimensions</span>
-            <input
-              name="dimensions"
-              type="text"
-              placeholder="480 x 608mm"
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
-            />
-          </label>
-
-          {/* Year */}
-          <label className="block">
-            <span className="text-sm font-medium">Year</span>
-            <input
-              name="year"
-              type="text"
-              defaultValue={new Date().getFullYear().toString()}
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
-            />
-          </label>
+          {/* Glaze */}
+          <div className="block">
+            <span className="text-sm font-medium">Glaze</span>
+            <div className="mt-1 space-y-2">
+              <input name="glaze_0" type="text" placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground" />
+              <input name="glaze_1" type="text" placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground" />
+              <input name="glaze_2" type="text" placeholder="Glaze 3" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground" />
+            </div>
+          </div>
 
           {/* Image */}
           <label className="block">

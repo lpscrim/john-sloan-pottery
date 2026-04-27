@@ -7,8 +7,7 @@ interface Project {
   title: string;
   categories: string[];
   medium: string;
-  dimensions: string;
-  year: string;
+  glaze: string[];
   imageUrl: string;
   galleryImages?: string[];
   text?: string;
@@ -105,7 +104,6 @@ export function MainGallery({
               categories={project.categories}
               imageUrl={project.imageUrl}
               galleryImages={project.galleryImages}
-              year={project.year}
               title={project.title}
               imageSizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
               imageWidth={900}

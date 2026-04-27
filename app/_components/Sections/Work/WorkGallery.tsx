@@ -11,8 +11,7 @@ interface Project {
   title: string;
   categories: string[];
   medium: string;
-  dimensions: string;
-  year: string;
+  glaze: string[];
   imageUrl: string;
   galleryImages?: string[];
   text?: string;
@@ -45,10 +44,9 @@ export function WorkGallery({
   const [modalIndex, setModalIndex] = useState<number>(0);
   const [isProject, setIsProject] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const [year, setYear] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [medium, setMedium] = useState<string>("");
-  const [dimensions, setDimensions] = useState<string>("");
+  const [glaze, setGlaze] = useState<string[]>([]);
   const [stripePriceId, setStripePriceId] = useState<string | null>(null);
   const [stockLevel, setStockLevel] = useState<number>(0);
   const [priceHw, setPriceHw] = useState<number>(0);
@@ -144,12 +142,11 @@ export function WorkGallery({
     const imgs = [project.imageUrl, ...(project.galleryImages || [])];
     setIsProject(true);
     setName(project.title);
-    setYear(project.year);
     setModalImages(imgs);
     setModalIndex(0);
     setText(project.text || "");
     setMedium(project.medium || "");
-    setDimensions(project.dimensions || "");
+    setGlaze(project.glaze ?? []);
     setStripePriceId(project.stripe_price_id ?? null);
     setStockLevel(getStock(project));
     setPriceHw(project.price_hw);
@@ -181,10 +178,9 @@ export function WorkGallery({
       const imgs = [project.imageUrl, ...(project.galleryImages || [])];
       setIsProject(true);
       setName(project.title);
-      setYear(project.year);
       setText(project.text || "");
       setMedium(project.medium || "");
-      setDimensions(project.dimensions || "");
+      setGlaze(project.glaze ?? []);
       setStripePriceId(project.stripe_price_id ?? null);
       setStockLevel(getStock(project));
       setPriceHw(project.price_hw);
@@ -248,10 +244,9 @@ export function WorkGallery({
         isProject={isProject}
         hasNext={modalIndex < modalImages.length - 1}
         name={name}
-        year={year}
         text={text}
         medium={medium}
-        dimensions={dimensions}
+        glaze={glaze}
         changePhotoId={handleThumbClick}
         stripePriceId={stripePriceId}
         stockLevel={displayedStockLevel}

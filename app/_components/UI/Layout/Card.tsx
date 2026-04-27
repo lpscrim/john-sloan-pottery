@@ -5,7 +5,6 @@ export function Card(project: {
   title: string;
   categories: string[];
   galleryImages?: string[];
-  year: string;
   imageSizes?: string;
   imageWidth?: number;
   imageHeight?: number;

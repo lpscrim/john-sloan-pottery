@@ -5,8 +5,7 @@ export interface Project {
   title: string;
   categories: string[];
   medium: string;
-  dimensions: string;
-  year: string;
+  glaze: string[];
   imageUrl: string;       // Supabase Storage public URL
   galleryImages?: string[];
   text: string;
@@ -59,8 +58,7 @@ export async function getProjects(): Promise<Project[]> {
         title: (product.name ?? ''),
         categories: product.categories ?? [],
         medium: product.medium ?? '',
-        dimensions: product.dimensions ?? '',
-        year: product.year ?? new Date().getFullYear().toString(),
+        glaze: product.glaze ?? [],
         imageUrl: product.image_url ?? '',
         ...(galleryImages.length > 0 && { galleryImages }),
         text: product.description ?? '',

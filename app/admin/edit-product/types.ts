@@ -11,8 +11,7 @@ export interface AdminProduct {
   stock_level: number;
   categories: string[];
   medium: string;
-  dimensions: string;
-  year: string;
+  glaze: string[];
   image_url: string;
   stripe_product_id: string | null;
   stripe_price_id: string | null;

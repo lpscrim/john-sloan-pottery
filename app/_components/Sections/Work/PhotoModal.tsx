@@ -15,10 +15,9 @@ interface PhotoModalProps {
   hasNext: boolean;
   isProject: boolean;
   name: string;
-  year: string;
   text?: string;
   medium?: string;
-  dimensions?: string;
+  glaze?: string[];
   images?: string[];
   index?: number;
   changePhotoId?: (idx: number) => void;
@@ -37,10 +36,9 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   hasNext,
   isProject,
   name,
-  year,
   text,
   medium,
-  dimensions,
+  glaze,
   images = [],
   index = 0,
   changePhotoId = () => {},
@@ -362,7 +360,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           />
           {isProject && (
           <span className="flex w-full justify-center text-foreground text-sm pt-4 pointer-events-none z-999">
-            {dimensions && <span>{dimensions}, </span>} &nbsp;{medium && <span>{medium}, &nbsp;</span>}<span>{year}</span>{priceHw > 0 && <span>,&nbsp; £{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
+            {glaze && glaze.length > 0 && <span>{glaze.join(', ')}{medium ? ', ' : ''}</span>}{medium && <span>{medium}</span>}{priceHw > 0 && <span>{(glaze?.length || medium) ? ', ' : ''}£{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
           </span>
         )}
         </div>

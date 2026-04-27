@@ -49,8 +49,9 @@ export async function updateProduct(
     const stockStr = formData.get('stock') as string | null;
     const categoriesRaw = formData.get('categories') as string | null;
     const medium = formData.get('medium') as string | null;
-    const dimensions = formData.get('dimensions') as string | null;
-    const year = formData.get('year') as string | null;
+    const glaze = [formData.get('glaze_0'), formData.get('glaze_1'), formData.get('glaze_2')]
+      .map((v) => (v as string | null)?.trim() ?? '')
+      .filter(Boolean);
     const removeCover = formData.get('removeCover') === 'on';
     const removeGallery = formData.getAll('removeGallery') as string[];
     const imageFile = formData.get('image') as File | null;
@@ -165,8 +166,7 @@ export async function updateProduct(
         stock_level: stockLevel,
         categories,
         medium: (medium ?? '').trim(),
-        dimensions: (dimensions ?? '').trim(),
-        year: year?.trim() || new Date().getFullYear().toString(),
+        glaze,
         image_url: imageUrl,
         type: 'pottery',
       })
