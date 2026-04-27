@@ -116,10 +116,6 @@ export function MainGallery({
                 {project.title}
               </h3>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-background wrap-break-word max-w-full">
-                {/*<span className="wrap-break-word max-w-full">
-                  [{project.categories.join(", ")}]
-                </span>*/}
-                <span className="invisible">{project.year}</span>
               </div>
               {getStockLevel(project) === 0 && (
                 <h3 className="text-background">SOLD OUT</h3>
