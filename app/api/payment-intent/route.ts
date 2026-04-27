@@ -109,10 +109,10 @@ export async function POST(req: NextRequest) {
     // ── Create PaymentIntent as a direct charge on the artist's connected account ──
     // Creating the PI with { stripeAccount } makes the artist the merchant of record:
     // Stripe processing fees are deducted from her balance, not the platform's.
-    // application_fee_amount flows back to the platform (Lewis's 1%).
+    // application_fee_amount flows back to the platform (Lewis's 5%).
     const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
     const applicationFeeAmount = clientAccountId
-      ? Math.round(totalAmount * 0.01)
+      ? Math.round(totalAmount * 0.05)
       : undefined;
 
     const cancelToken = crypto.randomUUID();

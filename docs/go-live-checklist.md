@@ -115,7 +115,7 @@ Practical step-by-step checklist to get the site fully live. Work through these 
 
 - [ ] Place a real purchase with a real card (a low-value item or a £1 test product)
   - Confirm payment appears in **the artist's** Stripe dashboard
-  - Confirm the platform fee (1%) is retained on **your** Stripe account
+  - Confirm the platform fee (5%) is retained on **your** Stripe account
   - Confirm the order notification email arrives with correct totals and shipping address
   - Confirm the success page shows correctly
   - Confirm a collection-mode order email shows the Edinburgh collection banner (no address)

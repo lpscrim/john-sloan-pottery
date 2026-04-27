@@ -167,7 +167,7 @@ No additional RLS policies needed (service-role key bypasses RLS).
 - [ ] In your platform dashboard → Connect → Accounts, invite/connect them
 - [ ] Copy the artist's account ID (`acct_...`) → `STRIPE_CONNECT_CLIENT_ACCOUNT_ID`
 
-All payments are **direct charges** on the artist's connected account. Stripe fees come out of the artist's balance. The platform retains 1% (`application_fee_amount`).
+All payments are **direct charges** on the artist's connected account. Stripe fees come out of the artist's balance. The platform retains 5% (`application_fee_amount`).
 
 ---
 
