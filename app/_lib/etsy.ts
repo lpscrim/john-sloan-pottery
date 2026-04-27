@@ -1,6 +1,59 @@
 import { createServerSupabase } from './supabase';
 
 const ETSY_BASE = 'https://openapi.etsy.com/v3';
+const MOCK_MODE = process.env.ETSY_MOCK === 'true';
+
+// ─── Mock data ────────────────────────────────────────────────────────────────
+
+const MOCK_LISTINGS: EtsyListing[] = [
+  {
+    listing_id: 1001,
+    title: 'Mock Stoneware Bowl',
+    description: 'A test bowl for development purposes.',
+    price: { amount: 4500, divisor: 100, currency_code: 'GBP' },
+    quantity: 3,
+    url: 'https://www.etsy.com/listing/1001/mock-stoneware-bowl',
+    images: [{ url_fullxfull: 'https://placehold.co/600x600?text=Bowl' }],
+  },
+  {
+    listing_id: 1002,
+    title: 'Mock Celadon Vase',
+    description: 'A test vase for development purposes.',
+    price: { amount: 7500, divisor: 100, currency_code: 'GBP' },
+    quantity: 1,
+    url: 'https://www.etsy.com/listing/1002/mock-celadon-vase',
+    images: [{ url_fullxfull: 'https://placehold.co/600x600?text=Vase' }],
+  },
+  {
+    listing_id: 1003,
+    title: 'Mock Ash Glaze Mug',
+    description: 'A test mug for development purposes.',
+    price: { amount: 2800, divisor: 100, currency_code: 'GBP' },
+    quantity: 5,
+    url: 'https://www.etsy.com/listing/1003/mock-ash-glaze-mug',
+    images: [{ url_fullxfull: 'https://placehold.co/600x600?text=Mug' }],
+  },
+];
+
+const MOCK_INVENTORY: EtsyInventory = {
+  products: [
+    {
+      product_id: 1,
+      property_values: [],
+      offerings: [
+        {
+          offering_id: 1,
+          quantity: 3,
+          is_enabled: true,
+          price: { amount: 4500, divisor: 100, currency_code: 'GBP' },
+        },
+      ],
+    },
+  ],
+  price_on_property: [],
+  quantity_on_property: [],
+  sku_on_property: [],
+};
 
 interface EtsyTokens {
   access_token: string;
@@ -145,6 +198,7 @@ export async function exchangeCodeForTokens(
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export async function isEtsyConnected(): Promise<boolean> {
+  if (MOCK_MODE) return true;
   const tokens = await getTokens();
   return tokens !== null && !!tokens.access_token;
 }
@@ -160,6 +214,7 @@ async function getValidAccessToken(): Promise<string> {
 // ─── Listings ─────────────────────────────────────────────────────────────────
 
 export async function fetchActiveListings(): Promise<EtsyListing[]> {
+  if (MOCK_MODE) return MOCK_LISTINGS;
   const apiKey = process.env.ETSY_API_KEY!;
   const shopId = process.env.ETSY_SHOP_ID!;
   const accessToken = await getValidAccessToken();
@@ -198,6 +253,7 @@ export async function fetchActiveListings(): Promise<EtsyListing[]> {
 // ─── Inventory ────────────────────────────────────────────────────────────────
 
 export async function fetchListingInventory(listingId: number): Promise<EtsyInventory> {
+  if (MOCK_MODE) return { ...MOCK_INVENTORY, products: MOCK_INVENTORY.products.map(p => ({ ...p })) };
   const apiKey = process.env.ETSY_API_KEY!;
   const accessToken = await getValidAccessToken();
 
@@ -220,6 +276,10 @@ export async function updateListingInventory(
   listingId: number,
   newQuantity: number,
 ): Promise<void> {
+  if (MOCK_MODE) {
+    console.log(`[ETSY MOCK] updateListingInventory listing=${listingId} qty=${newQuantity}`);
+    return;
+  }
   const apiKey = process.env.ETSY_API_KEY!;
   const accessToken = await getValidAccessToken();
 

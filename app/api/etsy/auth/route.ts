@@ -13,6 +13,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL('/admin', req.url));
   }
 
+  // Mock mode — skip real OAuth
+  if (process.env.ETSY_MOCK === 'true') {
+    return NextResponse.redirect(new URL('/admin/etsy?connected=1', req.url));
+  }
+
   const apiKey = process.env.ETSY_API_KEY;
   if (!apiKey) {
     return NextResponse.redirect(
