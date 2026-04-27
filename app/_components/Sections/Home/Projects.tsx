@@ -39,10 +39,6 @@ export async function Projects() {
                 </div>
                 <div className="space-y-1 flex flex-row gap-4">
                   <h3 className="tracking-tight">{project.title}</h3>
-                  <div className="flex gap-4 text-muted-foreground">
-                    
-                    <span>{project.year}</span>
-                  </div>
                 </div>
               </Link>
             ))}
