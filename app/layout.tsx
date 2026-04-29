@@ -21,15 +21,16 @@ const siteUrl = new URL(getSiteUrl()).origin;
 
 
 const seoKeywords = [
-  "art",
-  "portfolio",
-  "art shop",
-  "art for sale",
-  "art prints",
-  "original art",
+  "pottery",
+  "ceramics",
+  "handmade pottery",
+  "stoneware",
+  "John Sloan",
+  "John Sloan Pottery",
+  "ceramic art",
+  "pottery for sale",
+  "handmade ceramics",
   "art gallery",
-  "artwork",
-  // TODO: Add artist/shop-specific keywords
 ];
 
 
@@ -37,33 +38,33 @@ const seoKeywords = [
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Art Shop", // TODO: Replace with your site name
-    template: "%s | Art Shop", // TODO: Replace with your site name
+    default: "John Sloan Pottery",
+    template: "%s | John Sloan Pottery",
   },
   description:
-    "An art portfolio and shop.", // TODO: Replace with your site description
+    "John Sloan Pottery — handmade stoneware mugs, bowls, and vessels thrown and fired on the Isle of Skye. Each piece is unique, finished in a range of distinctive glazes.",
   alternates: {
     canonical: "/",
   },
   keywords: seoKeywords,
   category: "art",
-  authors: [{ name: "Artist" }], // TODO: Replace with artist name
-  creator: "Artist", // TODO: Replace with artist name
-  publisher: "Artist", // TODO: Replace with artist name
+  authors: [{ name: "John Sloan" }],
+  creator: "John Sloan",
+  publisher: "John Sloan",
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Art Shop", // TODO: Replace with your site name
-    title: "Art Shop", // TODO: Replace with your site name
+    siteName: "John Sloan Pottery",
+    title: "John Sloan Pottery",
     description:
-      "An art portfolio and shop.", // TODO: Replace with your site description
+      "John Sloan Pottery — handmade stoneware mugs, bowls, and vessels thrown and fired on the Isle of Skye. Each piece is unique, finished in a range of distinctive glazes.",
     locale: "en_GB",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Art Shop", // TODO: Replace with your site name
+    title: "John Sloan Pottery",
     description:
-      "An art portfolio and shop.", // TODO: Replace with your site description
+      "John Sloan Pottery — handmade stoneware mugs, bowls, and vessels thrown and fired on the Isle of Skye. Each piece is unique, finished in a range of distinctive glazes.",
   },
 };
 

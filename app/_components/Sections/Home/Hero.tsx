@@ -33,9 +33,9 @@ export function Hero() {
         <h2 
           className="absolute inset-0 flex items-center text-center font-medium justify-center text-[3vw]/[3vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
-          <span className='mb-4'>[ARTIST NAME] <div className="w-1/2 mx-auto border-b-2 border-card pb-4 " /></span>{/* TODO: Replace [ARTIST NAME] */}
+          <span className='mb-4'>JOHN SLOAN <div className="w-1/2 mx-auto border-b-2 border-card pb-4 " /></span>
           
-          <span className='text-[1.5vw]/[1.5vw]'>ARTIST</span>{/* TODO: Replace tagline */}
+          <span className='text-[1.5vw]/[1.5vw]'>POTTERY</span>
         </h2>
       </div>
       {/* Mobile */}
@@ -52,9 +52,9 @@ export function Hero() {
         <h2 
           className="absolute inset-0 flex items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-widest text-card z-20 flex-col opacity-[0.95]"
         >
-          <span className='mb-4'>[ARTIST NAME] <div className="w-1/2 mx-auto border-b-1 border-card pb-4 " /></span>{/* TODO: Replace [ARTIST NAME] */}
+          <span className='mb-4'>JOHN SLOAN <div className="w-1/2 mx-auto border-b-1 border-card pb-4 " /></span>
           
-          <span className='text-[3vw]/[3vw]'>ARTIST</span>{/* TODO: Replace tagline */}
+          <span className='text-[3vw]/[3vw]'>POTTERY</span>
         </h2>
       </div>
 

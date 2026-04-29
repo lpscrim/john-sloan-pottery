@@ -14,7 +14,7 @@ export function Contact() {
           <div className="space-y-8 lg:col-span-2">
             <p className="text-lg xl:text-xl text-muted-foreground">
               Available for commissioned work, collaborations, and inquiries.
-              Let`s create something meaningful together.
+              Each piece is made to order and can be tailored to your requirements — get in touch to discuss.
             </p>
             
             <div className="flex flex-row gap-8 items-center justify-between">
@@ -29,7 +29,7 @@ export function Contact() {
               
               <div className="flex items-center gap-3 text-lg text-muted-foreground justify-end">
                 <span className="w-5" />
-                <span>Your Location</span> {/* TODO: Replace with location */}
+                <span>Isle of Skye, Scotland</span>
               </div>
             </div>
           </div>

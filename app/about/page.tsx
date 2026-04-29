@@ -39,7 +39,7 @@ export default async function AboutPage() {
 
           {/* Statement */}
           <div className="flex flex-col justify-center gap-8 ">
-            <h1 className="text-4xl md:text-5xl tracking-tight">Artist Name</h1> {/* TODO: Replace with artist name */}
+            <h1 className="text-4xl md:text-5xl tracking-tight">John Sloan</h1>
             {about.statement && (
               <p className="text-xl xl:text-2xl italic leading-relaxed" style={{ fontFamily: 'EB Garamond, serif' }}>
                 {about.statement}

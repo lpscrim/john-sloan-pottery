@@ -10,10 +10,10 @@ function OrganizationJsonLd() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Art Shop", // TODO: Replace with your site name
+    name: "John Sloan Pottery",
     url: siteUrl,
     description:
-      "An art portfolio and shop.", // TODO: Replace with your site description
+      "John Sloan Pottery — handmade stoneware mugs, bowls, and vessels thrown and fired on the Isle of Skye. Each piece is unique, finished in a range of distinctive glazes.",
     sameAs: [], // TODO: Add your social media URLs
   };
 

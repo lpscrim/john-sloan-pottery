@@ -68,7 +68,7 @@ export function Header() {
                   : "opacity-100 pointer-events-auto"
               }`}
             >
-              Artist Name {/* TODO: Replace with the artist's name */}
+              John Sloan Pottery
             </span>
             <span
               className={`tracking-wide title font-light text-card invisible absolute left-0 top-0 transition-all duration-500 ${
@@ -77,7 +77,7 @@ export function Header() {
                   : "opacity-0 pointer-events-none"
               }`}
             >
-              Artist Name {/* TODO: Replace with the artist's name */}
+              John Sloan Pottery
             </span>
           </button>
 

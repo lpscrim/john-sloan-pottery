@@ -6,7 +6,7 @@ export interface HomeAboutContent {
 }
 
 export const HOME_ABOUT_DEFAULTS: HomeAboutContent = {
-  text: 'Artist Name is an artist based in [City, Country]. [Short bio sentence describing their practice.]', // TODO: Replace with default bio
+  text: 'John Sloan is a potter based on the Isle of Skye, Scotland. Working primarily with stoneware, he throws functional and sculptural pieces — mugs, bowls, vases, and more — each finished by hand in a range of distinctive glazes developed in his studio.',
   images: [], // TODO: Add default about section images (place in /public)
 };
 
