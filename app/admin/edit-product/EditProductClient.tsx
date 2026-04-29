@@ -55,6 +55,14 @@ export default function EditProductClient({
     }
   }, [updateState.success, deleteState.success, router]);
 
+  const [productSearch, setProductSearch] = useState('');
+
+  const filteredProducts = useMemo(() => {
+    const q = productSearch.trim().toLowerCase();
+    if (!q) return products;
+    return products.filter((p) => p.name.toLowerCase().includes(q));
+  }, [products, productSearch]);
+
   const resolvedSelectedId = useMemo(() => {
     if (selectedId !== null && products.some((p) => p.id === selectedId)) {
       return selectedId;
@@ -166,20 +174,50 @@ export default function EditProductClient({
           </p>
         </div>
 
-        <label className="block">
-          <span className="text-sm font-medium">Select Product</span>
-          <select
-            className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
-            value={resolvedSelectedId ?? ""}
-            onChange={(e) => setSelectedId(e.target.value)}
-          >
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name} (ID {product.id})
-              </option>
-            ))}
-          </select>
-        </label>
+        <div>
+          <span className="text-sm font-medium block mb-2">Select Product</span>
+          <input
+            type="text"
+            placeholder="Search products…"
+            value={productSearch}
+            onChange={(e) => setProductSearch(e.target.value)}
+            className="mb-3 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+          />
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-72 overflow-y-auto pr-1">
+            {filteredProducts.map((product) => {
+              const isActive = product.id === resolvedSelectedId;
+              const thumb = product.image_url || product.gallery[0]?.url || null;
+              return (
+                <button
+                  key={product.id}
+                  type="button"
+                  onClick={() => setSelectedId(product.id)}
+                  className={`rounded-md border-2 overflow-hidden text-left transition-colors ${isActive ? 'border-foreground' : 'border-muted hover:border-foreground/40'}`}
+                >
+                  <div className="aspect-square w-full bg-muted relative">
+                    {thumb ? (
+                      <Image
+                        src={thumb}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                        sizes="20vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs p-1 text-center">
+                        No image
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-xs px-1.5 py-1 truncate leading-tight">{product.name}</p>
+                </button>
+              );
+            })}
+            {filteredProducts.length === 0 && (
+              <p className="col-span-full text-sm text-muted-foreground py-2">No products match.</p>
+            )}
+          </div>
+        </div>
 
         <form
           ref={formRef}
