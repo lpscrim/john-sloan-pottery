@@ -106,7 +106,7 @@ export function WorkGallery({
       result = result.filter((p) => getStock(p) > 0);
     }
     if (selectedGlazes.length > 0) {
-      result = result.filter((p) => selectedGlazes.some(g => p.glaze.includes(g)));
+      result = result.filter((p) => selectedGlazes.every(g => p.glaze.includes(g)));
     }
     return result;
   }, [projects, selectedCategories, selectedGlazes, inStockOnly, getStock]);
@@ -144,11 +144,21 @@ export function WorkGallery({
     return result;
   }, [projects, selectedCategories, inStockOnly, getStock]);
 
+  // All glazes that exist before glaze filtering (to keep greyed-out options visible)
+  const knownGlazes = useMemo(() => {
+    const seen = new Set<string>();
+    preGlazeFiltered.forEach((p) => p.glaze.forEach((g) => seen.add(g)));
+    return seen;
+  }, [preGlazeFiltered]);
+
+  // Counts from the already-glaze-filtered results so only co-existing glazes are non-zero
   const allGlazes = useMemo(() => {
     const counts: Record<string, number> = {};
-    preGlazeFiltered.forEach((p) => p.glaze.forEach((g) => { counts[g] = (counts[g] || 0) + 1; }));
+    // Seed every known glaze with 0 so they all appear
+    knownGlazes.forEach((g) => { counts[g] = 0; });
+    filteredProjects.forEach((p) => p.glaze.forEach((g) => { counts[g] = (counts[g] || 0) + 1; }));
     return Object.entries(counts).sort((a, b) => b[1] - a[1]) as [string, number][];
-  }, [preGlazeFiltered]);
+  }, [filteredProjects, knownGlazes]);
 
   const toggleGlaze = (g: string) => {
     setSelectedGlazes((prev) =>
