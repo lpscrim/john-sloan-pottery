@@ -279,10 +279,6 @@ body {
   animation: marquee linear infinite;
 }
 
-.marquee-pausable:hover {
-  animation-play-state: paused;
-}
-
 @keyframes pop-up {
   0% {
     opacity: 0;

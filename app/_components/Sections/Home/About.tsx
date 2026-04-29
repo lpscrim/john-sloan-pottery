@@ -12,7 +12,7 @@ export async function About() {
     <section id="about" className="min-h-[80svh] px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
       <div className="w-full mx-auto">
         <div className="mb-24">
-          <h2 className="text-3xl md:text-5xl tracking-tight">About</h2>
+          <h2 className="text-3xl md:text-5xl tracking-tight"></h2>
         </div>
 
         <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto">

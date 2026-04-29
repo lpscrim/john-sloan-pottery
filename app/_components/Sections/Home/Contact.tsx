@@ -7,7 +7,7 @@ export function Contact() {
     <section id="contact" className="min-h-[80svh] px-6 py-24 flex items-center">
       <div className=" mx-auto w-full">
         <div className="mb-16 lg:mb-32">
-          <h2 className="text-3xl md:text-5xl tracking-tight">Get in touch</h2>
+          <h2 className="text-3xl md:text-5xl tracking-tight"></h2>
         </div>
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
