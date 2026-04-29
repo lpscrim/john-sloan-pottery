@@ -25,6 +25,7 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
   const [importing, setImporting] = useState<Record<number, boolean>>({});
   const [imported, setImported] = useState<Record<number, boolean>>({});
   const [syncing, setSyncing] = useState(false);
+  const [importingAll, setImportingAll] = useState(false);
   const [error, setError] = useState<string | null>(initialError ?? null);
   const [successMsg, setSuccessMsg] = useState<string | null>(
     justConnected ? 'Etsy connected successfully.' : null,
@@ -76,6 +77,17 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setImporting((prev) => ({ ...prev, [listing.listing_id]: false }));
+    }
+  };
+
+  const handleImportAll = async () => {
+    setImportingAll(true);
+    setError(null);
+    try {
+      const toImport = listings.filter((l) => !l.already_imported && !imported[l.listing_id]);
+      await Promise.all(toImport.map((l) => handleImport(l)));
+    } finally {
+      setImportingAll(false);
     }
   };
 
@@ -177,7 +189,16 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
 
           {notYetImported.length > 0 && (
             <div>
-              <h2 className="text-sm font-medium mb-2">Not imported</h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-sm font-medium">Not imported</h2>
+                <button
+                  onClick={handleImportAll}
+                  disabled={importingAll || notYetImported.every((l) => importing[l.listing_id])}
+                  className="rounded-md border border-foreground bg-foreground text-background px-3 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+                >
+                  {importingAll ? 'Importing…' : 'Import All'}
+                </button>
+              </div>
               <ListingTable
                 listings={notYetImported}
                 importing={importing}
