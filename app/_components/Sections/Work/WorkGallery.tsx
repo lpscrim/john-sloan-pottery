@@ -37,6 +37,7 @@ export function WorkGallery({
   const router = useRouter();
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedGlazes, setSelectedGlazes] = useState<string[]>([]);
   const [inStockOnly, setInStockOnly] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -104,8 +105,11 @@ export function WorkGallery({
     if (inStockOnly) {
       result = result.filter((p) => getStock(p) > 0);
     }
+    if (selectedGlazes.length > 0) {
+      result = result.filter((p) => selectedGlazes.some(g => p.glaze.includes(g)));
+    }
     return result;
-  }, [projects, selectedCategories, inStockOnly, getStock]);
+  }, [projects, selectedCategories, selectedGlazes, inStockOnly, getStock]);
 
   const inStockCount = useMemo(
     () => projects.filter((p) => getStock(p) > 0).length,
@@ -127,6 +131,30 @@ export function WorkGallery({
 
 
 
+
+  // Glaze counts (based on category + stock filtered projects, before glaze filter)
+  const preGlazeFiltered = useMemo(() => {
+    let result = projects;
+    if (selectedCategories.length > 0) {
+      result = result.filter((p) => selectedCategories.every(cat => p.categories.includes(cat)));
+    }
+    if (inStockOnly) {
+      result = result.filter((p) => getStock(p) > 0);
+    }
+    return result;
+  }, [projects, selectedCategories, inStockOnly, getStock]);
+
+  const allGlazes = useMemo(() => {
+    const counts: Record<string, number> = {};
+    preGlazeFiltered.forEach((p) => p.glaze.forEach((g) => { counts[g] = (counts[g] || 0) + 1; }));
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]) as [string, number][];
+  }, [preGlazeFiltered]);
+
+  const toggleGlaze = (g: string) => {
+    setSelectedGlazes((prev) =>
+      prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]
+    );
+  };
 
   // Add/remove category handlers
   const toggleCategory = (cat: string) => {
@@ -173,6 +201,7 @@ export function WorkGallery({
       lastOpenedProjectIdRef.current = projectParam;
 
       setSelectedCategories([]);
+      setSelectedGlazes([]);
       setInStockOnly(false);
 
       const imgs = [project.imageUrl, ...(project.galleryImages || [])];
@@ -222,6 +251,9 @@ export function WorkGallery({
         getStockLevel={getStock}
         selectedCategories={selectedCategories}
         setSelectedCategories={setSelectedCategories}
+        selectedGlazes={selectedGlazes}
+        toggleGlaze={toggleGlaze}
+        allGlazes={allGlazes}
         inStockOnly={inStockOnly}
         setInStockOnly={setInStockOnly}
         filteredProjects={filteredProjects}

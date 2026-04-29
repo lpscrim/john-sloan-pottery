@@ -19,6 +19,9 @@ interface Project {
 export interface MainGalleryProps {
   selectedCategories: string[];
   setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedGlazes: string[];
+  toggleGlaze: (g: string) => void;
+  allGlazes: [string, number][];
   inStockOnly: boolean;
   setInStockOnly: React.Dispatch<React.SetStateAction<boolean>>;
   filteredProjects: Project[];
@@ -34,6 +37,9 @@ export interface MainGalleryProps {
 export function MainGallery({
   selectedCategories,
   setSelectedCategories,
+  selectedGlazes,
+  toggleGlaze,
+  allGlazes,
   inStockOnly,
   setInStockOnly,
   filteredProjects,
@@ -94,9 +100,32 @@ export function MainGallery({
             })}
           </div>
           )}
+          {allGlazes.length > 0 && (
+          <div className="flex flex-wrap gap-0 mt-2">
+            {allGlazes.map(([glaze, count]) => {
+              const isSelected = selectedGlazes.includes(glaze);
+              const isUnselectable = count === 0;
+              return (
+                <span
+                  key={glaze}
+                  className="inline-flex items-center text-base sm:text-lg transition-opacity"
+                >
+                  <button
+                    onClick={() => !isUnselectable && toggleGlaze(glaze)}
+                    disabled={isUnselectable}
+                    className={`pr-1 py-1 rounded transition-colors cursor-crosshair text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
+                  >
+                    {glaze}{" "}
+                    <span className="text-foreground/60">[{count}]</span>
+                  </button>
+                </span>
+              );
+            })}
+          </div>
+          )}
         </div>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 px-0">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-0">
         {filteredProjects.map((project, idx) => (
           <div key={project.id} className="relative group">
             <Card

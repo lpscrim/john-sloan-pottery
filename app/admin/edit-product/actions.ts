@@ -177,28 +177,35 @@ export async function updateProduct(
     }
 
     if (existing.stripe_product_id) {
-      const stripe = getStripe();
-      await stripe.products.update(existing.stripe_product_id, {
-        name: name.trim(),
-        description: (description ?? '').trim() || undefined,
-        images: imageUrl ? [imageUrl] : [],
-      });
+      try {
+        const stripe = getStripe();
+        const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
+        const stripeOpts = clientAccountId ? { stripeAccount: clientAccountId } : undefined;
+        await stripe.products.update(existing.stripe_product_id, {
+          name: name.trim(),
+          description: (description ?? '').trim() || undefined,
+          images: imageUrl ? [imageUrl] : [],
+        }, stripeOpts);
 
-      if (existing.price_hw !== priceHw) {
-        const stripePrice = await stripe.prices.create({
-          product: existing.stripe_product_id,
-          unit_amount: priceHw,
-          currency: 'gbp',
-        });
+        if (existing.price_hw !== priceHw) {
+          const stripePrice = await stripe.prices.create(
+            { product: existing.stripe_product_id, unit_amount: priceHw, currency: 'gbp' },
+            stripeOpts,
+          );
 
-        if (existing.stripe_price_id) {
-          await stripe.prices.update(existing.stripe_price_id, { active: false });
+          if (existing.stripe_price_id) {
+            await stripe.prices.update(existing.stripe_price_id, { active: false }, stripeOpts);
+          }
+
+          await supabase
+            .from('products')
+            .update({ stripe_price_id: stripePrice.id })
+            .eq('id', productId);
         }
-
-        await supabase
-          .from('products')
-          .update({ stripe_price_id: stripePrice.id })
-          .eq('id', productId);
+      } catch (stripeErr: unknown) {
+        const msg = stripeErr instanceof Error ? stripeErr.message : '';
+        // If the product no longer exists in Stripe, skip silently
+        if (!msg.includes('No such product')) throw stripeErr;
       }
     }
 
@@ -263,8 +270,15 @@ export async function deleteProduct(
     if (deleteError) return { success: false, error: deleteError.message };
 
     if (existing.stripe_product_id) {
-      const stripe = getStripe();
-      await stripe.products.update(existing.stripe_product_id, { active: false });
+      try {
+        const stripe = getStripe();
+        const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
+        const stripeOpts = clientAccountId ? { stripeAccount: clientAccountId } : undefined;
+        await stripe.products.update(existing.stripe_product_id, { active: false }, stripeOpts);
+      } catch (stripeErr: unknown) {
+        const msg = stripeErr instanceof Error ? stripeErr.message : '';
+        if (!msg.includes('No such product')) throw stripeErr;
+      }
     }
 
     revalidatePath('/');
