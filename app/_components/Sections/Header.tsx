@@ -84,7 +84,7 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex gap-8 ">
             <button
-              className={`relative title text-2xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-2xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/work" className="cursor-crosshair">
                 <span
@@ -108,7 +108,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative title text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/about">
                 <span
@@ -132,7 +132,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative title text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
               onClick={() => conditionalScrollTo("#contact")}
             >
               <span
@@ -155,7 +155,7 @@ export function Header() {
               </span>
             </button>
             <button
-              className={`relative title text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
               onClick={toggleCart}
             >
               <span
@@ -201,7 +201,7 @@ export function Header() {
           <nav className={`md:hidden flex flex-col gap-4 text-xl pt-4 `}>
             <button
               onClick={() => setIsMenuOpen(false)}
-              className={`title pop-up opacity-0 text-left transition-colors ${
+              className={`nav pop-up opacity-0 text-left transition-colors ${
                 isLight ? "text-card " : "text-foreground "
               }`}
             >
@@ -211,7 +211,7 @@ export function Header() {
             </button>
             <button
               onClick={() => setIsMenuOpen(false)}
-              className={`title pop-up-2 opacity-0 text-left transition-colors cursor-crosshair ${
+              className={`nav pop-up-2 opacity-0 text-left transition-colors cursor-crosshair ${
                 isLight ? "text-card " : "text-foreground "
               }`}
             >
@@ -220,7 +220,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`title pop-up-3 opacity-0 text-left transition-colors cursor-crosshair ${
+              className={`nav pop-up-3 opacity-0 text-left transition-colors cursor-crosshair ${
                 isLight ? "text-card " : "text-foreground "
               }`}
               onClick={() => {
@@ -231,7 +231,7 @@ export function Header() {
               Contact
             </button>
             <button
-              className={`title pop-up-4 opacity-0 text-left transition-colors cursor-crosshair ${
+              className={`nav pop-up-4 opacity-0 text-left transition-colors cursor-crosshair ${
                 isLight ? "text-card " : "text-foreground "
               }`}
               onClick={() => {

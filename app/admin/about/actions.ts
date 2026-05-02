@@ -31,24 +31,16 @@ export async function saveAboutText(
   }
 }
 
-export async function saveAboutCV(
+export async function saveSecondaryText(
   formData: FormData
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await requireAdminUser();
-    let exhibitions, education, awards, press;
-    try {
-      exhibitions = JSON.parse((formData.get('exhibitions') as string | null) ?? '[]');
-      education = JSON.parse((formData.get('education') as string | null) ?? '[]');
-      awards = JSON.parse((formData.get('awards') as string | null) ?? '[]');
-      press = JSON.parse((formData.get('press') as string | null) ?? '[]');
-    } catch {
-      return { success: false, error: 'Invalid CV data format.' };
-    }
+    const secondary_text = (formData.get('secondary_text') as string | null) ?? '';
     const supabase = createServerSupabase();
     const { error } = await supabase
       .from('about_content')
-      .upsert({ id: 1, exhibitions, education, awards, press, updated_at: new Date().toISOString() });
+      .upsert({ id: 1, secondary_text, updated_at: new Date().toISOString() });
     if (error) return { success: false, error: error.message };
     revalidatePath('/about');
     revalidatePath('/admin/about');
@@ -56,13 +48,6 @@ export async function saveAboutCV(
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
   }
-}
-
-/** @deprecated Use saveAboutText + saveAboutCV instead */
-export async function saveAboutContent(
-  formData: FormData
-): Promise<{ success: boolean; error?: string }> {
-  return saveAboutCV(formData);
 }
 
 export async function uploadAboutPortrait(
@@ -91,6 +76,45 @@ export async function uploadAboutPortrait(
     const { error: dbError } = await supabase.from('about_content').upsert({
       id: 1,
       portrait_url: data.publicUrl,
+      updated_at: new Date().toISOString(),
+    });
+
+    if (dbError) return { success: false, error: dbError.message };
+
+    revalidatePath('/about');
+    revalidatePath('/admin/about');
+    return { success: true, url: data.publicUrl };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+  }
+}
+
+export async function uploadAboutSecondaryImage(
+  formData: FormData
+): Promise<{ success: boolean; url?: string; error?: string }> {
+  try {
+    await requireAdminUser();
+
+    const file = formData.get('image') as File | null;
+    if (!file || file.size === 0) return { success: false, error: 'No file provided.' };
+    if (!isAllowed(file)) return { success: false, error: 'File type not allowed.' };
+    if (file.size > 4 * 1024 * 1024) return { success: false, error: 'File exceeds 4 MB.' };
+
+    const supabase = createServerSupabase();
+    const ext = file.name.split('.').pop() ?? 'webp';
+    const path = `secondary/${Date.now()}_${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, file, { contentType: file.type, upsert: false });
+
+    if (uploadError) return { success: false, error: uploadError.message };
+
+    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+
+    const { error: dbError } = await supabase.from('about_content').upsert({
+      id: 1,
+      secondary_image_url: data.publicUrl,
       updated_at: new Date().toISOString(),
     });
 

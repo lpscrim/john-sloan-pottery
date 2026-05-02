@@ -80,6 +80,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'TAY Taxidriver';
+  src: url('/font/TAYTaxidriverRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 
 :root {
@@ -235,20 +242,30 @@ html {
   font-size: var(--font-size);
 }
 
-h1, h2, h3, h4, button, .title {
-  font-family: 'TAY Wingman', sans-serif;
+.title {
+  font-family: 'TAY Taxidriver', sans-serif;
+  text-transform: none;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, .nav {
+  font-family: 'Futura PT', sans-serif;
   text-transform: none;
   font-weight: 200;
 }
 
 button {
-   font-family: 'TAY Wingman', sans-serif;
+   font-family: 'Futura PT', sans-serif;
   text-transform: none;
   font-weight: 400;
 }
 
 body {
-  font-family: 'EB Garamond', sans-serif;
+  font-family: 'Futura PT', sans-serif;
+}
+
+#contact a {
+  font-family: 'Futura PT', sans-serif;
 }
 
 @layer utilities {
@@ -265,9 +282,7 @@ body {
 
 }
 
-#contact a {
-  font-family: 'Futura PT', sans-serif;
-}
+
 
 /* Animations */
 @keyframes marquee {

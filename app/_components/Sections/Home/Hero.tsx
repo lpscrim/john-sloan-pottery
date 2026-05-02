@@ -31,11 +31,11 @@ export function Hero() {
           className="object-cover object-center h-auto min-h-full w-full"
         />
         <h2 
-          className="absolute inset-0 flex items-center text-center font-medium justify-center text-[3vw]/[3vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
+          className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
-          <span className='mb-4'>JOHN SLOAN <div className="w-1/2 mx-auto border-b-2 border-card pb-4 " /></span>
+          <span className='mb-4'>John Sloan</span>
           
-          <span className='text-[1.5vw]/[1.5vw]'>POTTERY</span>
+          <span className='text-[3vw]/[3vw]'>Pottery</span>
         </h2>
       </div>
       {/* Mobile */}
@@ -50,11 +50,11 @@ export function Hero() {
           className="object-cover object-center h-auto min-h-full w-full"
         />
         <h2 
-          className="absolute inset-0 flex items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-widest text-card z-20 flex-col opacity-[0.95]"
+          className="absolute inset-0 title flex items-center text-center font-medium justify-center text-[12vw]/[12vw] tracking-widest text-card z-20 flex-col opacity-[0.95]"
         >
-          <span className='mb-4'>JOHN SLOAN <div className="w-1/2 mx-auto border-b-1 border-card pb-4 " /></span>
+          <span className='mb-4'>John Sloan</span>
           
-          <span className='text-[3vw]/[3vw]'>POTTERY</span>
+          <span className='text-[6vw]/[6vw]'>Pottery</span>
         </h2>
       </div>
 

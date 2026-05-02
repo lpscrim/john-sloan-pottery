@@ -2,8 +2,8 @@
 
 import { useState, useTransition, useRef } from 'react';
 import Image from 'next/image';
-import type { AboutContent, Exhibition, EducationItem, Award, PressItem } from '@/app/_lib/aboutContent';
-import { saveAboutText, saveAboutCV, uploadAboutPortrait, uploadGalleryImage, removeGalleryImage } from './actions';
+import type { AboutContent } from '@/app/_lib/aboutContent';
+import { saveAboutText, saveSecondaryText, uploadAboutPortrait, uploadAboutSecondaryImage, uploadGalleryImage, removeGalleryImage } from './actions';
 import { compressImage } from '../compressImage';
 
 // ── Small helpers ──────────────────────────────────────────────────────────
@@ -37,140 +37,6 @@ function inputCls() {
   return 'w-full border border-muted bg-background px-3 py-2 text-sm rounded-sm focus:outline-none focus:border-foreground transition-colors';
 }
 
-// ── CV list editors ────────────────────────────────────────────────────────
-
-function ExhibitionList({
-  items,
-  onChange,
-}: {
-  items: Exhibition[];
-  onChange: (items: Exhibition[]) => void;
-}) {
-  function add() {
-    onChange([...items, { year: '', title: '', location: '', type: 'solo' }]);
-  }
-  function remove(i: number) {
-    onChange(items.filter((_, idx) => idx !== i));
-  }
-  function update(i: number, field: keyof Exhibition, value: string) {
-    onChange(items.map((it, idx) => idx === i ? { ...it, [field]: value } : it));
-  }
-
-  return (
-    <div className="space-y-3">
-      {items.map((ex, i) => (
-        <div key={i} className="grid grid-cols-[5rem_1fr_1fr_6rem_2rem] gap-2 items-center">
-          <input className={inputCls()} placeholder="Year" value={ex.year} onChange={(e) => update(i, 'year', e.target.value)} />
-          <input className={inputCls()} placeholder="Title" value={ex.title} onChange={(e) => update(i, 'title', e.target.value)} />
-          <input className={inputCls()} placeholder="Location" value={ex.location} onChange={(e) => update(i, 'location', e.target.value)} />
-          <select className={inputCls()} value={ex.type} onChange={(e) => update(i, 'type', e.target.value as 'solo' | 'group')}>
-            <option value="solo">Solo</option>
-            <option value="group">Group</option>
-          </select>
-          <button type="button" onClick={() => remove(i)} className="text-muted-foreground hover:text-destructive text-lg leading-none cursor-crosshair">×</button>
-        </div>
-      ))}
-      <button type="button" onClick={add} className="text-sm text-muted-foreground underline underline-offset-2 cursor-crosshair">+ Add exhibition</button>
-    </div>
-  );
-}
-
-function EducationList({
-  items,
-  onChange,
-}: {
-  items: EducationItem[];
-  onChange: (items: EducationItem[]) => void;
-}) {
-  function add() {
-    onChange([...items, { year: '', qualification: '', institution: '' }]);
-  }
-  function remove(i: number) {
-    onChange(items.filter((_, idx) => idx !== i));
-  }
-  function update(i: number, field: keyof EducationItem, value: string) {
-    onChange(items.map((it, idx) => idx === i ? { ...it, [field]: value } : it));
-  }
-
-  return (
-    <div className="space-y-3">
-      {items.map((ed, i) => (
-        <div key={i} className="grid grid-cols-[5rem_1fr_1fr_2rem] gap-2 items-center">
-          <input className={inputCls()} placeholder="Year" value={ed.year} onChange={(e) => update(i, 'year', e.target.value)} />
-          <input className={inputCls()} placeholder="Qualification" value={ed.qualification} onChange={(e) => update(i, 'qualification', e.target.value)} />
-          <input className={inputCls()} placeholder="Institution" value={ed.institution} onChange={(e) => update(i, 'institution', e.target.value)} />
-          <button type="button" onClick={() => remove(i)} className="text-muted-foreground hover:text-destructive text-lg leading-none cursor-crosshair">×</button>
-        </div>
-      ))}
-      <button type="button" onClick={add} className="text-sm text-muted-foreground underline underline-offset-2 cursor-crosshair">+ Add education</button>
-    </div>
-  );
-}
-
-function AwardList({
-  items,
-  onChange,
-}: {
-  items: Award[];
-  onChange: (items: Award[]) => void;
-}) {
-  function add() {
-    onChange([...items, { year: '', title: '' }]);
-  }
-  function remove(i: number) {
-    onChange(items.filter((_, idx) => idx !== i));
-  }
-  function update(i: number, field: keyof Award, value: string) {
-    onChange(items.map((it, idx) => idx === i ? { ...it, [field]: value } : it));
-  }
-
-  return (
-    <div className="space-y-3">
-      {items.map((aw, i) => (
-        <div key={i} className="grid grid-cols-[5rem_1fr_2rem] gap-2 items-center">
-          <input className={inputCls()} placeholder="Year" value={aw.year} onChange={(e) => update(i, 'year', e.target.value)} />
-          <input className={inputCls()} placeholder="Title / Award name" value={aw.title} onChange={(e) => update(i, 'title', e.target.value)} />
-          <button type="button" onClick={() => remove(i)} className="text-muted-foreground hover:text-destructive text-lg leading-none cursor-crosshair">×</button>
-        </div>
-      ))}
-      <button type="button" onClick={add} className="text-sm text-muted-foreground underline underline-offset-2 cursor-crosshair">+ Add award</button>
-    </div>
-  );
-}
-
-function PressList({
-  items,
-  onChange,
-}: {
-  items: PressItem[];
-  onChange: (items: PressItem[]) => void;
-}) {
-  function add() {
-    onChange([...items, { year: '', title: '', publication: '', url: '' }]);
-  }
-  function remove(i: number) {
-    onChange(items.filter((_, idx) => idx !== i));
-  }
-  function update(i: number, field: keyof PressItem, value: string) {
-    onChange(items.map((it, idx) => idx === i ? { ...it, [field]: value } : it));
-  }
-
-  return (
-    <div className="space-y-3">
-      {items.map((pr, i) => (
-        <div key={i} className="grid grid-cols-[5rem_1fr_1fr_1fr_2rem] gap-2 items-center">
-          <input className={inputCls()} placeholder="Year" value={pr.year} onChange={(e) => update(i, 'year', e.target.value)} />
-          <input className={inputCls()} placeholder="Article title" value={pr.title} onChange={(e) => update(i, 'title', e.target.value)} />
-          <input className={inputCls()} placeholder="Publication" value={pr.publication} onChange={(e) => update(i, 'publication', e.target.value)} />
-          <input className={inputCls()} placeholder="URL (optional)" value={pr.url ?? ''} onChange={(e) => update(i, 'url', e.target.value)} />
-          <button type="button" onClick={() => remove(i)} className="text-muted-foreground hover:text-destructive text-lg leading-none cursor-crosshair">×</button>
-        </div>
-      ))}
-      <button type="button" onClick={add} className="text-sm text-muted-foreground underline underline-offset-2 cursor-crosshair">+ Add press item</button>
-    </div>
-  );
-}
-
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default function AboutClient({ initial }: { initial: AboutContent }) {
@@ -179,18 +45,19 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
   const [bio, setBio] = useState(initial.bio);
   const [textStatus, setTextStatus] = useState<{ ok?: boolean; msg: string }>({ msg: '' });
 
-  // CV state
-  const [exhibitions, setExhibitions] = useState<Exhibition[]>(initial.exhibitions);
-  const [education, setEducation] = useState<EducationItem[]>(initial.education);
-  const [awards, setAwards] = useState<Award[]>(initial.awards);
-  const [press, setPress] = useState<PressItem[]>(initial.press);
-  const [cvStatus, setCvStatus] = useState<{ ok?: boolean; msg: string }>({ msg: '' });
-
   // Portrait state
   const [portraitUrl, setPortraitUrl] = useState(initial.portrait_url);
   const [portraitPreview, setPortraitPreview] = useState<string | null>(null);
   const [portraitStatus, setPortraitStatus] = useState<{ ok?: boolean; msg: string }>({ msg: '' });
   const portraitRef = useRef<HTMLInputElement>(null);
+
+  // Secondary image/text state
+  const [secondaryImageUrl, setSecondaryImageUrl] = useState(initial.secondary_image_url);
+  const [secondaryPreview, setSecondaryPreview] = useState<string | null>(null);
+  const [secondaryText, setSecondaryText] = useState(initial.secondary_text);
+  const [secondaryImgStatus, setSecondaryImgStatus] = useState<{ ok?: boolean; msg: string }>({ msg: '' });
+  const [secondaryTextStatus, setSecondaryTextStatus] = useState<{ ok?: boolean; msg: string }>({ msg: '' });
+  const secondaryRef = useRef<HTMLInputElement>(null);
 
   // Gallery state
   const [galleryImages, setGalleryImages] = useState<string[]>(initial.gallery_images);
@@ -213,17 +80,39 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
     });
   }
 
-  async function handleSaveCv(e: React.FormEvent) {
+  function handleSecondaryChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSecondaryPreview(URL.createObjectURL(file));
+  }
+
+  async function handleSecondaryUpload(e: React.FormEvent) {
     e.preventDefault();
-    setCvStatus({ msg: '' });
+    const file = secondaryRef.current?.files?.[0];
+    if (!file) { setSecondaryImgStatus({ msg: 'Select an image first.' }); return; }
+    setSecondaryImgStatus({ msg: '' });
+    const compressed = await compressImage(file).catch(() => file);
     const fd = new FormData();
-    fd.set('exhibitions', JSON.stringify(exhibitions));
-    fd.set('education', JSON.stringify(education));
-    fd.set('awards', JSON.stringify(awards));
-    fd.set('press', JSON.stringify(press));
+    fd.set('image', compressed);
     startTransition(async () => {
-      const res = await saveAboutCV(fd);
-      setCvStatus({ ok: res.success, msg: res.success ? 'Saved.' : (res.error ?? 'Error') });
+      const res = await uploadAboutSecondaryImage(fd);
+      if (res.success && res.url) {
+        setSecondaryImageUrl(res.url);
+        setSecondaryPreview(null);
+        if (secondaryRef.current) secondaryRef.current.value = '';
+      }
+      setSecondaryImgStatus({ ok: res.success, msg: res.success ? 'Image updated.' : (res.error ?? 'Error') });
+    });
+  }
+
+  async function handleSaveSecondaryText(e: React.FormEvent) {
+    e.preventDefault();
+    setSecondaryTextStatus({ msg: '' });
+    const fd = new FormData();
+    fd.set('secondary_text', secondaryText);
+    startTransition(async () => {
+      const res = await saveSecondaryText(fd);
+      setSecondaryTextStatus({ ok: res.success, msg: res.success ? 'Saved.' : (res.error ?? 'Error') });
     });
   }
 
@@ -356,8 +245,63 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
         </div>
       </section>
 
-      {/* ── Gallery Images ── */}
+      {/* ── Secondary Image & Text ── */}
       <section className="space-y-8 border-b border-muted pb-16">
+        <SectionHeading>Secondary Image &amp; Text</SectionHeading>
+        <p className="text-sm text-muted-foreground -mt-4">
+          Shown as a second reversed block (text left, image right) below the gallery on the about page.
+          Requires <code className="text-xs bg-muted px-1 py-0.5 rounded">secondary_image_url</code> and{' '}
+          <code className="text-xs bg-muted px-1 py-0.5 rounded">secondary_text</code> columns in Supabase.
+        </p>
+        <div className="grid md:grid-cols-2 gap-10">
+          {/* Secondary image upload */}
+          <div>
+            <p className="text-sm text-muted-foreground mb-3">Secondary image</p>
+            {(secondaryPreview ?? secondaryImageUrl) && (
+              <div className="relative aspect-3/4 w-48 mb-4 overflow-hidden rounded-sm">
+                <Image
+                  src={secondaryPreview ?? secondaryImageUrl}
+                  alt="Secondary image preview"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+            <form onSubmit={handleSecondaryUpload} className="space-y-3">
+              <input
+                ref={secondaryRef}
+                type="file"
+                accept="image/*"
+                onChange={handleSecondaryChange}
+                className="text-sm text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-sm file:cursor-crosshair"
+              />
+              <div>
+                <SaveButton pending={isPending} label="Upload image" />
+              </div>
+              <StatusMsg {...secondaryImgStatus} />
+            </form>
+          </div>
+
+          {/* Secondary text */}
+          <form onSubmit={handleSaveSecondaryText} className="space-y-4">
+            <div>
+              <label className="text-sm text-muted-foreground block mb-1">Secondary text</label>
+              <textarea
+                value={secondaryText}
+                onChange={(e) => setSecondaryText(e.target.value)}
+                rows={8}
+                placeholder="Text shown alongside the secondary image…"
+                className={`${inputCls()} resize-none`}
+              />
+            </div>
+            <SaveButton pending={isPending} />
+            <StatusMsg {...secondaryTextStatus} />
+          </form>
+        </div>
+      </section>
+
+      {/* ── Gallery Images ── */}
+      <section className="space-y-8 pb-16">
         <SectionHeading>Gallery Images</SectionHeading>
         <p className="text-sm text-muted-foreground -mt-4">Studio / exhibition images shown in the gallery grid on the about page. Compressed automatically.</p>
 
@@ -392,42 +336,6 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
         </div>
         <StatusMsg {...galleryStatus} />
       </section>
-
-      {/* ── CV ── */}
-      <form onSubmit={handleSaveCv} className="space-y-12">
-        <div className="flex items-center justify-between">
-          <SectionHeading>CV</SectionHeading>
-          <div className="flex items-center gap-4">
-            <SaveButton pending={isPending} label="Save CV" />
-          </div>
-        </div>
-        <StatusMsg {...cvStatus} />
-
-        <div className="space-y-4">
-          <p className="text-sm font-medium">Exhibitions</p>
-          <ExhibitionList items={exhibitions} onChange={setExhibitions} />
-        </div>
-
-        <div className="space-y-4 border-t border-muted pt-8">
-          <p className="text-sm font-medium">Education</p>
-          <EducationList items={education} onChange={setEducation} />
-        </div>
-
-        <div className="space-y-4 border-t border-muted pt-8">
-          <p className="text-sm font-medium">Awards &amp; Recognition</p>
-          <AwardList items={awards} onChange={setAwards} />
-        </div>
-
-        <div className="space-y-4 border-t border-muted pt-8">
-          <p className="text-sm font-medium">Press &amp; Publications</p>
-          <PressList items={press} onChange={setPress} />
-        </div>
-
-        <div className="border-t border-muted pt-8">
-          <SaveButton pending={isPending} label="Save CV" />
-          <StatusMsg {...cvStatus} />
-        </div>
-      </form>
 
     </div>
   );
