@@ -63,7 +63,7 @@ export function MainGallery({
               }}
               className={`cursor-crosshair transition-opacity ${selectedCategories.length === 0 && !inStockOnly ? "text-foreground" : "text-foreground/50"}`}
             >
-              All [{totalCount}]
+              All <span className="text-accent">{totalCount}</span>
             </button>
             <button
               onClick={() => {
@@ -71,7 +71,7 @@ export function MainGallery({
               }}
               className={`cursor-crosshair transition-opacity ${inStockOnly ? "text-foreground font-semibold" : "text-foreground/50"}`}
             >
-              Available [{inStockCount}]
+              Available <span className="text-accent">{inStockCount}</span>
             </button>
           </div>
           {showCategories && (
@@ -93,7 +93,7 @@ export function MainGallery({
                     className={`pr-1 py-1 rounded transition-colors cursor-crosshair text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
                   >
                     {categoryStr}{" "}
-                    <span className="text-foreground/60">[{count}]</span>
+                    <span className="text-accent">{count}</span>
                   </button>
                 </span>
               );
@@ -116,7 +116,7 @@ export function MainGallery({
                     className={`pr-1 py-1 rounded transition-colors cursor-crosshair text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
                   >
                     {glaze}{" "}
-                    <span className="text-foreground/60">[{count}]</span>
+                    <span className="text-accent">{count}</span>
                   </button>
                 </span>
               );
