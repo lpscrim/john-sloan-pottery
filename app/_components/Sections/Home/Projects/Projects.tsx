@@ -14,14 +14,14 @@ export async function Projects() {
         <h2 className="text-3xl md:text-5xl tracking-tight"></h2>
       </div>
 
-      <MarqueeBanner duration={projects.length * 4}>
+      <MarqueeBanner duration={projects.length * 6}>
         {items.map((project, idx) => (
           <Link
             key={idx}
             href={`/work?project=${project.id}`}
             className="group cursor-crosshair shrink-0 w-86 md:w-96 lg:w-104 xl:w-120"
           >
-            <div className="relative aspect-4/5 bg-muted overflow-hidden rounded-xs">
+            <div className="relative aspect-4/5 bg-muted overflow-hidden rounded-sm">
               <ImageWithFallback
                 src={project.imageUrl}
                 alt={project.title}
