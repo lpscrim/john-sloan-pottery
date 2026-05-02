@@ -35,7 +35,7 @@ export async function Projects() {
 
       <div className="px-6 mt-24 text-center">
         <Button size="xl">
-          <Link href="/work">See More</Link>
+          <Link href="/work">See All</Link>
         </Button>
       </div>
     </section>

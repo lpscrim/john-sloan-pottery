@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useCallback } from 'react';
+import Image from 'next/image';
 
 export function Hero() {
   const desktopVideoRef = useRef<HTMLVideoElement>(null);
@@ -18,7 +19,7 @@ export function Hero() {
   return (
     <section id="home" className="min-h-svh flex flex-col justify-center items-center">
       {/* Top image strip - Desktop */}
-      <div className='absolute bg-black/5 backdrop-blur-none w-full h-full z-9'></div>
+      <div className='absolute bg-black/10 backdrop-blur-md w-full h-full z-9'></div>
       <div className="hidden md:flex w-full h-svh relative overflow-hidden justify-center items-center">
         {/* Static image positioned in background */}
         <video 
@@ -33,9 +34,11 @@ export function Hero() {
         <h2 
           className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
-          <span className='mb-4'>John Sloan</span>
-          
-          <span className='text-[3vw]/[3vw]'>Pottery</span>
+          <Image src="/Logo.svg" alt="Logo" width="500" height="500" className="" loading='eager' />
+
+          {/*<span className='mb-4 '>John Sloan</span>
+
+          <span className='text-[3vw]/[3vw] '>Pottery</span>*/}
         </h2>
       </div>
       {/* Mobile */}

@@ -32,7 +32,7 @@ export async function About() {
         </div>
          <div className="mt-24 text-center">
           <Button size="xl">
-            <Link href="/about">Find Out More</Link>
+            <Link href="/about">In the studio</Link>
           </Button>
         </div>
       </div>

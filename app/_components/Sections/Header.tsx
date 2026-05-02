@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { ShoppingBag } from "lucide-react";
 import NavIcon from "../UI/Nav/NavIcon";
 import { useCart } from "../Cart/CartContext";
 
@@ -52,10 +53,10 @@ export function Header() {
         <div className="absolute inset-0 w-full h-full  bg-background z-0 pointer-events-none transition-all duration-500" />
       )}
       <div className="relative mx-auto py-4 z-10">
-        <div className="flex items-center justify-between">
+        <div className="relative flex items-center justify-between">
           {/* Logo with crossfade */}
           <button
-            className={`relative cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "invisible" : "text-foreground"}`}
+            className={`relative cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             onClick={() => {
               conditionalScrollTo("");
               setIsMenuOpen(false);
@@ -71,7 +72,7 @@ export function Header() {
               John Sloan Pottery
             </span>
             <span
-              className={`tracking-wide title font-light text-card invisible absolute left-0 top-0 transition-all duration-500 ${
+              className={`tracking-wide title font-light text-card  absolute left-0 top-0 transition-all duration-500 ${
                 isLight
                   ? "opacity-100 pointer-events-auto"
                   : "opacity-0 pointer-events-none"
@@ -81,14 +82,14 @@ export function Header() {
             </span>
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex gap-8 ">
+          {/* Desktop Navigation — centred */}
+          <nav className="hidden md:flex gap-8 absolute left-1/2 -translate-x-1/2">
             <button
               className={`relative nav text-2xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/work" className="cursor-crosshair">
                 <span
-                  className={`text-foreground  transition-all duration-500 ${
+                  className={`text-foreground transition-all duration-500 ${
                     isLight
                       ? "opacity-0 pointer-events-none"
                       : "opacity-100 pointer-events-auto"
@@ -97,7 +98,7 @@ export function Header() {
                   Work
                 </span>
                 <span
-                  className={`text-card  absolute left-0 top-0 transition-all duration-500 ${
+                  className={`text-card absolute left-0 top-0 transition-all duration-500 ${
                     isLight
                       ? "opacity-100 pointer-events-auto"
                       : "opacity-0 pointer-events-none"
@@ -112,7 +113,7 @@ export function Header() {
             >
               <Link href="/about">
                 <span
-                  className={`text-foreground  transition-all duration-500 ${
+                  className={`text-foreground transition-all duration-500 ${
                     isLight
                       ? "opacity-0 pointer-events-none"
                       : "opacity-100 pointer-events-auto"
@@ -121,7 +122,7 @@ export function Header() {
                   About
                 </span>
                 <span
-                  className={`text-card  absolute left-0 top-0 transition-all duration-500 ${
+                  className={`text-card absolute left-0 top-0 transition-all duration-500 ${
                     isLight
                       ? "opacity-100 pointer-events-auto"
                       : "opacity-0 pointer-events-none"
@@ -136,7 +137,7 @@ export function Header() {
               onClick={() => conditionalScrollTo("#contact")}
             >
               <span
-                className={`text-foreground  transition-all duration-500 ${
+                className={`text-foreground transition-all duration-500 ${
                   isLight
                     ? "opacity-0 pointer-events-none"
                     : "opacity-100 pointer-events-auto"
@@ -145,43 +146,32 @@ export function Header() {
                 Contact
               </span>
               <span
-                className={`text-card  absolute left-0 top-0 transition-all duration-500 ${
+                className={`text-card absolute left-0 top-0 transition-all duration-500 ${
                   isLight
                     ? "opacity-100 pointer-events-auto"
                     : "opacity-0 pointer-events-none"
                 }`}
               >
                 Contact
-              </span>
-            </button>
-            <button
-              className={`relative nav text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
-              onClick={toggleCart}
-            >
-              <span
-                className={`text-foreground  transition-all duration-500 ${
-                  isLight
-                    ? "opacity-0 pointer-events-none"
-                    : "opacity-100 pointer-events-auto"
-                }`}
-              >
-                Cart
-                {count > 0 && (
-                  <span className="text-foreground/60"> [{count}]</span>
-                )}
-              </span>
-              <span
-                className={`text-card  absolute left-0 top-0 transition-all duration-500 ${
-                  isLight
-                    ? "opacity-100 pointer-events-auto"
-                    : "opacity-0 pointer-events-none"
-                }`}
-              >
-                Cart
-                {count > 0 && <span className="text-card/60"> [{count}]</span>}
               </span>
             </button>
           </nav>
+
+          {/* Desktop Cart icon — right */}
+          <button
+            className={`hidden md:flex relative cursor-crosshair transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+            onClick={toggleCart}
+            aria-label="Open cart"
+          >
+            <span className="relative">
+              <ShoppingBag size={22} strokeWidth={1.5} />
+              {count > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 text-[10px] leading-none">
+                  {count}
+                </span>
+              )}
+            </span>
+          </button>
 
           {/* Mobile Menu Button */}
           <button
