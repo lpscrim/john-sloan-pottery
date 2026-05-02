@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -52,34 +53,38 @@ export function Header() {
       {!isLight && (
         <div className="absolute inset-0 w-full h-full  bg-background z-0 pointer-events-none transition-all duration-500" />
       )}
-      <div className="relative mx-auto py-4 z-10">
+      <div className="relative mx-auto py-2 z-10">
         <div className="relative flex items-center justify-between">
           {/* Logo with crossfade */}
           <button
-            className={`relative cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+            className="relative cursor-crosshair w-[50px] h-[50px] transition-colors duration-500"
             onClick={() => {
               conditionalScrollTo("");
               setIsMenuOpen(false);
             }}
           >
-            <span
-              className={`tracking-wide title font-light text-foreground left-0 top-0 transition-all duration-500 ${
+            <Image
+              src="/LogoB.svg"
+              alt="John Sloan Pottery"
+              width={50}
+              height={50}
+              className={`transition-all duration-500 ${
                 isLight
                   ? "opacity-0 pointer-events-none"
                   : "opacity-100 pointer-events-auto"
               }`}
-            >
-              John Sloan Pottery
-            </span>
-            <span
-              className={`tracking-wide title font-light text-card  absolute left-0 top-0 transition-all duration-500 ${
+            />
+            <Image
+              src="/Logo.svg"
+              alt="John Sloan Pottery"
+              width={50}
+              height={50}
+              className={`absolute inset-0 transition-all duration-500 ${
                 isLight
                   ? "opacity-100 pointer-events-auto"
                   : "opacity-0 pointer-events-none"
               }`}
-            >
-              John Sloan Pottery
-            </span>
+            />
           </button>
 
           {/* Desktop Navigation — centred */}

@@ -73,6 +73,14 @@
 }
 
 @font-face {
+  font-family: 'TAY Tallboy';
+  src: url('/font/TAYTallboy.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Futura PT';
   src: url('/font/futura-pt/FuturaCyrillicHeavy.ttf') format('truetype');
   font-weight: 900;
@@ -244,20 +252,20 @@ html {
 
 .title {
   font-family: 'TAY Taxidriver', sans-serif;
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: 400;
 }
 
 h1, h2, h3, h4, .nav {
   font-family: 'Futura PT', sans-serif;
   text-transform: none;
-  font-weight: 200;
+   font-weight: 200;
 }
 
 button {
    font-family: 'Futura PT', sans-serif;
   text-transform: none;
-  font-weight: 400;
+  font-weight: 200;
 }
 
 body {
