@@ -3,15 +3,15 @@ export default function Button(props: Readonly<{
   onClick?: () => void;
   size: string;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset" ;
   }>) {
   const { children, onClick, size, disabled } = props;
   return (
     <button 
+      type={props.type}
       disabled={disabled}
-      className={`cursor-crosshair text-foreground text-${size} py-2 px-2 rounded-xs transition-all duration-250 group` } onClick={onClick}>
-      <span className="group-hover:px-0.5 transition-all duration-250">[</span>{" "}
-      {children}{" "}
-      <span className="group-hover:px-0.5 transition-all duration-250">]</span>
+      className={`bg-muted  rounded-md text-foreground text-${size} py-2 px-4 shadow-sm active:shadow-none active:translate-y-0.5 active:-translate-x-0.5 transition-all duration-250 ` } onClick={onClick}>
+      {children}
     </button>
   );
 }

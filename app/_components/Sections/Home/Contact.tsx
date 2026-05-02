@@ -1,5 +1,6 @@
 "use client";
 
+import  Button  from "../../UI/Layout/Button";
 import { useState } from "react";
 import { Mail, Instagram, Globe, Newspaper } from "lucide-react";
 
@@ -46,7 +47,7 @@ export function Contact() {
               {/* TODO: Replace href and span text with contact email */}
               <a
                 href="mailto:your@email.com"
-                className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor-crosshair group text-lg"
+                className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor- group text-lg"
               >
                 <Mail size={20} className="text-muted-foreground " />
                 <span>your@email.com</span>{" "}
@@ -66,7 +67,7 @@ export function Contact() {
                   href="https://www.instagram.com/yourhandle/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center cursor-crosshair gap-3 hover:opacity-70 transition-opacity"
+                  className="flex items-center cursor- gap-3 hover:opacity-70 transition-opacity"
                 >
                   <Instagram size={20} className="text-muted-foreground" />
                   <span>Instagram</span>
@@ -75,7 +76,7 @@ export function Contact() {
                   onClick={() =>
                     window.dispatchEvent(new CustomEvent("open-mailing-list"))
                   }
-                  className="flex items-center gap-3 cursor-crosshair hover:opacity-70 transition-opacity whitespace-nowrap"
+                  className="flex items-center gap-3 cursor- hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
                   <Newspaper size={20} className="text-muted-foreground" />
                   <span>Newsletter</span>
@@ -85,7 +86,7 @@ export function Contact() {
                   href="https://example.com/shop"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 cursor-crosshair hover:opacity-70 transition-opacity whitespace-nowrap"
+                  className="flex items-center gap-3 cursor- hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
                   <Globe size={20} className="text-muted-foreground" />
                   <span>Stored Shop</span>
@@ -139,13 +140,13 @@ export function Contact() {
                       Something went wrong — please try again.
                     </p>
                   )}
-                  <button
+                  <Button
                     type="submit"
                     disabled={status === "sending"}
-                    className="ml-auto bg-muted/10 px-4 border-b border-foreground/30 rounded-sm py-1 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 cursor-crosshair"
+                    size="sm"
                   >
                     {status === "sending" ? "Sending…" : "Send"}
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}
