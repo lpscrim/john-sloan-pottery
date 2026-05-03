@@ -24,14 +24,14 @@ export function Hero() {
         {/* Static image positioned in background */}
         <video 
           ref={desktopVideoRef}
-          src="/Banner Landscape.mp4" 
+          src="/pottery.mp4" 
           autoPlay 
           muted
           playsInline
           onEnded={() => handleEnded(desktopVideoRef.current)}
           className="object-cover object-center h-auto min-h-full w-full"
         />
-        <h2 
+        <div 
           className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
           <Image src="/Logo.webp" alt="Logo" width="350" height="350" className="" loading='eager' />
@@ -39,26 +39,28 @@ export function Hero() {
           {/*<span className='mb-4 '>John Sloan</span>
 
           <span className='text-[3vw]/[3vw] '>Pottery</span>*/}
-        </h2>
+        </div>
       </div>
       {/* Mobile */}
       <div className="flex md:hidden w-full h-svh relative overflow-hidden justify-center items-center">
         <video 
           ref={mobileVideoRef}
-          src="/Banner Portrait.mp4" 
+          src="/pottery.mp4" 
           autoPlay 
           muted
           playsInline
           onEnded={() => handleEnded(mobileVideoRef.current)}
           className="object-cover object-center h-auto min-h-full w-full"
         />
-        <h2 
-          className="absolute inset-0 title flex items-center text-center font-medium justify-center text-[12vw]/[12vw] tracking-widest text-card z-20 flex-col opacity-[0.95]"
+        <div 
+          className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
-          <span className='mb-4'>John Sloan</span>
-          
-          <span className='text-[6vw]/[6vw]'>Pottery</span>
-        </h2>
+          <Image src="/Logo.webp" alt="Logo" width="200" height="200" className="" loading='eager' />
+
+          {/*<span className='mb-4 '>John Sloan</span>
+
+          <span className='text-[3vw]/[3vw] '>Pottery</span>*/}
+        </div>
       </div>
 
     </section>

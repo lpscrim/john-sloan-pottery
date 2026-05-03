@@ -90,7 +90,7 @@ export function CartDrawer() {
           <h2 className="text-lg font-semibold tracking-tight">CART [{count}]</h2>
           <button
             onClick={closeCart}
-            className="cursor-crosshair text-muted-foreground hover:text-foreground transition-colors text-2xl leading-none"
+            className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors text-2xl leading-none"
             aria-label="Close cart"
           >
             &times;
@@ -100,7 +100,7 @@ export function CartDrawer() {
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-8 space-y-4">
           {items.length === 0 && (
-            <p className="text-muted-foreground text-sm">Your cart is empty.</p>
+            <p className="text-muted-foreground text-base">Your cart is empty.</p>
           )}
 
           {items.map((item) => (
@@ -118,8 +118,8 @@ export function CartDrawer() {
 
               {/* Details */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{item.name}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base font-medium truncate">{item.name}</p>
+                <p className="text-base text-muted-foreground">
                   £{(item.priceHw / 100).toFixed(2)}
                 </p>
 
@@ -128,15 +128,15 @@ export function CartDrawer() {
                 <div className="flex items-center gap-2 mt-1">
                   <button
                     onClick={() => updateQuantity(item.priceId, item.quantity - 1)}
-                    className="cursor-crosshair text-muted-foreground hover:text-foreground text-sm w-6 h-6 flex items-center justify-center border border-muted rounded-sm transition-colors"
+                    className="cursor-pointer text-muted-foreground hover:text-foreground text-base w-6 h-6 flex items-center justify-center border border-muted rounded-sm transition-colors"
                   >
                     −
                   </button>
-                  <span className="text-sm w-4 text-center">{item.quantity}</span>
+                  <span className="text-base w-4 text-center">{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.priceId, item.quantity + 1)}
                     disabled={item.quantity >= item.stockLevel}
-                    className="cursor-crosshair text-muted-foreground hover:text-foreground text-sm w-6 h-6 flex items-center justify-center border border-muted rounded-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="cursor-pointer text-muted-foreground hover:text-foreground text-base w-6 h-6 flex items-center justify-center border border-muted rounded-sm transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     +
                   </button>
@@ -146,12 +146,12 @@ export function CartDrawer() {
 
               {/* Line total + remove */}
               <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className="text-sm font-medium">
+                <span className="text-base font-medium">
                   £{((item.priceHw * item.quantity) / 100).toFixed(2)}
                 </span>
                 <button
                   onClick={() => removeItem(item.priceId)}
-                  className="cursor-crosshair text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="cursor-pointer text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   REMOVE
                 </button>
@@ -164,9 +164,9 @@ export function CartDrawer() {
         {items.length > 0 && (
           <div className="border-t border-muted px-6 py-4 space-y-3">
             {error && (
-              <p className="text-sm text-red-500">{error}</p>
+              <p className="text-base text-red-500">{error}</p>
             )}
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-base">
               <span className="text-muted-foreground">SUBTOTAL</span>
               <span>£{(subtotal / 100).toFixed(2)}</span>
             </div>
@@ -176,7 +176,7 @@ export function CartDrawer() {
                 role="checkbox"
                 aria-checked={collect}
                 onClick={() => setCollect((v) => !v)}
-                className={`cursor-crosshair mt-0.5 shrink-0 w-4 h-4 border transition-colors ${
+                className={`cursor-pointer mt-0.5 shrink-0 w-4 h-4 border transition-colors ${
                   collect ? 'bg-foreground border-foreground' : 'bg-transparent border-foreground/40'
                 }`}
               >
@@ -187,13 +187,13 @@ export function CartDrawer() {
                 )}
               </button>
               <div>
-                <p className="text-sm leading-snug">Collect from Edinburgh (free)</p>
+                <p className="text-base leading-snug">Collect from Edinburgh (free)</p>
                 <p className="text-xs text-muted-foreground leading-snug">Arrange collection directly with the artist</p>
               </div>
             </div>
 
             <div className="space-y-0.5">
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-base">
                 <span className="text-muted-foreground">SHIPPING</span>
                 <span>{effectiveShipping === 0 ? 'Free' : `£${(effectiveShipping / 100).toFixed(2)}`}</span>
               </div>
@@ -203,7 +203,7 @@ export function CartDrawer() {
                 </p>
               )}
             </div>
-            <div className="flex items-center justify-between text-sm font-semibold border-t border-muted pt-2">
+            <div className="flex items-center justify-between text-base font-semibold border-t border-muted pt-2">
               <span>TOTAL</span>
               <span>£{(total / 100).toFixed(2)}</span>
             </div>
@@ -211,14 +211,14 @@ export function CartDrawer() {
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="w-full cursor-crosshair rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="w-full cursor-pointer rounded-md bg-foreground px-4 py-2.5 text-base font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
             >
               {loading ? 'PREPARING…' : 'CHECKOUT'}
             </button>
 
             <button
               onClick={clearCart}
-              className="w-full cursor-crosshair text-xs text-muted-foreground hover:text-foreground transition-colors text-center"
+              className="w-full cursor-pointer text-xs text-muted-foreground hover:text-foreground transition-colors text-center"
             >
               CLEAR CART
             </button>

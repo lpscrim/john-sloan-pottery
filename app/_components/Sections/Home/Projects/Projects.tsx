@@ -19,7 +19,7 @@ export async function Projects() {
           <Link
             key={idx}
             href={`/work?project=${project.id}`}
-            className="group cursor-crosshair shrink-0 w-86 md:w-96 lg:w-104 xl:w-120"
+            className="group cursor-crosshair shrink-0 w-80 md:w-96 lg:w-104 xl:w-120"
           >
             <div className="relative aspect-4/5 bg-muted overflow-hidden rounded-sm">
               <ImageWithFallback
