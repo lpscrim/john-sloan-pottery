@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useCart } from '@/app/_components/Cart/CartContext';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
@@ -11,13 +11,11 @@ interface Props {
   examples: string[];
 }
 
+type TileCombo = { g1: Glaze; g2: Glaze; url: string; key: string };
+
 function tileUrl(slug1: string, slug2: string) {
   const [a, b] = [slug1, slug2].sort();
   return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/glaze-tiles/${a}-${b}.jpg`;
-}
-
-function glazeSwatchUrl(slug: string) {
-  return tileUrl(slug, slug);
 }
 
 function shapeUrl(slug: string) {
@@ -36,13 +34,38 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
 
   const { addItem } = useCart();
 
+  // All combinations including same-glaze (single colour)
+  const tileCombos = useMemo((): TileCombo[] => {
+    const out: TileCombo[] = [];
+    for (let i = 0; i < glazes.length; i++) {
+      for (let j = i; j < glazes.length; j++) {
+        const g1 = glazes[i], g2 = glazes[j];
+        out.push({
+          g1, g2,
+          url: tileUrl(g1.slug, g2.slug),
+          key: [g1.id, g2.id].sort().join('|'),
+        });
+      }
+    }
+    return out;
+  }, [glazes]);
+
+  const selectedKey = glaze1 && glaze2
+    ? [glaze1.id, glaze2.id].sort().join('|')
+    : null;
+
+  const handleTileSelect = (combo: TileCombo) => {
+    setGlaze1(combo.g1);
+    setGlaze2(combo.g2);
+    setGlazeStep(1);
+  };
+
   const handleGlazeClick = (glaze: Glaze) => {
     if (glazeStep === 1) {
       setGlaze1(glaze);
       setGlaze2(null);
       setGlazeStep(2);
     } else {
-      // Same glaze allowed — single colour
       setGlaze2(glaze);
       setGlazeStep(1);
     }
@@ -82,7 +105,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
       {/* ── Left: configuration steps ─────────────────────────── */}
       <div className="space-y-14">
 
-        {/* Step 1: Glazes */}
+        {/* Step 1: Glazes — individual selector */}
         <div>
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xl tracking-tight">
@@ -102,49 +125,45 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             )}
           </div>
 
-          <p className="text-sm text-muted-foreground mb-5">
+          <p className="text-sm text-muted-foreground mb-4">
             {!glaze1
-              ? 'Select a base glaze. You can choose the same glaze twice for a single colour.'
+              ? 'Pick a base glaze, then an accent. Or select a combination tile on the right.'
               : !glaze2
-              ? `Base: ${glaze1.name}. Now pick your accent — or click the same glaze for a single colour.`
+              ? `Base: ${glaze1.name}. Now pick your accent — or choose the same glaze for a single colour.`
               : glaze1.id === glaze2.id
               ? `${glaze1.name} — single colour`
               : `${glaze1.name} (base) + ${glaze2.name} (accent)`
             }
           </p>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+          <div className="flex flex-wrap gap-2">
             {glazes.map((glaze) => {
               const isBase = glaze.id === glaze1?.id;
               const isAccent = glaze.id === glaze2?.id;
               const isSingle = isBase && isAccent;
+              const isDisabled = glazeStep === 2 && glaze.id === glaze1?.id && !!glaze2;
 
               return (
                 <button
                   key={glaze.id}
                   onClick={() => handleGlazeClick(glaze)}
-                  className={`text-left border transition-all overflow-hidden ${
+                  disabled={isDisabled}
+                  className={`px-4 py-2 text-sm border transition-all ${
                     isSingle
-                      ? 'border-foreground ring-2 ring-foreground/20'
-                      : isBase || isAccent
-                      ? 'border-foreground'
-                      : 'border-foreground/15 hover:border-foreground/40'
+                      ? 'border-foreground bg-foreground text-background'
+                      : isBase
+                      ? 'border-foreground bg-foreground text-background'
+                      : isAccent
+                      ? 'border-foreground bg-foreground/15 text-foreground'
+                      : isDisabled
+                      ? 'border-foreground/10 text-foreground/30 cursor-not-allowed'
+                      : 'border-foreground/20 hover:border-foreground/60'
                   }`}
                 >
-                  <div className="relative aspect-square bg-muted/30">
-                    <img
-                      src={glazeSwatchUrl(glaze.slug)}
-                      alt={glaze.name}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                    />
-                  </div>
-                  <div className="px-2 py-1.5">
-                    <p className="text-xs font-medium leading-tight">{glaze.name}</p>
-                    {isSingle && <p className="text-xs text-muted-foreground">single</p>}
-                    {isBase && !isSingle && <p className="text-xs text-muted-foreground">base</p>}
-                    {isAccent && !isSingle && <p className="text-xs text-muted-foreground">accent</p>}
-                  </div>
+                  {glaze.name}
+                  {isSingle && <span className="ml-1.5 text-xs opacity-50">single</span>}
+                  {isBase && !isSingle && <span className="ml-1.5 text-xs opacity-50">base</span>}
+                  {isAccent && !isSingle && <span className="ml-1.5 text-xs opacity-50">accent</span>}
                 </button>
               );
             })}
@@ -192,39 +211,56 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
         </div>
       </div>
 
-      {/* ── Right: live preview ────────────────────────────────── */}
+      {/* ── Right: tile grid + shape preview + cart ───────────── */}
       <div className="space-y-8 lg:sticky lg:top-24 lg:self-start">
 
-        {/* Glaze tile preview */}
+        {/* Tile grid — all combinations */}
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-            Glaze combination
+            Glaze combinations
           </p>
-          <div className="relative aspect-square bg-muted/20 w-full max-w-sm">
-            {currentTileUrl ? (
-              <Image
-                key={currentTileUrl}
-                src={currentTileUrl}
-                alt={`${glaze1?.name} + ${glaze2?.name} glaze tile`}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center px-6">
-                <p className="text-sm text-muted-foreground text-center">
-                  {!glaze1
-                    ? 'Select a base glaze to preview the combination'
-                    : 'Select an accent glaze'}
-                </p>
-              </div>
-            )}
+          <p className="text-sm text-muted-foreground mb-4">
+            Click any tile to select that combination directly.
+          </p>
+          <div className="flex flex-wrap gap-1.5 items-start">
+            {tileCombos.map((combo) => {
+              const isSelected = combo.key === selectedKey;
+              const label = combo.g1.id === combo.g2.id
+                ? `${combo.g1.name} — single`
+                : `${combo.g1.name} + ${combo.g2.name}`;
+
+              return (
+                <button
+                  key={combo.key}
+                  title={label}
+                  onClick={() => handleTileSelect(combo)}
+                  className={`relative overflow-hidden border transition-all duration-300 shrink-0 ${
+                    isSelected
+                      ? 'w-36 h-36 border-foreground'
+                      : 'w-14 h-14 border-foreground/10 hover:border-foreground/40'
+                  }`}
+                >
+                  <img
+                    src={combo.url}
+                    alt={label}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
+                  />
+                  {isSelected && (
+                    <div className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm px-2 py-1.5">
+                      <p className="text-xs font-medium leading-tight">{label}</p>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Shape preview */}
         {shape && (
           <div>
-            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Shape</p>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Type</p>
             <div className="relative aspect-square bg-muted/20 w-full max-w-sm">
               <Image
                 src={shapeUrl(shape.slug)}
@@ -247,7 +283,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                   : <>{' (base) + '}<span className="text-foreground">{glaze2!.name}</span>{' (accent)'}</>
                 }
               </p>
-              <p>Shape: <span className="text-foreground">{shape!.name}</span></p>
+              <p>Type: <span className="text-foreground">{shape!.name}</span></p>
               <p className="text-lg text-foreground font-medium pt-1">
                 {formatPrice(shape!.price_pence)}
               </p>
