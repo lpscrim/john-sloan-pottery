@@ -2,6 +2,7 @@
 
 import { useActionState, useTransition, useRef, useState } from 'react';
 import Image from 'next/image';
+import Button from '@/app/_components/UI/Layout/Button';
 import type { Glaze, MugShape, MugSize } from '@/app/_lib/customMug';
 import {
   addGlaze, toggleGlazeActive, deleteGlaze,
@@ -14,15 +15,9 @@ import {
 
 function SaveButton({ pending, label = 'Add' }: { pending: boolean; label?: string }) {
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="cursor-crosshair text-sm transition-all duration-250 group disabled:opacity-50"
-    >
-      <span className="group-hover:px-0.5 transition-all duration-250">[</span>{' '}
-      {pending ? 'Saving…' : label}{' '}
-      <span className="group-hover:px-0.5 transition-all duration-250">]</span>
-    </button>
+    <Button type="submit" disabled={pending} size="sm">
+      {pending ? 'Saving…' : label}
+    </Button>
   );
 }
 

@@ -3,6 +3,7 @@
 import { useActionState, useRef, useState, useEffect } from 'react';
 import { addProduct, type AddProductState } from './actions';
 import { compressImage } from '../compressImage';
+import Button from '@/app/_components/UI/Layout/Button';
 
 const initialState: AddProductState = { success: false };
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4 MB (post-compression safety net)
@@ -269,13 +270,13 @@ export default function AddProductPage() {
           </div>
 
           {/* Submit */}
-          <button
+          <Button
             type="submit"
             disabled={isPending || compressing}
-            className="w-full rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+            size="base"
           >
             {compressing ? 'Compressing images…' : isPending ? 'Creating…' : 'Create Product'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

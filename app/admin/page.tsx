@@ -1,6 +1,10 @@
-import Link from 'next/link';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import Button from '@/app/_components/UI/Layout/Button';
 
 export default function AdminHomePage() {
+  const router = useRouter();
   return (
     <div className="bg-background text-foreground px-6 pt-16">
       <div className="max-w-xl mx-auto space-y-6">
@@ -9,54 +13,14 @@ export default function AdminHomePage() {
           Choose a task to continue.
         </p>
         <div className="grid gap-4 text-base">
-          <Link
-            href="/admin/add-product"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Add product
-          </Link>
-          <Link
-            href="/admin/edit-product"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Edit products
-          </Link>
-          <Link
-            href="/admin/orders"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Orders
-          </Link>
-          <Link
-            href="/admin/about"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            About page
-          </Link>
-          <Link
-            href="/admin/home-about"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Home about section
-          </Link>
-          <Link
-            href="/admin/custom-mug"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Custom mug builder
-          </Link>
-          <Link
-            href="/admin/settings"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Settings
-          </Link>
-          <Link
-            href="/admin/etsy"
-            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
-          >
-            Etsy sync
-          </Link>
+          <Button size="base" onClick={() => router.push('/admin/add-product')}>Add product</Button>
+          <Button size="base" onClick={() => router.push('/admin/edit-product')}>Edit products</Button>
+          <Button size="base" onClick={() => router.push('/admin/orders')}>Orders</Button>
+          <Button size="base" onClick={() => router.push('/admin/about')}>About page</Button>
+          <Button size="base" onClick={() => router.push('/admin/home-about')}>Home about section</Button>
+          <Button size="base" onClick={() => router.push('/admin/custom-mug')}>Custom mug builder</Button>
+          <Button size="base" onClick={() => router.push('/admin/settings')}>Settings</Button>
+          <Button size="base" onClick={() => router.push('/admin/etsy')}>Etsy sync</Button>
         </div>
       </div>
     </div>

@@ -1,18 +1,16 @@
 'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import Button from '@/app/_components/UI/Layout/Button';
 
 export function AdminBackButton() {
   const pathname = usePathname();
+  const router = useRouter();
   if (pathname === '/admin') return null;
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Link
-        href="/admin"
-        className="text-sm px-4 py-2 rounded border border-muted bg-background hover:border-foreground transition-colors"
-      >
+      <Button size="sm" onClick={() => router.push('/admin')}>
         ← Admin
-      </Link>
+      </Button>
     </div>
   );
 }

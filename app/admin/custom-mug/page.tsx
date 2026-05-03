@@ -1,5 +1,4 @@
 import { createServerSupabase } from '@/app/_lib/supabase';
-import { AdminBackButton } from '../AdminBackButton';
 import CustomMugAdminClient from './CustomMugAdminClient';
 
 export const dynamic = 'force-dynamic';
@@ -29,7 +28,6 @@ export default async function CustomMugAdminPage() {
   return (
     <div className="bg-background text-foreground px-6 pt-16 pb-24">
       <div className="max-w-xl mx-auto space-y-8">
-        <AdminBackButton />
         <h1 className="text-3xl tracking-tight">CUSTOM MUG BUILDER</h1>
         <p className="text-muted-foreground">
           Manage glazes, shapes, sizes, tile photos and example images.
