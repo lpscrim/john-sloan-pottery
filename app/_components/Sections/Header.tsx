@@ -57,17 +57,17 @@ export function Header() {
         <div className="relative flex items-center justify-between">
           {/* Logo with crossfade */}
           <button
-            className="relative cursor-crosshair w-[50px] h-[50px] transition-colors duration-500"
+            className="relative cursor-pointer  transition-colors duration-500"
             onClick={() => {
               conditionalScrollTo("");
               setIsMenuOpen(false);
             }}
           >
             <Image
-              src="/LogoB.svg"
+              src="/LogoB.webp"
               alt="John Sloan Pottery"
-              width={50}
-              height={50}
+              width={35}
+              height={35}
               className={`transition-all duration-500 ${
                 isLight
                   ? "opacity-0 pointer-events-none"
@@ -75,10 +75,10 @@ export function Header() {
               }`}
             />
             <Image
-              src="/Logo.svg"
+              src="/Logo.webp"
               alt="John Sloan Pottery"
-              width={50}
-              height={50}
+              width={35}
+              height={35}
               className={`absolute inset-0 transition-all duration-500 ${
                 isLight
                   ? "opacity-100 pointer-events-auto"
@@ -92,7 +92,7 @@ export function Header() {
             <button
               className={`relative nav text-2xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
-              <Link href="/work" className="cursor-crosshair">
+              <Link href="/work" className="cursor-pointer">
                 <span
                   className={`text-foreground transition-all duration-500 ${
                     isLight
@@ -114,7 +114,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative nav text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-2xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/about">
                 <span
@@ -138,7 +138,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative nav text-2xl cursor-crosshair nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-2xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
               onClick={() => conditionalScrollTo("#contact")}
             >
               <span
@@ -164,7 +164,7 @@ export function Header() {
 
           {/* Desktop Cart icon — right */}
           <button
-            className={`hidden md:flex relative cursor-crosshair transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+            className={`hidden md:flex relative cursor-pointer transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             onClick={toggleCart}
             aria-label="Open cart"
           >
@@ -180,7 +180,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden cursor-crosshair -mr-4.75 -mt-4 -mb-3.75"
+            className="md:hidden cursor-pointer -mr-4.75 -mt-4 -mb-3.75"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <NavIcon
@@ -200,22 +200,22 @@ export function Header() {
                 isLight ? "text-card " : "text-foreground "
               }`}
             >
-              <Link href="/work" className="cursor-crosshair">
+              <Link href="/work" className="cursor-pointer">
                 Work
               </Link>
             </button>
             <button
               onClick={() => setIsMenuOpen(false)}
-              className={`nav pop-up-2 opacity-0 text-left transition-colors cursor-crosshair ${
+              className={`nav pop-up-2 opacity-0 text-left transition-colors cursor-pointer ${
                 isLight ? "text-card " : "text-foreground "
               }`}
             >
-              <Link href="/about" className="cursor-crosshair">
+              <Link href="/about" className="cursor-pointer">
                 About
               </Link>
             </button>
             <button
-              className={`nav pop-up-3 opacity-0 text-left transition-colors cursor-crosshair ${
+              className={`nav pop-up-3 opacity-0 text-left transition-colors cursor-pointer ${
                 isLight ? "text-card " : "text-foreground "
               }`}
               onClick={() => {
@@ -226,7 +226,7 @@ export function Header() {
               Contact
             </button>
             <button
-              className={`nav pop-up-4 opacity-0 text-left transition-colors cursor-crosshair ${
+              className={`nav pop-up-4 opacity-0 text-left transition-colors cursor-pointer ${
                 isLight ? "text-card " : "text-foreground "
               }`}
               onClick={() => {

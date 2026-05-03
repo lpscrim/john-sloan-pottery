@@ -34,7 +34,7 @@ export function Hero() {
         <h2 
           className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
         >
-          <Image src="/Logo.svg" alt="Logo" width="500" height="500" className="" loading='eager' />
+          <Image src="/Logo.webp" alt="Logo" width="350" height="350" className="" loading='eager' />
 
           {/*<span className='mb-4 '>John Sloan</span>
 
