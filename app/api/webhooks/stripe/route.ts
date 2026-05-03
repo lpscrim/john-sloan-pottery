@@ -13,22 +13,32 @@ export async function POST(req: NextRequest) {
   // Direct charges fire events on the connected account, forwarded to the
   // platform via a Connect webhook (separate secret: STRIPE_CONNECT_WEBHOOK_SECRET).
   // Fall back to the standard account secret if the connect secret isn't set yet.
-  const accountSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-  const connectSecret = process.env.STRIPE_CONNECT_WEBHOOK_SECRET;
+  const accountSecret = (process.env.STRIPE_WEBHOOK_SECRET ?? '').trim();
+  const connectSecret = process.env.STRIPE_CONNECT_WEBHOOK_SECRET?.trim();
+
+  console.log('[WEBHOOK] sig header present:', !!sig);
+  console.log('[WEBHOOK] connectSecret present:', !!connectSecret);
+  console.log('[WEBHOOK] accountSecret present:', !!accountSecret);
+  console.log('[WEBHOOK] rawBody length:', rawBody.length);
 
   let event: Stripe.Event;
   try {
     if (connectSecret) {
       try {
         event = stripe.webhooks.constructEvent(rawBody, sig!, connectSecret);
-      } catch {
+        console.log('[WEBHOOK] verified with connectSecret');
+      } catch (connectErr) {
+        console.error('[WEBHOOK] connectSecret failed:', connectErr instanceof Error ? connectErr.message : connectErr);
         event = stripe.webhooks.constructEvent(rawBody, sig!, accountSecret);
+        console.log('[WEBHOOK] verified with accountSecret');
       }
     } else {
       event = stripe.webhooks.constructEvent(rawBody, sig!, accountSecret);
+      console.log('[WEBHOOK] verified with accountSecret (no connectSecret)');
     }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error('[WEBHOOK] all verification attempts failed:', message);
     return NextResponse.json({ error: `Webhook Error: ${message}` }, { status: 400 });
   }
 
