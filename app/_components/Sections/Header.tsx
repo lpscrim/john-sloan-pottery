@@ -49,7 +49,7 @@ export function Header() {
   const isLight = !isWorkPage && !isAdminPage && onHero;
 
   return (
-    <header className={`fixed text-2xl top-0 left-0 right-0 z-999 px-6 `}>
+    <header className={`fixed text-2xl top-0 left-0 right-0 z-999 px-6 py-2`}>
       {!isLight && (
         <div className="absolute inset-0 w-full h-full  bg-background z-0 pointer-events-none transition-all duration-500" />
       )}

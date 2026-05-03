@@ -10,35 +10,17 @@ export async function POST(req: NextRequest) {
   const sig = req.headers.get('stripe-signature');
   const rawBody = await req.text();
 
-  // Direct charges fire events on the connected account, forwarded to the
-  // platform via a Connect webhook (separate secret: STRIPE_CONNECT_WEBHOOK_SECRET).
-  // Fall back to the standard account secret if the connect secret isn't set yet.
-  const accountSecret = (process.env.STRIPE_WEBHOOK_SECRET ?? '').trim();
-  const connectSecret = process.env.STRIPE_CONNECT_WEBHOOK_SECRET?.trim();
-
-  console.log('[WEBHOOK] sig header present:', !!sig);
-  console.log('[WEBHOOK] connectSecret present:', !!connectSecret);
-  console.log('[WEBHOOK] accountSecret present:', !!accountSecret);
-  console.log('[WEBHOOK] rawBody length:', rawBody.length);
+  // Events from the connected account are forwarded via a Connect webhook
+  // (signed with STRIPE_CONNECT_WEBHOOK_SECRET). If that is not configured,
+  // fall back to the platform webhook secret for local/test environments.
+  const secret = (process.env.STRIPE_CONNECT_WEBHOOK_SECRET ?? process.env.STRIPE_WEBHOOK_SECRET ?? '').trim();
 
   let event: Stripe.Event;
   try {
-    if (connectSecret) {
-      try {
-        event = stripe.webhooks.constructEvent(rawBody, sig!, connectSecret);
-        console.log('[WEBHOOK] verified with connectSecret');
-      } catch (connectErr) {
-        console.error('[WEBHOOK] connectSecret failed:', connectErr instanceof Error ? connectErr.message : connectErr);
-        event = stripe.webhooks.constructEvent(rawBody, sig!, accountSecret);
-        console.log('[WEBHOOK] verified with accountSecret');
-      }
-    } else {
-      event = stripe.webhooks.constructEvent(rawBody, sig!, accountSecret);
-      console.log('[WEBHOOK] verified with accountSecret (no connectSecret)');
-    }
+    event = stripe.webhooks.constructEvent(rawBody, sig!, secret);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
-    console.error('[WEBHOOK] all verification attempts failed:', message);
+    console.error('[WEBHOOK] signature verification failed:', message);
     return NextResponse.json({ error: `Webhook Error: ${message}` }, { status: 400 });
   }
 
