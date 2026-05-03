@@ -1,5 +1,5 @@
 import { createServerSupabase } from '@/app/_lib/supabase';
-import AdminBackButton from '../AdminBackButton';
+import { AdminBackButton } from '../AdminBackButton';
 import CustomMugAdminClient from './CustomMugAdminClient';
 
 export const dynamic = 'force-dynamic';
