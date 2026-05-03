@@ -257,22 +257,18 @@ html {
 }
 
 h1, h2, h3, h4, .nav {
-  font-family: 'Futura PT', sans-serif;
+  font-family: 'TAY Birdie', sans-serif;
   text-transform: none;
    font-weight: 200;
 }
 
-button {
-   font-family: 'Futura PT', sans-serif;
+button, #contact a  {
+   font-family: 'TAY Birdie', sans-serif;
   text-transform: none;
   font-weight: 200;
 }
 
 body {
-  font-family: 'Futura PT', sans-serif;
-}
-
-#contact a {
   font-family: 'Futura PT', sans-serif;
 }
 

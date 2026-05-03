@@ -37,7 +37,7 @@ export function Contact() {
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
           <div className="space-y-8 lg:col-span-2">
-            <p className="text-lg xl:text-xl text-muted-foreground">
+            <p className="text-lg xl:text-xl textforeground">
               Available for commissioned work, collaborations, and inquiries.
               Each piece is made to order and can be tailored to your
               requirements — get in touch to discuss.
@@ -49,18 +49,18 @@ export function Contact() {
                 href="mailto:your@email.com"
                 className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor-pointer group text-lg"
               >
-                <Mail size={20} className="text-muted-foreground " />
+                <Mail size={20} className="text-foreground " />
                 <span>your@email.com</span>{" "}
                 {/* TODO: Replace with contact email */}
               </a>
 
-              <div className="flex items-center gap-3 text-lg text-muted-foreground justify-end">
+              <div className="flex items-center gap-3 text-lg text-foreground justify-end">
                 <span className="w-5" />
                 <span>Isle of Skye, Scotland</span>
               </div>
             </div>
             <div className="">
-              <p className="text-muted-foreground mb-4">Social</p>
+              <p className="text-foreground mb-4">Social</p>
               <div className="space-y-3 lg:flex lg:flex-row lg:gap-8 lg:space-y-0">
                 {/* TODO: Replace with Instagram URL */}
                 <a
@@ -69,7 +69,7 @@ export function Contact() {
                   rel="noopener noreferrer"
                   className="flex items-center cursor-pointer gap-3 hover:opacity-70 transition-opacity"
                 >
-                  <Instagram size={20} className="text-muted-foreground" />
+                  <Instagram size={20} className="text-foreground" />
                   <span>Instagram</span>
                 </a>
                 <button
@@ -78,7 +78,7 @@ export function Contact() {
                   }
                   className="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
-                  <Newspaper size={20} className="text-muted-foreground" />
+                  <Newspaper size={20} className="text-foreground" />
                   <span>Newsletter</span>
                 </button>
                 {/* TODO: Replace with your external shop URL (e.g. Stored, Etsy) or remove */}
@@ -88,7 +88,7 @@ export function Contact() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
-                  <Globe size={20} className="text-muted-foreground" />
+                  <Globe size={20} className="text-foreground" />
                   <span>Stored Shop</span>
                 </a>
               </div>
@@ -97,7 +97,7 @@ export function Contact() {
 
           <div className="space-y-8 lg:col-start-3 lg:col-span-2 text-lg">
             {status === "sent" ? (
-              <p className="text-muted-foreground text-base">
+              <p className="text-foreground text-base">
                 Message sent — I&apos;ll be in touch.
               </p>
             ) : (
@@ -111,7 +111,7 @@ export function Contact() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, name: e.target.value }))
                     }
-                    className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-muted-foreground transition-colors w-full"
+                    className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-foreground transition-colors w-full"
                   />
                   <input
                     type="email"
@@ -121,7 +121,7 @@ export function Contact() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, email: e.target.value }))
                     }
-                    className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-muted-foreground transition-colors w-full"
+                    className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-foreground transition-colors w-full"
                   />
                 </div>
                 <textarea
@@ -132,7 +132,7 @@ export function Contact() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, message: e.target.value }))
                   }
-                  className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-muted-foreground transition-colors w-full resize-none"
+                  className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-foreground transition-colors w-full resize-none"
                 />
                 <div className="flex items-center justify-between">
                   {status === "error" && (
