@@ -335,7 +335,7 @@ body {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.3s ease;
+  transition: transform 0.7s ease;
 }
 .nav-underline:hover::after {
   transform: scaleX(1);
