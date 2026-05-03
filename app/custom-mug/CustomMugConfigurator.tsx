@@ -236,14 +236,15 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                   onClick={() => handleTileSelect(combo)}
                   className={`relative overflow-hidden border transition-all duration-300 shrink-0 ${
                     isSelected
-                      ? 'w-36 h-36 border-foreground'
+                      ? 'w-64 h-64 border-foreground'
                       : 'w-14 h-14 border-foreground/10 hover:border-foreground/40'
                   }`}
                 >
-                  <img
+                  <Image
                     src={combo.url}
                     alt={label}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                     onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
                   />
                   {isSelected && (
