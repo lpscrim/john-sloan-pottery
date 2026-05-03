@@ -47,7 +47,7 @@ export function Contact() {
               {/* TODO: Replace href and span text with contact email */}
               <a
                 href="mailto:your@email.com"
-                className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor- group text-lg"
+                className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor-pointer group text-lg"
               >
                 <Mail size={20} className="text-muted-foreground " />
                 <span>your@email.com</span>{" "}
@@ -67,7 +67,7 @@ export function Contact() {
                   href="https://www.instagram.com/yourhandle/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center cursor- gap-3 hover:opacity-70 transition-opacity"
+                  className="flex items-center cursor-pointer gap-3 hover:opacity-70 transition-opacity"
                 >
                   <Instagram size={20} className="text-muted-foreground" />
                   <span>Instagram</span>
@@ -76,7 +76,7 @@ export function Contact() {
                   onClick={() =>
                     window.dispatchEvent(new CustomEvent("open-mailing-list"))
                   }
-                  className="flex items-center gap-3 cursor- hover:opacity-70 transition-opacity whitespace-nowrap"
+                  className="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
                   <Newspaper size={20} className="text-muted-foreground" />
                   <span>Newsletter</span>
@@ -86,7 +86,7 @@ export function Contact() {
                   href="https://example.com/shop"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 cursor- hover:opacity-70 transition-opacity whitespace-nowrap"
+                  className="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity whitespace-nowrap"
                 >
                   <Globe size={20} className="text-muted-foreground" />
                   <span>Stored Shop</span>
