@@ -3,10 +3,14 @@ import { createServerSupabase } from './supabase';
 
 function getAllowlist() {
   const raw = process.env.ADMIN_EMAIL_ALLOWLIST ?? '';
-  return raw
+  const list = raw
     .split(',')
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean);
+  if (list.length === 0) {
+    console.error('[adminAuth] ADMIN_EMAIL_ALLOWLIST is not configured — all admin access denied');
+  }
+  return list;
 }
 
 function isAllowedEmail(email: string | null | undefined) {

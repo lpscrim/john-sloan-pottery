@@ -155,10 +155,22 @@ export async function POST(req: NextRequest) {
     const cancelToken = crypto.randomUUID();
 
     // Combine all items into reserved_items metadata so the orders page displays them
-    const allReservedItems = [
+    let allReservedItems = [
       ...enrichedReservations,
       ...enrichedCustomItems,
     ];
+
+    // Stripe metadata values are capped at 500 chars each; the whole set at 50 KB.
+    // If the serialised items exceed 40 KB, strip image URLs to reduce size.
+    // If still too large, return an error rather than silently truncating order data.
+    let reservedItemsJson = JSON.stringify(allReservedItems);
+    if (reservedItemsJson.length > 40_000) {
+      allReservedItems = allReservedItems.map(({ image: _image, ...rest }) => rest) as typeof allReservedItems;
+      reservedItemsJson = JSON.stringify(allReservedItems);
+    }
+    if (reservedItemsJson.length > 50_000) {
+      return NextResponse.json({ error: 'Order too large to process — please contact us' }, { status: 400 });
+    }
 
     const paymentIntent = await stripe.paymentIntents.create(
       {
@@ -169,7 +181,7 @@ export async function POST(req: NextRequest) {
           ? { application_fee_amount: applicationFeeAmount }
           : {}),
         metadata: {
-          reserved_items: JSON.stringify(allReservedItems),
+          reserved_items: reservedItemsJson,
           shipping_amount: String(shippingRatePence),
           cancel_token: cancelToken,
           ...(collect ? { collection: 'true' } : {}),

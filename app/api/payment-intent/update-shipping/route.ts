@@ -15,6 +15,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Validate country is a 2-letter ISO 3166-1 alpha-2 code
+    if (!/^[A-Z]{2}$/.test(country)) {
+      return NextResponse.json({ error: 'Invalid country code' }, { status: 400 });
+    }
+
     const stripe = getStripe();
     const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
     const stripeOpts = clientAccountId ? { stripeAccount: clientAccountId } : undefined;

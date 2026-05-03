@@ -38,47 +38,54 @@ export async function GET(req: NextRequest) {
   const results: SyncResult[] = [];
   const errors: string[] = [];
 
-  for (const product of products) {
-    try {
-      const listingId = parseInt(product.etsy_listing_id as string, 10);
-      const inventory = await fetchListingInventory(listingId);
+  // Process in batches of 5 to parallelise within Etsy's rate limit (~10 req/s)
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < products.length; i += BATCH_SIZE) {
+    const batch = products.slice(i, i + BATCH_SIZE);
+    await Promise.allSettled(
+      batch.map(async (product) => {
+        try {
+          const listingId = parseInt(product.etsy_listing_id as string, 10);
+          const inventory = await fetchListingInventory(listingId);
 
-      // Sum quantity across all offerings (handles simple and variation listings)
-      const etsyQty = inventory.products.reduce(
-        (sum, p) => sum + p.offerings.reduce((s, o) => s + o.quantity, 0),
-        0,
-      );
+          // Sum quantity across all offerings (handles simple and variation listings)
+          const etsyQty = inventory.products.reduce(
+            (sum, p) => sum + p.offerings.reduce((s, o) => s + o.quantity, 0),
+            0,
+          );
 
-      const appQty: number = product.stock_level ?? 0;
+          const appQty: number = product.stock_level ?? 0;
 
-      if (etsyQty < appQty) {
-        // Etsy had a sale — bring app stock down to match
-        await supabase
-          .from('products')
-          .update({ stock_level: etsyQty })
-          .eq('id', product.id);
-        results.push({
-          listing_id: product.etsy_listing_id as string,
-          action: 'etsy_sale_detected',
-          from: appQty,
-          to: etsyQty,
-        });
-      } else if (appQty < etsyQty) {
-        // App stock is lower — push that value to Etsy
-        await updateListingInventory(listingId, appQty);
-        results.push({
-          listing_id: product.etsy_listing_id as string,
-          action: 'pushed_to_etsy',
-          from: etsyQty,
-          to: appQty,
-        });
-      }
-      // If equal, nothing to do
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      console.error(`[ETSY POLL] Failed for product ${product.id}:`, msg);
-      errors.push(`product ${product.id}: ${msg}`);
-    }
+          if (etsyQty < appQty) {
+            // Etsy had a sale — bring app stock down to match
+            await supabase
+              .from('products')
+              .update({ stock_level: etsyQty })
+              .eq('id', product.id);
+            results.push({
+              listing_id: product.etsy_listing_id as string,
+              action: 'etsy_sale_detected',
+              from: appQty,
+              to: etsyQty,
+            });
+          } else if (appQty < etsyQty) {
+            // App stock is lower — push that value to Etsy
+            await updateListingInventory(listingId, appQty);
+            results.push({
+              listing_id: product.etsy_listing_id as string,
+              action: 'pushed_to_etsy',
+              from: etsyQty,
+              to: appQty,
+            });
+          }
+          // If equal, nothing to do
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err);
+          console.error(`[ETSY POLL] Failed for product ${product.id}:`, msg);
+          errors.push(`product ${product.id}: ${msg}`);
+        }
+      })
+    );
   }
 
   return NextResponse.json({ synced: results.length, results, errors });

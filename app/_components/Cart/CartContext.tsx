@@ -201,8 +201,11 @@ export function CartProvider({ children, shippingRate = 0 }: { children: React.R
           writeCart(updated);
           emit();
         }
-      } catch {
-        // Network error — ignore, will retry next interval
+      } catch (err) {
+        // Network error — will retry next interval
+        if (err instanceof Error && err.name !== 'AbortError') {
+          console.error('[CartContext] Stock sync failed:', err.message);
+        }
       }
     }
 
