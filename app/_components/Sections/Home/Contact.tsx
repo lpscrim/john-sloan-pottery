@@ -31,8 +31,8 @@ export function Contact() {
       className="min-h-[80svh] px-6 py-24 flex items-center"
     >
       <div className=" mx-auto w-full">
-        <div className="mb-16 lg:mb-32">
-          <h2 className="text-3xl md:text-5xl tracking-tight"></h2>
+        <div className="mb-16 lg:mb-32 ">
+          <h2 className="text-3xl md:text-5xl tracking-tight text-center">Get in touch</h2>
         </div>
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
@@ -97,7 +97,7 @@ export function Contact() {
 
           <div className="space-y-8 lg:col-start-3 lg:col-span-2 text-lg">
             {status === "sent" ? (
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-base">
                 Message sent — I&apos;ll be in touch.
               </p>
             ) : (
@@ -111,7 +111,7 @@ export function Contact() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, name: e.target.value }))
                     }
-                    className="bg-muted/20 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-sm placeholder:text-muted-foreground transition-colors w-full"
+                    className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-muted-foreground transition-colors w-full"
                   />
                   <input
                     type="email"
@@ -121,7 +121,7 @@ export function Contact() {
                     onChange={(e) =>
                       setForm((f) => ({ ...f, email: e.target.value }))
                     }
-                    className="bg-muted/20 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-sm placeholder:text-muted-foreground transition-colors w-full"
+                    className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-muted-foreground transition-colors w-full"
                   />
                 </div>
                 <textarea
@@ -132,11 +132,11 @@ export function Contact() {
                   onChange={(e) =>
                     setForm((f) => ({ ...f, message: e.target.value }))
                   }
-                  className="bg-muted/20 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-sm placeholder:text-muted-foreground transition-colors w-full resize-none"
+                  className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-muted-foreground transition-colors w-full resize-none"
                 />
                 <div className="flex items-center justify-between">
                   {status === "error" && (
-                    <p className="text-sm text-red-500">
+                    <p className="text-base text-red-500">
                       Something went wrong — please try again.
                     </p>
                   )}
