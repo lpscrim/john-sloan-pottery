@@ -3,8 +3,19 @@
 import { createContext, useContext, useCallback, useSyncExternalStore, useRef, useEffect } from 'react';
 
 // ─── Types ───────────────────────────────────────────────────────
+export interface CustomMugDetails {
+  sizeId: string;
+  sizeName: string;
+  glaze1Slug: string;
+  glaze2Slug: string;
+  glaze1Name: string;
+  glaze2Name: string;
+  shapeSlug: string;
+  shapeName: string;
+}
+
 export interface CartItem {
-  /** Stripe Price ID */
+  /** Stripe Price ID — or 'custom-mug-{uuid}' for bespoke mug orders */
   priceId: string;
   /** Product name */
   name: string;
@@ -14,8 +25,10 @@ export interface CartItem {
   priceHw: number;
   /** Items in cart */
   quantity: number;
-  /** Available stock (cap for quantity) */
+  /** Available stock (cap for quantity). Custom mugs use 1 — add again for multiples. */
   stockLevel: number;
+  /** Present only for custom mug orders */
+  customMug?: CustomMugDetails;
 }
 
 interface CartContextValue {

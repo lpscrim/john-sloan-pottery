@@ -40,6 +40,12 @@ export default function AdminHomePage() {
             Home about section
           </Link>
           <Link
+            href="/admin/custom-mug"
+            className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
+          >
+            Custom mug builder
+          </Link>
+          <Link
             href="/admin/settings"
             className="block rounded-md border border-muted bg-background px-4 py-3  transition-colors hover:border-foreground"
           >

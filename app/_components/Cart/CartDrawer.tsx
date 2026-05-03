@@ -27,7 +27,11 @@ export function CartDrawer() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          items: items.map((i) => ({ priceId: i.priceId, quantity: i.quantity })),
+          items: items.map((i) => ({
+            priceId: i.priceId,
+            quantity: i.quantity,
+            ...(i.customMug ? { customMug: i.customMug } : {}),
+          })),
           collect,
         }),
       });
