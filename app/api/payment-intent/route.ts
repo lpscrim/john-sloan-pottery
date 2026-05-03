@@ -40,6 +40,8 @@ export async function POST(req: NextRequest) {
     const regularItems = lineItems.filter((i) => !i.customMug);
     const customMugItems = lineItems.filter((i) => i.customMug);
 
+    const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
+    const stripe = getStripe();
     const supabase = createServerSupabase();
 
     // ── Reserve stock atomically (regular items only) ───────────────
@@ -83,9 +85,14 @@ export async function POST(req: NextRequest) {
       }
 
       // ── Fetch Stripe price + product data for regular items ─────────
-      const stripe = getStripe();
       const prices = await Promise.all(
-        regularItems.map((item) => stripe.prices.retrieve(item.priceId, { expand: ['product'] }))
+        regularItems.map((item) =>
+          stripe.prices.retrieve(
+            item.priceId,
+            { expand: ['product'] },
+            clientAccountId ? { stripeAccount: clientAccountId } : undefined,
+          )
+        )
       );
 
       enrichedReservations = reservations.map((r, i) => ({
@@ -141,8 +148,6 @@ export async function POST(req: NextRequest) {
     const totalAmount = regularSubtotal + customMugTotal + shippingRatePence;
 
     // ── Create PaymentIntent ────────────────────────────────────────
-    const stripe = getStripe();
-    const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
     const applicationFeeAmount = clientAccountId
       ? Math.round(totalAmount * 0.05)
       : undefined;

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useCart } from '@/app/_components/Cart/CartContext';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
+import Button from '@/app/_components/UI/Layout/Button';
 
 interface Props {
   glazes: Glaze[];
@@ -116,12 +117,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                 : 'Glazes'}
             </h2>
             {glaze1 && (
-              <button
-                onClick={resetGlazes}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Reset
-              </button>
+              <Button size="sm" onClick={resetGlazes}>Reset</Button>
             )}
           </div>
 
@@ -148,7 +144,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                   key={glaze.id}
                   onClick={() => handleGlazeClick(glaze)}
                   disabled={isDisabled}
-                  className={`px-4 py-2 text-sm border transition-all ${
+                  className={`px-4 py-2 text-sm border transition-all cursor-pointer ${
                     isSingle
                       ? 'border-foreground bg-foreground text-background'
                       : isBase
@@ -156,7 +152,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                       : isAccent
                       ? 'border-foreground bg-foreground/15 text-foreground'
                       : isDisabled
-                      ? 'border-foreground/10 text-foreground/30 cursor-not-allowed'
+                      ? 'border-foreground/10 text-foreground/30 cursor-not-allowed!'
                       : 'border-foreground/20 hover:border-foreground/60'
                   }`}
                 >
@@ -181,7 +177,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                 <button
                   key={s.id}
                   onClick={() => setShape(s)}
-                  className={`text-left border transition-all overflow-hidden ${
+                  className={`text-left border transition-all overflow-hidden cursor-pointer ${
                     shape?.id === s.id
                       ? 'border-foreground'
                       : 'border-foreground/20 hover:border-foreground/50'
@@ -234,7 +230,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                   key={combo.key}
                   title={label}
                   onClick={() => handleTileSelect(combo)}
-                  className={`relative overflow-hidden border transition-all duration-300 shrink-0 ${
+                  className={`relative overflow-hidden border transition-all duration-300 shrink-0 cursor-pointer ${
                     isSelected
                       ? 'w-64 h-64 border-foreground'
                       : 'w-14 h-14 border-foreground/10 hover:border-foreground/40'
@@ -291,17 +287,13 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             </div>
           )}
 
-          <button
+          <Button
             onClick={handleAddToCart}
             disabled={!canAddToCart}
-            className={`w-full px-8 py-4 text-sm tracking-widest uppercase transition-all ${
-              canAddToCart
-                ? 'bg-foreground text-background hover:opacity-80 cursor-pointer'
-                : 'bg-foreground/10 text-foreground/30 cursor-not-allowed'
-            }`}
+            size="base"
           >
             {canAddToCart ? 'Add to basket' : 'Select glazes & type'}
-          </button>
+          </Button>
 
           {canAddToCart && (
             <p className="text-xs text-muted-foreground">
