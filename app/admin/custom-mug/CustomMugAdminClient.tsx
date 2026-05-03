@@ -22,11 +22,11 @@ function SaveButton({ pending, label = 'Add' }: { pending: boolean; label?: stri
 }
 
 function inputCls() {
-  return 'w-full border border-muted bg-background px-3 py-2 text-sm rounded-sm focus:outline-none focus:border-foreground transition-colors';
+  return 'w-full border border-muted bg-background px-3 py-2 text-base rounded-sm focus:outline-none focus:border-foreground transition-colors';
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-xs tracking-widest uppercase text-muted-foreground mb-6">{children}</h2>;
+  return <h2 className="text-base tracking-widest uppercase text-muted-foreground mb-6">{children}</h2>;
 }
 
 // ─── Glazes section ───────────────────────────────────────────────────────────
@@ -43,18 +43,18 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
       {glazes.length > 0 && (
         <ul className="space-y-2">
           {glazes.map((g) => (
-            <li key={g.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-sm">
-              <span>{g.name} <span className="text-muted-foreground text-xs">({g.slug})</span></span>
+            <li key={g.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-base">
+              <span>{g.name} <span className="text-muted-foreground text-base">({g.slug})</span></span>
               <div className="flex gap-4">
                 <button
                   onClick={() => startTransition(() => toggleGlazeActive(g.id, !(g as Glaze & { active?: boolean }).active))}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-base text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {(g as Glaze & { active?: boolean }).active !== false ? 'Disable' : 'Enable'}
                 </button>
                 <button
                   onClick={() => { if (confirm(`Delete "${g.name}"?`)) startTransition(() => deleteGlaze(g.id)); }}
-                  className="text-xs text-destructive hover:opacity-70 transition-opacity"
+                  className="text-base text-destructive hover:opacity-70 transition-opacity"
                 >
                   Delete
                 </button>
@@ -73,13 +73,13 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
         className="flex gap-3 items-end"
       >
         <div className="flex-1">
-          <label className="block text-xs text-muted-foreground mb-1">Glaze name</label>
+          <label className="block text-base text-muted-foreground mb-1">Glaze name</label>
           <input name="name" required placeholder="e.g. Celadon" className={inputCls()} />
         </div>
         <SaveButton pending={pending} />
       </form>
-      {state.error && <p className="text-sm text-destructive">{state.error}</p>}
-      <p className="text-xs text-muted-foreground">Slug is auto-generated from the name. Upload tile images below.</p>
+      {state.error && <p className="text-base text-destructive">{state.error}</p>}
+      <p className="text-base text-muted-foreground">Slug is auto-generated from the name. Upload tile images below.</p>
     </section>
   );
 }
@@ -98,18 +98,18 @@ function ShapesSection({ shapes }: { shapes: MugShape[] }) {
       {shapes.length > 0 && (
         <ul className="space-y-2">
           {shapes.map((s) => (
-            <li key={s.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-sm">
-              <span>{s.name} <span className="text-muted-foreground text-xs">({s.slug})</span></span>
+            <li key={s.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-base">
+              <span>{s.name} <span className="text-muted-foreground text-base">({s.slug})</span></span>
               <div className="flex gap-4">
                 <button
                   onClick={() => startTransition(() => toggleShapeActive(s.id, !(s as MugShape & { active?: boolean }).active))}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-base text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {(s as MugShape & { active?: boolean }).active !== false ? 'Disable' : 'Enable'}
                 </button>
                 <button
                   onClick={() => { if (confirm(`Delete "${s.name}"?`)) startTransition(() => deleteShape(s.id)); }}
-                  className="text-xs text-destructive hover:opacity-70 transition-opacity"
+                  className="text-base text-destructive hover:opacity-70 transition-opacity"
                 >
                   Delete
                 </button>
@@ -128,20 +128,20 @@ function ShapesSection({ shapes }: { shapes: MugShape[] }) {
         className="space-y-3"
       >
         <div>
-          <label className="block text-xs text-muted-foreground mb-1">Shape name</label>
+          <label className="block text-base text-muted-foreground mb-1">Shape name</label>
           <input name="name" required placeholder="e.g. Classic" className={inputCls()} />
         </div>
         <div>
-          <label className="block text-xs text-muted-foreground mb-1">Description (optional)</label>
+          <label className="block text-base text-muted-foreground mb-1">Description (optional)</label>
           <input name="description" placeholder="e.g. Straight sides, generous handle" className={inputCls()} />
         </div>
         <div>
-          <label className="block text-xs text-muted-foreground mb-1">Photo of unfired mug</label>
-          <input name="image" type="file" accept="image/*" className="text-sm" />
+          <label className="block text-base text-muted-foreground mb-1">Photo of unfired mug</label>
+          <input name="image" type="file" accept="image/*" className="text-base" />
         </div>
         <SaveButton pending={pending} />
       </form>
-      {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+      {state.error && <p className="text-base text-destructive">{state.error}</p>}
     </section>
   );
 }
@@ -169,23 +169,23 @@ function SizesSection({ sizes }: { sizes: MugSize[] }) {
       {sizes.length > 0 && (
         <ul className="space-y-2">
           {sizes.map((s) => (
-            <li key={s.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-sm">
+            <li key={s.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-base">
               <span className="flex-1">{s.name}</span>
 
               {editingId === s.id ? (
                 <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground text-xs">£</span>
+                  <span className="text-muted-foreground text-base">£</span>
                   <input
                     type="number"
                     step="0.01"
                     min="0.01"
                     value={editPrice}
                     onChange={(e) => setEditPrice(e.target.value)}
-                    className="w-20 border border-muted bg-background px-2 py-1 text-sm rounded-sm focus:outline-none focus:border-foreground"
+                    className="w-20 border border-muted bg-background px-2 py-1 text-base rounded-sm focus:outline-none focus:border-foreground"
                     autoFocus
                   />
-                  <button onClick={() => handleSavePrice(s.id)} className="text-xs hover:opacity-70">Save</button>
-                  <button onClick={() => setEditingId(null)} className="text-xs text-muted-foreground hover:opacity-70">Cancel</button>
+                  <button onClick={() => handleSavePrice(s.id)} className="text-base hover:opacity-70">Save</button>
+                  <button onClick={() => setEditingId(null)} className="text-base text-muted-foreground hover:opacity-70">Cancel</button>
                 </div>
               ) : (
                 <span className="text-muted-foreground">
@@ -197,20 +197,20 @@ function SizesSection({ sizes }: { sizes: MugSize[] }) {
                 {editingId !== s.id && (
                   <button
                     onClick={() => { setEditingId(s.id); setEditPrice((s.price_pence / 100).toFixed(2)); }}
-                    className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-base text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Edit price
                   </button>
                 )}
                 <button
                   onClick={() => startTransition(() => toggleSizeActive(s.id, !(s as MugSize & { active?: boolean }).active))}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-base text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {(s as MugSize & { active?: boolean }).active !== false ? 'Disable' : 'Enable'}
                 </button>
                 <button
                   onClick={() => { if (confirm(`Delete "${s.name}"?`)) startTransition(() => deleteSize(s.id)); }}
-                  className="text-xs text-destructive hover:opacity-70 transition-opacity"
+                  className="text-base text-destructive hover:opacity-70 transition-opacity"
                 >
                   Delete
                 </button>
@@ -229,20 +229,20 @@ function SizesSection({ sizes }: { sizes: MugSize[] }) {
         className="flex flex-wrap gap-3 items-end"
       >
         <div className="flex-1 min-w-32">
-          <label className="block text-xs text-muted-foreground mb-1">Size name</label>
+          <label className="block text-base text-muted-foreground mb-1">Size name</label>
           <input name="name" required placeholder="e.g. Medium" className={inputCls()} />
         </div>
         <div className="w-32">
-          <label className="block text-xs text-muted-foreground mb-1">Price (£)</label>
+          <label className="block text-base text-muted-foreground mb-1">Price (£)</label>
           <input name="price" type="number" step="0.01" min="0.01" required placeholder="35.00" className={inputCls()} />
         </div>
         <div className="w-24">
-          <label className="block text-xs text-muted-foreground mb-1">Sort order</label>
+          <label className="block text-base text-muted-foreground mb-1">Sort order</label>
           <input name="sort_order" type="number" min="0" placeholder="0" className={inputCls()} />
         </div>
         <SaveButton pending={pending} />
       </form>
-      {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+      {state.error && <p className="text-base text-destructive">{state.error}</p>}
     </section>
   );
 }
@@ -256,9 +256,9 @@ function GlazeTileUpload({ glazes }: { glazes: Glaze[] }) {
   return (
     <section className="space-y-6">
       <SectionHeading>Glaze tile images</SectionHeading>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         Upload a photo of the test tile for each glaze combination. Files are stored as{' '}
-        <code className="text-xs bg-muted px-1 py-0.5 rounded">{'{slugA}-{slugB}.jpg'}</code> (alphabetical).
+        <code className="text-base bg-muted px-1 py-0.5 rounded">{'{slugA}-{slugB}.jpg'}</code> (alphabetical).
       </p>
 
       <form
@@ -271,14 +271,14 @@ function GlazeTileUpload({ glazes }: { glazes: Glaze[] }) {
       >
         <div className="flex gap-3">
           <div className="flex-1">
-            <label className="block text-xs text-muted-foreground mb-1">Base glaze</label>
+            <label className="block text-base text-muted-foreground mb-1">Base glaze</label>
             <select name="slug1" required className={inputCls()}>
               <option value="">Select…</option>
               {glazes.map((g) => <option key={g.id} value={g.slug}>{g.name}</option>)}
             </select>
           </div>
           <div className="flex-1">
-            <label className="block text-xs text-muted-foreground mb-1">Accent glaze</label>
+            <label className="block text-base text-muted-foreground mb-1">Accent glaze</label>
             <select name="slug2" required className={inputCls()}>
               <option value="">Select…</option>
               {glazes.map((g) => <option key={g.id} value={g.slug}>{g.name}</option>)}
@@ -286,13 +286,13 @@ function GlazeTileUpload({ glazes }: { glazes: Glaze[] }) {
           </div>
         </div>
         <div>
-          <label className="block text-xs text-muted-foreground mb-1">Tile photo</label>
-          <input name="image" type="file" accept="image/*" required className="text-sm" />
+          <label className="block text-base text-muted-foreground mb-1">Tile photo</label>
+          <input name="image" type="file" accept="image/*" required className="text-base" />
         </div>
         <SaveButton pending={pending} label="Upload" />
       </form>
-      {state.error && <p className="text-sm text-destructive">{state.error}</p>}
-      {'success' in state && state.success && <p className="text-sm text-green-700">{state.success as string}</p>}
+      {state.error && <p className="text-base text-destructive">{state.error}</p>}
+      {'success' in state && state.success && <p className="text-base text-green-700">{state.success as string}</p>}
     </section>
   );
 }
@@ -307,7 +307,7 @@ function ExamplesSection({ examples, supabaseUrl }: { examples: { name: string; 
   return (
     <section className="space-y-6">
       <SectionHeading>Example mug photos</SectionHeading>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         These appear in the gallery on the custom mug page.
       </p>
 
@@ -325,7 +325,7 @@ function ExamplesSection({ examples, supabaseUrl }: { examples: { name: string; 
               </div>
               <button
                 onClick={() => { if (confirm('Remove this photo?')) startTransition(() => deleteMugExample(f.name)); }}
-                className="absolute top-1 right-1 bg-background/80 text-destructive text-xs px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 bg-background/80 text-destructive text-base px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 ×
               </button>
@@ -342,10 +342,10 @@ function ExamplesSection({ examples, supabaseUrl }: { examples: { name: string; 
         }}
         className="flex gap-3 items-end"
       >
-        <input name="image" type="file" accept="image/*" required className="text-sm flex-1" />
+        <input name="image" type="file" accept="image/*" required className="text-base flex-1" />
         <SaveButton pending={pending} label="Upload" />
       </form>
-      {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+      {state.error && <p className="text-base text-destructive">{state.error}</p>}
     </section>
   );
 }

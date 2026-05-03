@@ -188,7 +188,7 @@ export default async function OrdersPage() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl tracking-tight">ORDERS</h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-base text-muted-foreground mt-1">
               {orders.length} completed {orders.length === 1 ? 'order' : 'orders'}
             </p>
           </div>
@@ -199,27 +199,27 @@ export default async function OrdersPage() {
         {orders.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="rounded-md border border-muted px-4 py-3">
-              <p className="text-xs text-muted-foreground">Revenue</p>
-              <p className="text-sm font-medium mt-0.5">{formatMoney(totalRevenue, currency)}</p>
+              <p className="text-base text-muted-foreground">Revenue</p>
+              <p className="text-base font-medium mt-0.5">{formatMoney(totalRevenue, currency)}</p>
             </div>
             <div className="rounded-md border border-muted px-4 py-3">
-              <p className="text-xs text-muted-foreground">Platform fees (5%)</p>
-              <p className="text-sm font-medium mt-0.5">{formatMoney(totalMyFees, currency)}</p>
+              <p className="text-base text-muted-foreground">Platform fees (5%)</p>
+              <p className="text-base font-medium mt-0.5">{formatMoney(totalMyFees, currency)}</p>
             </div>
             <div className="rounded-md border border-muted px-4 py-3">
-              <p className="text-xs text-muted-foreground">Stripe fees</p>
-              <p className="text-sm font-medium mt-0.5">{formatMoney(totalStripeFees, currency)}</p>
+              <p className="text-base text-muted-foreground">Stripe fees</p>
+              <p className="text-base font-medium mt-0.5">{formatMoney(totalStripeFees, currency)}</p>
             </div>
             <div className="rounded-md border border-muted px-4 py-3">
-              <p className="text-xs text-muted-foreground">Net to artist</p>
-              <p className="text-sm font-medium mt-0.5">{formatMoney(totalNet, currency)}</p>
+              <p className="text-base text-muted-foreground">Net to artist</p>
+              <p className="text-base font-medium mt-0.5">{formatMoney(totalNet, currency)}</p>
             </div>
           </div>
         )}
 
         {/* Orders */}
         {orders.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No orders yet.</p>
+          <p className="text-base text-muted-foreground">No orders yet.</p>
         ) : (
           <div className="space-y-4">
             {orders.map((order) => (
@@ -229,7 +229,7 @@ export default async function OrdersPage() {
               >
                 {/* Date/time + dispatch */}
                 <div className="flex items-start justify-between gap-4 flex-wrap">
-                  <p className="text-xs text-muted-foreground">{formatDateTime(order.created)}</p>
+                  <p className="text-base text-muted-foreground">{formatDateTime(order.created)}</p>
                   <DispatchButton
                     sessionId={order.id}
                     dispatched={order.dispatched}
@@ -239,11 +239,11 @@ export default async function OrdersPage() {
 
                 {/* Customer details */}
                 <div className="space-y-0.5">
-                  {order.name && <p className="text-sm font-medium">{order.name}</p>}
-                  {order.email && <p className="text-sm text-muted-foreground">{order.email}</p>}
-                  {order.phone && <p className="text-sm text-muted-foreground">{order.phone}</p>}
+                  {order.name && <p className="text-base font-medium">{order.name}</p>}
+                  {order.email && <p className="text-base text-muted-foreground">{order.email}</p>}
+                  {order.phone && <p className="text-base text-muted-foreground">{order.phone}</p>}
                   {order.shippingAddress && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base text-muted-foreground">
                       {[
                         order.shippingAddress.line1,
                         order.shippingAddress.line2,
@@ -260,7 +260,7 @@ export default async function OrdersPage() {
                 {/* Items with thumbnails */}
                 <div className="border-t border-muted pt-3 space-y-2">
                   {order.items.map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 text-sm">
+                    <div key={i} className="flex items-center gap-3 text-base">
                       {item.imageUrl ? (
                         <Image
                           src={item.imageUrl}
@@ -282,7 +282,7 @@ export default async function OrdersPage() {
                 </div>
 
                 {/* Financial breakdown */}
-                <div className="border-t border-muted pt-3 space-y-1 text-sm">
+                <div className="border-t border-muted pt-3 space-y-1 text-base">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Subtotal</span>
                     <span>{formatMoney(order.amountTotal - (order.shippingCost ?? 0), order.currency)}</span>
@@ -313,7 +313,7 @@ export default async function OrdersPage() {
                   </div>
                 </div>
 
-                <p className="text-xs text-muted-foreground font-mono">pi: {order.id}</p>
+                <p className="text-base text-muted-foreground font-mono">pi: {order.id}</p>
               </div>
             ))}
           </div>

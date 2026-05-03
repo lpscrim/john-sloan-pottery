@@ -66,7 +66,7 @@ function ChangePasswordForm({ supabase }: { supabase: ReturnType<typeof createBr
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="text-base text-muted-foreground hover:text-foreground transition-colors"
       >
         Change password
       </button>
@@ -82,7 +82,7 @@ function ChangePasswordForm({ supabase }: { supabase: ReturnType<typeof createBr
         onChange={(e) => setNewPassword(e.target.value)}
         required
         minLength={8}
-        className="rounded-md border border-muted bg-background px-2 py-1 text-sm w-36 focus:outline-none focus:border-foreground"
+        className="rounded-md border border-muted bg-background px-2 py-1 text-base w-36 focus:outline-none focus:border-foreground"
       />
       <input
         type="password"
@@ -90,24 +90,24 @@ function ChangePasswordForm({ supabase }: { supabase: ReturnType<typeof createBr
         value={confirm}
         onChange={(e) => setConfirm(e.target.value)}
         required
-        className="rounded-md border border-muted bg-background px-2 py-1 text-sm w-28 focus:outline-none focus:border-foreground"
+        className="rounded-md border border-muted bg-background px-2 py-1 text-base w-28 focus:outline-none focus:border-foreground"
       />
       <button
         type="submit"
         disabled={pending}
-        className="text-sm text-foreground hover:opacity-70 transition-opacity disabled:opacity-50"
+        className="text-base text-foreground hover:opacity-70 transition-opacity disabled:opacity-50"
       >
         {pending ? "Saving…" : "Save"}
       </button>
       <button
         type="button"
         onClick={() => { setOpen(false); setMsg(null); }}
-        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="text-base text-muted-foreground hover:text-foreground transition-colors"
       >
         Cancel
       </button>
       {msg && (
-        <span className={`text-sm ${msg.ok ? "text-green-700" : "text-red-600"}`}>
+        <span className={`text-base ${msg.ok ? "text-green-700" : "text-red-600"}`}>
           {msg.text}
         </span>
       )}
@@ -214,41 +214,41 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
         <div className="max-w-md mx-auto space-y-6">
           <div>
             <h1 className="text-3xl tracking-tight">ADMIN LOGIN</h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Sign in to access admin tools.
             </p>
           </div>
 
           {error && (
-            <div className="rounded-md border border-red-400 bg-red-50 px-4 py-3 text-red-700 text-sm">
+            <div className="rounded-md border border-red-400 bg-red-50 px-4 py-3 text-red-700 text-base">
               {error}
             </div>
           )}
 
           <form className="space-y-4" onSubmit={handleSignIn}>
             <label className="block">
-              <span className="text-sm font-medium">Email</span>
+              <span className="text-base font-medium">Email</span>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
               />
             </label>
             <label className="block">
-              <span className="text-sm font-medium">Password</span>
+              <span className="text-base font-medium">Password</span>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
               />
             </label>
             <button
               type="submit"
-              className="w-full rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+              className="w-full rounded-md bg-foreground px-4 py-2.5 text-base font-medium text-background transition-opacity hover:opacity-90"
             >
               Sign in
             </button>

@@ -28,7 +28,7 @@ export function DispatchButton({ sessionId, dispatched, dispatchedAt }: Props) {
       <button
         onClick={handleClick}
         disabled={isPending}
-        className={`text-xs px-3 py-1.5 rounded border transition-colors disabled:opacity-50 ${
+        className={`text-base px-3 py-1.5 rounded border transition-colors disabled:opacity-50 ${
           dispatched
             ? 'border-foreground bg-foreground text-background hover:bg-transparent hover:text-foreground'
             : 'border-muted hover:border-foreground'
@@ -37,7 +37,7 @@ export function DispatchButton({ sessionId, dispatched, dispatchedAt }: Props) {
         {isPending ? '…' : dispatched ? '✓ Dispatched' : 'Mark dispatched'}
       </button>
       {dispatched && dispatchedAt && (
-        <span className="text-xs text-muted-foreground">
+        <span className="text-base text-muted-foreground">
           {new Date(dispatchedAt).toLocaleDateString('en-GB', {
             day: 'numeric',
             month: 'short',
@@ -45,7 +45,7 @@ export function DispatchButton({ sessionId, dispatched, dispatchedAt }: Props) {
           })}
         </span>
       )}
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {error && <span className="text-base text-red-500">{error}</span>}
     </div>
   );
 }

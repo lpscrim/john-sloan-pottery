@@ -123,53 +123,53 @@ export default function AddProductPage() {
         <form ref={formRef} action={formAction} onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
           <label className="block">
-            <span className="text-sm font-medium">Name *</span>
+            <span className="text-base font-medium">Name *</span>
             <input
               name="name"
               type="text"
               required
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
 
           {/* Description */}
           <label className="block">
-            <span className="text-sm font-medium">Description</span>
+            <span className="text-base font-medium">Description</span>
             <textarea
               name="description"
               rows={3}
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
 
           {/* Price */}
           <label className="block">
-            <span className="text-sm font-medium">Price (£) *</span>
+            <span className="text-base font-medium">Price (£) *</span>
             <input
               name="price"
               type="number"
               step="0.01"
               min="0.01"
               required
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
 
           {/* Stock */}
           <label className="block">
-            <span className="text-sm font-medium">Stock</span>
+            <span className="text-base font-medium">Stock</span>
             <input
               name="stock"
               type="number"
               min="0"
               defaultValue={0}
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
 
           {/* Categories */}
           <label className="block">
-            <span className="text-sm font-medium">
+            <span className="text-base font-medium">
               Categories{' '}
               <span className="text-muted-foreground font-normal">(comma-separated)</span>
             </span>
@@ -177,40 +177,40 @@ export default function AddProductPage() {
               name="categories"
               type="text"
               placeholder="LANDSCAPE, BW"
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
 
           {/* Medium */}
           <label className="block">
-            <span className="text-sm font-medium">Medium</span>
+            <span className="text-base font-medium">Medium</span>
             <input
               name="medium"
               type="text"
               placeholder="Oil on canvas"
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
             />
           </label>
 
           {/* Glaze */}
           <div className="block">
-            <span className="text-sm font-medium">Glaze</span>
+            <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
-              <input name="glaze_0" type="text" placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground" />
-              <input name="glaze_1" type="text" placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground" />
-              <input name="glaze_2" type="text" placeholder="Glaze 3" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-foreground" />
+              <input name="glaze_0" type="text" placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+              <input name="glaze_1" type="text" placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+              <input name="glaze_2" type="text" placeholder="Glaze 3" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
             </div>
           </div>
 
           {/* Image */}
           <label className="block">
-            <span className="text-sm font-medium">Cover Image</span>
+            <span className="text-base font-medium">Cover Image</span>
             <input
               name="image"
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="mt-1 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-sm file:font-medium file:text-background hover:file:opacity-80"
+              className="mt-1 block w-full text-base file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-base file:font-medium file:text-background hover:file:opacity-80"
             />
           </label>
 
@@ -228,7 +228,7 @@ export default function AddProductPage() {
 
           {/* Secondary Images (up to 4) */}
           <label className="block">
-            <span className="text-sm font-medium">
+            <span className="text-base font-medium">
               Gallery Images{' '}
               <span className="text-muted-foreground font-normal">(up to 4, optional)</span>
             </span>
@@ -238,7 +238,7 @@ export default function AddProductPage() {
               accept="image/*"
               multiple
               onChange={handleSecondaryChange}
-              className="mt-1 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-sm file:font-medium file:text-background hover:file:opacity-80"
+              className="mt-1 block w-full text-base file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-base file:font-medium file:text-background hover:file:opacity-80"
             />
           </label>
 
@@ -257,13 +257,13 @@ export default function AddProductPage() {
           {/* Notifications */}
           <div>
             {(state.error || fileError) && (
-              <div className="rounded-md border border-red-400 bg-red-50 px-4 py-3 text-red-700 text-sm">
+              <div className="rounded-md border border-red-400 bg-red-50 px-4 py-3 text-red-700 text-base">
                 {fileError || state.error}
               </div>
             )}
 
             {state.success && (
-              <div className="rounded-md border border-green-400 bg-green-50 px-4 py-3 text-green-700 text-sm">
+              <div className="rounded-md border border-green-400 bg-green-50 px-4 py-3 text-green-700 text-base">
                 Product created successfully!
               </div>
             )}

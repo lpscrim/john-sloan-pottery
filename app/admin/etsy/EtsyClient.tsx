@@ -111,7 +111,7 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
     return (
       <div className="space-y-4">
         {error && (
-          <p className="text-sm text-red-500 border border-red-200 rounded-md px-3 py-2 bg-red-50">
+          <p className="text-base text-red-500 border border-red-200 rounded-md px-3 py-2 bg-red-50">
             {decodeURIComponent(error)}
           </p>
         )}
@@ -121,7 +121,7 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
         </p>
         <a
           href="/api/etsy/auth"
-          className="inline-block rounded-md border border-foreground bg-foreground text-background px-4 py-2 text-sm font-medium hover:opacity-80 transition-opacity"
+          className="inline-block rounded-md border border-foreground bg-foreground text-background px-4 py-2 text-base font-medium hover:opacity-80 transition-opacity"
         >
           Connect Etsy
         </a>
@@ -140,10 +140,10 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
     <div className="space-y-6">
       {/* Status bar */}
       <div className="flex items-center gap-4 flex-wrap">
-        <span className="text-sm font-medium text-green-600">● Etsy connected</span>
+        <span className="text-base font-medium text-green-600">● Etsy connected</span>
         <a
           href="/api/etsy/auth"
-          className="text-sm text-muted-foreground underline hover:text-foreground"
+          className="text-base text-muted-foreground underline hover:text-foreground"
         >
           Reconnect
         </a>
@@ -154,14 +154,14 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
         <button
           onClick={handlePull}
           disabled={loadingListings}
-          className="rounded-md border border-foreground bg-foreground text-background px-4 py-2 text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+          className="rounded-md border border-foreground bg-foreground text-background px-4 py-2 text-base font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
         >
           {loadingListings ? 'Loading…' : 'Pull from Etsy'}
         </button>
         <button
           onClick={handleSyncNow}
           disabled={syncing}
-          className="rounded-md border border-muted bg-background text-foreground px-4 py-2 text-sm font-medium hover:border-foreground transition-colors disabled:opacity-50"
+          className="rounded-md border border-muted bg-background text-foreground px-4 py-2 text-base font-medium hover:border-foreground transition-colors disabled:opacity-50"
         >
           {syncing ? 'Syncing…' : 'Sync stock now'}
         </button>
@@ -169,12 +169,12 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
 
       {/* Messages */}
       {error && (
-        <p className="text-sm text-red-500 border border-red-200 rounded-md px-3 py-2 bg-red-50">
+        <p className="text-base text-red-500 border border-red-200 rounded-md px-3 py-2 bg-red-50">
           {decodeURIComponent(error)}
         </p>
       )}
       {successMsg && (
-        <p className="text-sm text-green-700 border border-green-200 rounded-md px-3 py-2 bg-green-50">
+        <p className="text-base text-green-700 border border-green-200 rounded-md px-3 py-2 bg-green-50">
           {successMsg}
         </p>
       )}
@@ -182,7 +182,7 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
       {/* Listings */}
       {listings.length > 0 && (
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             {listings.length} active listing{listings.length !== 1 ? 's' : ''} on Etsy
             {notYetImported.length > 0 && ` · ${notYetImported.length} not yet imported`}
           </p>
@@ -190,11 +190,11 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
           {notYetImported.length > 0 && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-sm font-medium">Not imported</h2>
+                <h2 className="text-base font-medium">Not imported</h2>
                 <button
                   onClick={handleImportAll}
                   disabled={importingAll || notYetImported.every((l) => importing[l.listing_id])}
-                  className="rounded-md border border-foreground bg-foreground text-background px-3 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+                  className="rounded-md border border-foreground bg-foreground text-background px-3 py-1.5 text-base font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
                 >
                   {importingAll ? 'Importing…' : 'Import All'}
                 </button>
@@ -210,7 +210,7 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
 
           {alreadyLinked.length > 0 && (
             <div>
-              <h2 className="text-sm font-medium mb-2 text-muted-foreground">Already imported</h2>
+              <h2 className="text-base font-medium mb-2 text-muted-foreground">Already imported</h2>
               <ListingTable
                 listings={alreadyLinked}
                 importing={importing}
@@ -250,7 +250,7 @@ function ListingTable({
           )}
           <div className="flex-1 min-w-0">
             <p className="font-medium truncate">{listing.title}</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               £{(listing.price_pence / 100).toFixed(2)} &middot; Stock: {listing.quantity}
             </p>
           </div>
@@ -259,7 +259,7 @@ function ListingTable({
               href={listing.etsy_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-muted-foreground underline hover:text-foreground"
+              className="text-base text-muted-foreground underline hover:text-foreground"
             >
               View
             </a>
@@ -267,7 +267,7 @@ function ListingTable({
               <button
                 onClick={() => onImport(listing)}
                 disabled={importing[listing.listing_id]}
-                className="rounded-md border border-foreground bg-background text-foreground px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors disabled:opacity-50"
+                className="rounded-md border border-foreground bg-background text-foreground px-3 py-1.5 text-base hover:bg-foreground hover:text-background transition-colors disabled:opacity-50"
               >
                 {importing[listing.listing_id] ? 'Importing…' : 'Import'}
               </button>

@@ -16,7 +16,7 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
     <button
       type="submit"
       disabled={pending}
-      className="cursor-crosshair text-sm transition-all duration-250 group disabled:opacity-50"
+      className="cursor-crosshair text-base transition-all duration-250 group disabled:opacity-50"
     >
       <span className="group-hover:px-0.5 transition-all duration-250">[</span>{' '}
       {pending ? 'Saving…' : label}{' '}
@@ -28,7 +28,7 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
 function StatusMsg({ ok, msg }: { ok?: boolean; msg: string }) {
   if (!msg) return null;
   return (
-    <p className={`text-sm mt-2 ${ok ? 'text-green-700' : 'text-destructive'}`}>{msg}</p>
+    <p className={`text-base mt-2 ${ok ? 'text-green-700' : 'text-destructive'}`}>{msg}</p>
   );
 }
 
@@ -107,7 +107,7 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
 
       {/* ── Text ──────────────────────────────────────────────────── */}
       <section className="space-y-4">
-        <h2 className="text-xs tracking-widest uppercase text-muted-foreground">
+        <h2 className="text-base tracking-widest uppercase text-muted-foreground">
           Intro text
         </h2>
         <form onSubmit={handleSaveText} className="space-y-3">
@@ -115,7 +115,7 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
             value={text}
             onChange={(e) => { setText(e.target.value); setTextMsg(''); }}
             rows={5}
-            className="w-full border border-muted bg-background px-3 py-2 text-sm rounded-sm focus:outline-none focus:border-foreground transition-colors resize-y"
+            className="w-full border border-muted bg-background px-3 py-2 text-base rounded-sm focus:outline-none focus:border-foreground transition-colors resize-y"
           />
           <SaveButton pending={isPendingText} />
           <StatusMsg ok={textOk} msg={textMsg} />
@@ -124,10 +124,10 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
 
       {/* ── Images ────────────────────────────────────────────────── */}
       <section className="space-y-4">
-        <h2 className="text-xs tracking-widest uppercase text-muted-foreground">
+        <h2 className="text-base tracking-widest uppercase text-muted-foreground">
           Gallery images
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           These images appear in the rotating gallery on the home page About section. Drag to reorder isn&apos;t available — remove and re-upload to change order.
         </p>
 
@@ -146,7 +146,7 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
                 type="button"
                 onClick={() => handleRemove(url)}
                 disabled={removingUrl === url}
-                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs tracking-widest cursor-crosshair disabled:opacity-50"
+                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-base tracking-widest cursor-crosshair disabled:opacity-50"
               >
                 {removingUrl === url ? 'Removing…' : 'REMOVE'}
               </button>
@@ -154,7 +154,7 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
           ))}
 
           {/* Upload slot */}
-          <label className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed border-muted rounded-sm cursor-pointer hover:border-foreground transition-colors text-muted-foreground text-xs text-center px-2 ${isPendingUpload ? 'opacity-50 pointer-events-none' : ''}`}>
+          <label className={`aspect-square flex flex-col items-center justify-center border-2 border-dashed border-muted rounded-sm cursor-pointer hover:border-foreground transition-colors text-muted-foreground text-base text-center px-2 ${isPendingUpload ? 'opacity-50 pointer-events-none' : ''}`}>
             <span className="text-2xl leading-none mb-1">+</span>
             <span>{isPendingUpload ? 'Uploading…' : 'Add image'}</span>
             <input
@@ -173,10 +173,10 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
 
       {/* ── Reset ─────────────────────────────────────────────────── */}
       <section className="space-y-3 border-t border-muted pt-8">
-        <h2 className="text-xs tracking-widest uppercase text-muted-foreground">
+        <h2 className="text-base tracking-widest uppercase text-muted-foreground">
           Reset to defaults
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           Restores the original intro text and the five built-in images.
         </p>
         <form onSubmit={handleReset}>

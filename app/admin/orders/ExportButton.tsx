@@ -106,7 +106,7 @@ export function ExportButton({ orders }: { orders: ExportOrder[] }) {
   return (
     <button
       onClick={handleExport}
-      className="text-sm px-4 py-2 rounded border border-muted hover:border-foreground transition-colors shrink-0"
+      className="text-base px-4 py-2 rounded border border-muted hover:border-foreground transition-colors shrink-0"
     >
       Export CSV
     </button>

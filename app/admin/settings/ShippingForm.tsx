@@ -44,7 +44,7 @@ function RateField({
   return (
     <form onSubmit={handleSubmit} className="flex items-end gap-3">
       <label className="flex-1 block">
-        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="text-base text-muted-foreground">{label}</span>
         <div className="relative mt-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base">£</span>
           <input
@@ -65,8 +65,8 @@ function RateField({
         >
           {pending ? 'Saving…' : 'Save'}
         </button>
-        {error && <p className="text-xs text-red-500 whitespace-nowrap">{error}</p>}
-        {saved && <p className="text-xs text-green-600">Saved.</p>}
+        {error && <p className="text-base text-red-500 whitespace-nowrap">{error}</p>}
+        {saved && <p className="text-base text-green-600">Saved.</p>}
       </div>
     </form>
   );
@@ -87,7 +87,7 @@ function RegionSection({
     <div className="space-y-3">
       <div>
         <p className="text-base font-medium">{title}</p>
-        <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
+        <p className="text-base text-muted-foreground mt-0.5">{description}</p>
       </div>
       <RateField label="Shipping rate" initialPence={rate} onSave={onSave} />
     </div>

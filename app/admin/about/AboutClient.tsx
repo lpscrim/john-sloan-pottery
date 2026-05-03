@@ -13,7 +13,7 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
     <button
       type="submit"
       disabled={pending}
-      className="cursor-crosshair text-sm transition-all duration-250 group disabled:opacity-50"
+      className="cursor-crosshair text-base transition-all duration-250 group disabled:opacity-50"
     >
       <span className="group-hover:px-0.5 transition-all duration-250">[</span>{' '}
       {pending ? 'Saving…' : label}{' '}
@@ -25,16 +25,16 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
 function StatusMsg({ ok, msg }: { ok?: boolean; msg: string }) {
   if (!msg) return null;
   return (
-    <p className={`text-sm mt-2 ${ok ? 'text-green-700' : 'text-destructive'}`}>{msg}</p>
+    <p className={`text-base mt-2 ${ok ? 'text-green-700' : 'text-destructive'}`}>{msg}</p>
   );
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-xs tracking-widest uppercase text-muted-foreground mb-6">{children}</h2>;
+  return <h2 className="text-base tracking-widest uppercase text-muted-foreground mb-6">{children}</h2>;
 }
 
 function inputCls() {
-  return 'w-full border border-muted bg-background px-3 py-2 text-sm rounded-sm focus:outline-none focus:border-foreground transition-colors';
+  return 'w-full border border-muted bg-background px-3 py-2 text-base rounded-sm focus:outline-none focus:border-foreground transition-colors';
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
@@ -191,7 +191,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
         <div className="grid md:grid-cols-2 gap-10">
           {/* Portrait upload */}
           <div>
-            <p className="text-sm text-muted-foreground mb-3">Portrait image</p>
+            <p className="text-base text-muted-foreground mb-3">Portrait image</p>
             {(portraitPreview ?? portraitUrl) && (
               <div className="relative aspect-3/4 w-48 mb-4 overflow-hidden rounded-sm">
                 <Image
@@ -208,7 +208,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
                 type="file"
                 accept="image/*"
                 onChange={handlePortraitChange}
-                className="text-sm text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-sm file:cursor-crosshair"
+                className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-crosshair"
               />
               <div>
                 <SaveButton pending={isPending} label="Upload portrait" />
@@ -220,7 +220,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
           {/* Statement + Bio */}
           <form onSubmit={handleSaveText} className="space-y-4">
             <div>
-              <label className="text-sm text-muted-foreground block mb-1">Artist statement</label>
+              <label className="text-base text-muted-foreground block mb-1">Artist statement</label>
               <textarea
                 value={statement}
                 onChange={(e) => setStatement(e.target.value)}
@@ -230,7 +230,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
               />
             </div>
             <div>
-              <label className="text-sm text-muted-foreground block mb-1">Biography</label>
+              <label className="text-base text-muted-foreground block mb-1">Biography</label>
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
@@ -248,15 +248,15 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
       {/* ── Secondary Image & Text ── */}
       <section className="space-y-8 border-b border-muted pb-16">
         <SectionHeading>Secondary Image &amp; Text</SectionHeading>
-        <p className="text-sm text-muted-foreground -mt-4">
+        <p className="text-base text-muted-foreground -mt-4">
           Shown as a second reversed block (text left, image right) below the gallery on the about page.
-          Requires <code className="text-xs bg-muted px-1 py-0.5 rounded">secondary_image_url</code> and{' '}
-          <code className="text-xs bg-muted px-1 py-0.5 rounded">secondary_text</code> columns in Supabase.
+          Requires <code className="text-base bg-muted px-1 py-0.5 rounded">secondary_image_url</code> and{' '}
+          <code className="text-base bg-muted px-1 py-0.5 rounded">secondary_text</code> columns in Supabase.
         </p>
         <div className="grid md:grid-cols-2 gap-10">
           {/* Secondary image upload */}
           <div>
-            <p className="text-sm text-muted-foreground mb-3">Secondary image</p>
+            <p className="text-base text-muted-foreground mb-3">Secondary image</p>
             {(secondaryPreview ?? secondaryImageUrl) && (
               <div className="relative aspect-3/4 w-48 mb-4 overflow-hidden rounded-sm">
                 <Image
@@ -273,7 +273,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
                 type="file"
                 accept="image/*"
                 onChange={handleSecondaryChange}
-                className="text-sm text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-sm file:cursor-crosshair"
+                className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-crosshair"
               />
               <div>
                 <SaveButton pending={isPending} label="Upload image" />
@@ -285,7 +285,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
           {/* Secondary text */}
           <form onSubmit={handleSaveSecondaryText} className="space-y-4">
             <div>
-              <label className="text-sm text-muted-foreground block mb-1">Secondary text</label>
+              <label className="text-base text-muted-foreground block mb-1">Secondary text</label>
               <textarea
                 value={secondaryText}
                 onChange={(e) => setSecondaryText(e.target.value)}
@@ -303,7 +303,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
       {/* ── Gallery Images ── */}
       <section className="space-y-8 pb-16">
         <SectionHeading>Gallery Images</SectionHeading>
-        <p className="text-sm text-muted-foreground -mt-4">Studio / exhibition images shown in the gallery grid on the about page. Compressed automatically.</p>
+        <p className="text-base text-muted-foreground -mt-4">Studio / exhibition images shown in the gallery grid on the about page. Compressed automatically.</p>
 
         {galleryImages.length > 0 && (
           <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
@@ -313,7 +313,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
                 <button
                   type="button"
                   onClick={() => handleRemoveGallery(url)}
-                  className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs cursor-crosshair"
+                  className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-base cursor-crosshair"
                 >
                   Remove
                 </button>
@@ -323,7 +323,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
         )}
 
         <div>
-          <label className="text-sm text-muted-foreground block mb-2">Upload images (multiple allowed)</label>
+          <label className="text-base text-muted-foreground block mb-2">Upload images (multiple allowed)</label>
           <input
             ref={galleryRef}
             type="file"
@@ -331,7 +331,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
             multiple
             onChange={handleGalleryUpload}
             disabled={isPending}
-            className="text-sm text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-sm file:cursor-crosshair disabled:opacity-50"
+            className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-crosshair disabled:opacity-50"
           />
         </div>
         <StatusMsg {...galleryStatus} />

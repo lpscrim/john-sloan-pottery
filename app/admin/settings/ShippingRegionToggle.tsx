@@ -52,14 +52,14 @@ export function ShippingRegionToggle({ current }: { current: ShippingRegion }) {
               }`}
             />
             <span>
-              <span className="text-sm font-medium">{opt.label}</span>
-              <span className="block text-xs text-muted-foreground mt-0.5">{opt.description}</span>
+              <span className="text-base font-medium">{opt.label}</span>
+              <span className="block text-base text-muted-foreground mt-0.5">{opt.description}</span>
             </span>
           </span>
         </button>
       ))}
-      {error && <p className="text-sm text-red-500">{error}</p>}
-      {saved && <p className="text-sm text-green-600">Saved.</p>}
+      {error && <p className="text-base text-red-500">{error}</p>}
+      {saved && <p className="text-base text-green-600">Saved.</p>}
     </div>
   );
 }

@@ -156,7 +156,7 @@ export default function EditProductClient({
       <div className="min-h-screen bg-background text-foreground px-6 py-16">
         <div className="max-w-xl mx-auto">
           <h1 className="text-3xl tracking-tight mb-4">EDIT PRODUCT</h1>
-          <p className="text-sm text-muted-foreground">No products found.</p>
+          <p className="text-base text-muted-foreground">No products found.</p>
         </div>
       </div>
     );
@@ -169,19 +169,19 @@ export default function EditProductClient({
       <div className="max-w-2xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl tracking-tight mb-2">EDIT PRODUCT</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             Current stock: {selected.stock_level}
           </p>
         </div>
 
         <div>
-          <span className="text-sm font-medium block mb-2">Select Product</span>
+          <span className="text-base font-medium block mb-2">Select Product</span>
           <input
             type="text"
             placeholder="Search products…"
             value={productSearch}
             onChange={(e) => setProductSearch(e.target.value)}
-            className="mb-3 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+            className="mb-3 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
           />
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-72 overflow-y-auto pr-1">
             {filteredProducts.map((product) => {
@@ -204,17 +204,17 @@ export default function EditProductClient({
                         sizes="20vw"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs p-1 text-center">
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground text-base p-1 text-center">
                         No image
                       </div>
                     )}
                   </div>
-                  <p className="text-xs px-1.5 py-1 truncate leading-tight">{product.name}</p>
+                  <p className="text-base px-1.5 py-1 truncate leading-tight">{product.name}</p>
                 </button>
               );
             })}
             {filteredProducts.length === 0 && (
-              <p className="col-span-full text-sm text-muted-foreground py-2">No products match.</p>
+              <p className="col-span-full text-base text-muted-foreground py-2">No products match.</p>
             )}
           </div>
         </div>
@@ -229,29 +229,29 @@ export default function EditProductClient({
           <input type="hidden" name="productId" value={selected.id} />
 
           <label className="block">
-            <span className="text-sm font-medium">Name *</span>
+            <span className="text-base font-medium">Name *</span>
             <input
               name="name"
               type="text"
               required
               defaultValue={selected.name}
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium">Description</span>
+            <span className="text-base font-medium">Description</span>
             <textarea
               name="description"
               rows={3}
               defaultValue={selected.description}
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
             />
           </label>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="text-sm font-medium">Price (GBP) *</span>
+              <span className="text-base font-medium">Price (GBP) *</span>
               <input
                 name="price"
                 type="number"
@@ -259,56 +259,56 @@ export default function EditProductClient({
                 min="0.01"
                 required
                 defaultValue={priceDisplay}
-                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
               />
             </label>
             <label className="block">
-              <span className="text-sm font-medium">Stock</span>
+              <span className="text-base font-medium">Stock</span>
               <input
                 name="stock"
                 type="number"
                 min="0"
                 defaultValue={selected.stock_level}
-                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
               />
             </label>
           </div>
 
           <label className="block">
-            <span className="text-sm font-medium">
+            <span className="text-base font-medium">
               Categories (comma-separated)
             </span>
             <input
               name="categories"
               type="text"
               defaultValue={selected.categories.join(", ")}
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium">Medium</span>
+            <span className="text-base font-medium">Medium</span>
             <input
               name="medium"
               type="text"
               defaultValue={selected.medium}
               placeholder="Oil on canvas"
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm"
+              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
             />
           </label>
 
           <div className="block">
-            <span className="text-sm font-medium">Glaze</span>
+            <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
-              <input name="glaze_0" type="text" defaultValue={selected.glaze[0] ?? ''} placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm" />
-              <input name="glaze_1" type="text" defaultValue={selected.glaze[1] ?? ''} placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm" />
-              <input name="glaze_2" type="text" defaultValue={selected.glaze[2] ?? ''} placeholder="Glaze 3" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-sm" />
+              <input name="glaze_0" type="text" defaultValue={selected.glaze[0] ?? ''} placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
+              <input name="glaze_1" type="text" defaultValue={selected.glaze[1] ?? ''} placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
+              <input name="glaze_2" type="text" defaultValue={selected.glaze[2] ?? ''} placeholder="Glaze 3" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Cover Image</span>
+              <span className="text-base font-medium">Cover Image</span>
             </div>
             {selected.image_url ? (
               <div className="relative aspect-4/5 max-w-60 overflow-hidden rounded-md bg-muted">
@@ -321,7 +321,7 @@ export default function EditProductClient({
                 />
               </div>
             ) : (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 No cover image uploaded.
               </p>
             )}
@@ -330,12 +330,12 @@ export default function EditProductClient({
               type="file"
               accept="image/*"
               onChange={handleCoverChange}
-              className="mt-1 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-sm file:font-medium file:text-background hover:file:opacity-80"
+              className="mt-1 block w-full text-base file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-base file:font-medium file:text-background hover:file:opacity-80"
             />
           </div>
 
           <div className="space-y-3">
-            <span className="text-sm font-medium">Gallery Images</span>
+            <span className="text-base font-medium">Gallery Images</span>
             {selected.gallery.length > 0 ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {selected.gallery.map((image) => (
@@ -349,7 +349,7 @@ export default function EditProductClient({
                         sizes="(min-width: 640px) 33vw, 50vw"
                       />
                     </div>
-                    <div className="flex items-center gap-2 text-xs">
+                    <div className="flex items-center gap-2 text-base">
                       <input
                         type="checkbox"
                         name="removeGallery"
@@ -361,7 +361,7 @@ export default function EditProductClient({
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 No gallery images uploaded.
               </p>
             )}
@@ -371,18 +371,18 @@ export default function EditProductClient({
               accept="image/*"
               multiple
               onChange={handleGalleryChange}
-              className="mt-1 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-sm file:font-medium file:text-background hover:file:opacity-80"
+              className="mt-1 block w-full text-base file:mr-4 file:rounded-md file:border-0 file:bg-foreground file:px-4 file:py-2 file:text-base file:font-medium file:text-background hover:file:opacity-80"
             />
           </div>
           <div className="">
             {(updateState.error || deleteState.error || fileError) && (
-              <div className="rounded-md border border-red-400 bg-red-50 px-4 py-3 text-red-700 text-sm">
+              <div className="rounded-md border border-red-400 bg-red-50 px-4 py-3 text-red-700 text-base">
                 {fileError || updateState.error || deleteState.error}
               </div>
             )}
 
             {(updateState.success && savedAt) || deleteState.success ? (
-              <div className="rounded-md border border-green-400 bg-green-50 px-4 py-3 text-green-700 text-sm">
+              <div className="rounded-md border border-green-400 bg-green-50 px-4 py-3 text-green-700 text-base">
                 {updateState.success
                   ? "Product updated successfully."
                   : "Product removed successfully."}
@@ -392,7 +392,7 @@ export default function EditProductClient({
           <button
             type="submit"
             disabled={isUpdating || compressing}
-            className="w-full rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="w-full rounded-md bg-foreground px-4 py-2.5 text-base font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {compressing ? "Compressing images…" : isUpdating ? "Updating…" : "Update Product"}
           </button>
@@ -407,7 +407,7 @@ export default function EditProductClient({
           <button
             type="submit"
             disabled={isDeleting}
-            className="w-full rounded-md border border-red-400 px-4 py-2.5 text-sm font-medium text-red-500 transition-opacity hover:opacity-80 disabled:opacity-50"
+            className="w-full rounded-md border border-red-400 px-4 py-2.5 text-base font-medium text-red-500 transition-opacity hover:opacity-80 disabled:opacity-50"
           >
             {isDeleting ? "Removing…" : "Remove Product"}
           </button>
