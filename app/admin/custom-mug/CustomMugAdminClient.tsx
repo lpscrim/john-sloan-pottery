@@ -3,6 +3,7 @@
 import { useActionState, useTransition, useRef, useState } from 'react';
 import Image from 'next/image';
 import Button from '@/app/_components/UI/Layout/Button';
+import { compressImage } from '../compressImage';
 import type { Glaze, MugShape, MugSize } from '@/app/_lib/customMug';
 import {
   addGlaze, toggleGlazeActive, deleteGlaze,
@@ -122,6 +123,11 @@ function ShapesSection({ shapes }: { shapes: MugShape[] }) {
       <form
         ref={formRef}
         action={async (fd) => {
+          const file = fd.get('image') as File | null;
+          if (file && file.size > 0) {
+            const compressed = await compressImage(file).catch(() => file);
+            fd.set('image', compressed);
+          }
           await action(fd);
           formRef.current?.reset();
         }}
@@ -264,6 +270,11 @@ function GlazeTileUpload({ glazes }: { glazes: Glaze[] }) {
       <form
         ref={formRef}
         action={async (fd) => {
+          const file = fd.get('image') as File | null;
+          if (file && file.size > 0) {
+            const compressed = await compressImage(file).catch(() => file);
+            fd.set('image', compressed);
+          }
           await action(fd);
           formRef.current?.reset();
         }}
@@ -337,6 +348,11 @@ function ExamplesSection({ examples, supabaseUrl }: { examples: { name: string; 
       <form
         ref={formRef}
         action={async (fd) => {
+          const file = fd.get('image') as File | null;
+          if (file && file.size > 0) {
+            const compressed = await compressImage(file).catch(() => file);
+            fd.set('image', compressed);
+          }
           await action(fd);
           formRef.current?.reset();
         }}
