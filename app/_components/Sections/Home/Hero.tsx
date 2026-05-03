@@ -9,15 +9,12 @@ export function Hero() {
 
   const handleEnded = useCallback((video: HTMLVideoElement | null) => {
     if (!video) return;
-    video.pause();
-    setTimeout(() => {
       video.currentTime = 0;
       video.play();
-    }, 5000);
   }, []);
 
   return (
-    <section id="home" className="min-h-svh flex flex-col justify-center items-center">
+    <section id="home" className="min-h-lvh flex flex-col justify-center items-center">
       {/* Top image strip - Desktop */}
       <div className='absolute bg-black/10 backdrop-blur-md w-full h-full z-9'></div>
       <div className="hidden md:flex w-full h-svh relative overflow-hidden justify-center items-center">
@@ -32,13 +29,11 @@ export function Hero() {
           className="object-cover object-center h-auto min-h-full w-full"
         />
         <div 
-          className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
+          className="absolute inset-0 flex title items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
         >
           <Image src="/Logo.webp" alt="Logo" width="350" height="350" className="" loading='eager' />
 
-          {/*<span className='mb-4 '>John Sloan</span>
 
-          <span className='text-[3vw]/[3vw] '>Pottery</span>*/}
         </div>
       </div>
       {/* Mobile */}
@@ -53,13 +48,10 @@ export function Hero() {
           className="object-cover object-center h-auto min-h-full w-full"
         />
         <div 
-          className="absolute inset-0 flex title items-center text-center font-medium justify-center text-[6vw]/[6vw] tracking-wide text-card z-20 flex-col opacity-[0.95]"
+          className="absolute inset-0 flex title items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
         >
           <Image src="/Logo.webp" alt="Logo" width="200" height="200" className="" loading='eager' />
 
-          {/*<span className='mb-4 '>John Sloan</span>
-
-          <span className='text-[3vw]/[3vw] '>Pottery</span>*/}
         </div>
       </div>
 

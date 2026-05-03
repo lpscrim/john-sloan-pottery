@@ -9,7 +9,7 @@ export async function About() {
   const { text, images } = await getHomeAboutContent();
 
   return (
-    <section id="about" className="min-h-[80svh] px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
+    <section id="about" className="min-h-svh px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
       <div className="w-full mx-auto">
         <div className="mb-24">
           <h2 className="text-3xl md:text-5xl tracking-tight text-center">Behind the clay</h2>

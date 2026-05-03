@@ -11,7 +11,7 @@ export async function Projects() {
   return (
     <section id="work" className="py-24 xl:py-32 overflow-hidden">
       <div className="px-6 mb-16 xl:mb-24">
-        <h2 className="text-3xl md:text-5xl tracking-tight"></h2>
+        <h2 className="text-3xl md:text-5xl tracking-tight text-center">Recent Works</h2>
       </div>
 
       <MarqueeBanner duration={projects.length * 6}>
@@ -21,6 +21,7 @@ export async function Projects() {
             href={`/work?project=${project.id}`}
             className="group cursor-crosshair shrink-0 w-80 md:w-96 lg:w-104 xl:w-120"
           >
+            
             <div className="relative aspect-4/5 bg-muted overflow-hidden rounded-sm">
               <ImageWithFallback
                 src={project.imageUrl}
