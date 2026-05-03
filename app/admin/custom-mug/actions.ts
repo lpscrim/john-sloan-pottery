@@ -47,7 +47,10 @@ export async function addShape(_prev: { error?: string }, formData: FormData) {
   await requireAdminUser();
   const name = (formData.get('name') as string | null)?.trim();
   const description = (formData.get('description') as string | null)?.trim() || null;
+  const priceStr = (formData.get('price') as string | null)?.trim();
   if (!name) return { error: 'Name is required.' };
+  const pricePence = Math.round(parseFloat(priceStr ?? '0') * 100);
+  if (!Number.isFinite(pricePence) || pricePence <= 0) return { error: 'Enter a valid price.' };
   const slug = toSlug(name);
   const imageFile = formData.get('image') as File | null;
 
@@ -68,6 +71,7 @@ export async function addShape(_prev: { error?: string }, formData: FormData) {
     name,
     slug,
     description,
+    price_pence: pricePence,
     ...(imagePath ? { image_path: imagePath } : {}),
   });
   if (error) return { error: error.message };
@@ -94,7 +98,17 @@ export async function deleteShape(id: string) {
   revalidatePath('/custom-mug');
 }
 
-// ─── Mug sizes ───────────────────────────────────────────────────────────────
+export async function updateShapePrice(id: string, pricePence: number) {
+  await requireAdminUser();
+  if (!Number.isInteger(pricePence) || pricePence <= 0) throw new Error('Invalid price');
+  const supabase = createServerSupabase();
+  const { error } = await supabase.from('mug_shapes').update({ price_pence: pricePence }).eq('id', id);
+  if (error) throw new Error(error.message);
+  revalidatePath('/admin/custom-mug');
+  revalidatePath('/custom-mug');
+}
+
+// ─── Mug sizes (legacy — retained for existing orders) ───────────────────────
 
 export async function addSize(_prev: { error?: string }, formData: FormData) {
   await requireAdminUser();
@@ -143,7 +157,7 @@ export async function deleteSize(id: string) {
 
 // ─── Glaze tile images ────────────────────────────────────────────────────────
 
-export async function uploadGlazeTile(_prev: { error?: string }, formData: FormData) {
+export async function uploadGlazeTile(_prev: { error?: string; success?: string }, formData: FormData): Promise<{ error?: string; success?: string }> {
   await requireAdminUser();
   const slug1 = (formData.get('slug1') as string | null)?.trim().toLowerCase();
   const slug2 = (formData.get('slug2') as string | null)?.trim().toLowerCase();

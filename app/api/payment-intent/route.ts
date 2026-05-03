@@ -102,31 +102,30 @@ export async function POST(req: NextRequest) {
     const enrichedCustomItems: EnrichedCustomItem[] = [];
 
     if (customMugItems.length > 0) {
-      const sizeIds = [...new Set(customMugItems.map((i) => i.customMug!.sizeId))];
-      const { data: sizeData, error: sizeError } = await supabase
-        .from('mug_sizes')
+      const shapeIds = [...new Set(customMugItems.map((i) => i.customMug!.shapeId))];
+      const { data: shapeData, error: shapeError } = await supabase
+        .from('mug_shapes')
         .select('id, name, price_pence')
-        .in('id', sizeIds)
+        .in('id', shapeIds)
         .eq('active', true);
 
-      if (sizeError || !sizeData) {
-        return NextResponse.json({ error: 'Failed to load mug sizes' }, { status: 500 });
+      if (shapeError || !shapeData) {
+        return NextResponse.json({ error: 'Failed to load mug types' }, { status: 500 });
       }
 
-      const sizeMap = new Map(sizeData.map((s) => [s.id, s]));
+      const shapeMap = new Map(shapeData.map((s) => [s.id, s]));
 
       for (const item of customMugItems) {
-        const mugSize = sizeMap.get(item.customMug!.sizeId);
-        if (!mugSize) {
-          return NextResponse.json({ error: 'Invalid mug size' }, { status: 400 });
+        const mugShape = shapeMap.get(item.customMug!.shapeId);
+        if (!mugShape) {
+          return NextResponse.json({ error: 'Invalid mug type' }, { status: 400 });
         }
-        const itemPrice = mugSize.price_pence * item.quantity;
+        const itemPrice = mugShape.price_pence * item.quantity;
         customMugTotal += itemPrice;
         enrichedCustomItems.push({
           title: [
-            `Custom ${mugSize.name} Mug`,
+            `Custom ${mugShape.name} Mug`,
             `Glazes: ${item.customMug!.glaze1Name} (base) + ${item.customMug!.glaze2Name} (accent)`,
-            `Shape: ${item.customMug!.shapeName}`,
           ].join('\n'),
           qty: item.quantity,
           price: itemPrice,

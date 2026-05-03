@@ -3,18 +3,21 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useCart } from '@/app/_components/Cart/CartContext';
-import type { Glaze, MugShape, MugSize } from '@/app/_lib/customMug';
+import type { Glaze, MugShape } from '@/app/_lib/customMug';
 
 interface Props {
   glazes: Glaze[];
   shapes: MugShape[];
-  sizes: MugSize[];
   examples: string[];
 }
 
 function tileUrl(slug1: string, slug2: string) {
   const [a, b] = [slug1, slug2].sort();
   return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/glaze-tiles/${a}-${b}.jpg`;
+}
+
+function glazeSwatchUrl(slug: string) {
+  return tileUrl(slug, slug);
 }
 
 function shapeUrl(slug: string) {
@@ -25,12 +28,11 @@ function formatPrice(pence: number) {
   return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(pence / 100);
 }
 
-export default function CustomMugConfigurator({ glazes, shapes, sizes, examples }: Props) {
+export default function CustomMugConfigurator({ glazes, shapes, examples }: Props) {
   const [glaze1, setGlaze1] = useState<Glaze | null>(null);
   const [glaze2, setGlaze2] = useState<Glaze | null>(null);
   const [glazeStep, setGlazeStep] = useState<1 | 2>(1);
   const [shape, setShape] = useState<MugShape | null>(null);
-  const [size, setSize] = useState<MugSize | null>(null);
 
   const { addItem } = useCart();
 
@@ -40,7 +42,7 @@ export default function CustomMugConfigurator({ glazes, shapes, sizes, examples 
       setGlaze2(null);
       setGlazeStep(2);
     } else {
-      if (glaze.id === glaze1?.id) return;
+      // Same glaze allowed — single colour
       setGlaze2(glaze);
       setGlazeStep(1);
     }
@@ -53,19 +55,18 @@ export default function CustomMugConfigurator({ glazes, shapes, sizes, examples 
   };
 
   const currentTileUrl = glaze1 && glaze2 ? tileUrl(glaze1.slug, glaze2.slug) : null;
-  const canAddToCart = glaze1 && glaze2 && shape && size;
+  const canAddToCart = glaze1 && glaze2 && shape;
 
   const handleAddToCart = () => {
-    if (!glaze1 || !glaze2 || !shape || !size) return;
+    if (!glaze1 || !glaze2 || !shape) return;
     addItem({
       priceId: `custom-mug-${crypto.randomUUID()}`,
-      name: `Custom ${size.name} Mug`,
+      name: `Custom ${shape.name} Mug`,
       imageUrl: currentTileUrl ?? '',
-      priceHw: size.price_pence,
+      priceHw: shape.price_pence,
       stockLevel: 1,
       customMug: {
-        sizeId: size.id,
-        sizeName: size.name,
+        shapeId: shape.id,
         glaze1Slug: glaze1.slug,
         glaze2Slug: glaze2.slug,
         glaze1Name: glaze1.name,
@@ -101,55 +102,60 @@ export default function CustomMugConfigurator({ glazes, shapes, sizes, examples 
             )}
           </div>
 
-          {glaze1 && !glaze2 && (
-            <p className="text-sm text-muted-foreground mb-4">
-              Base: <span className="text-foreground">{glaze1.name}</span>
-            </p>
-          )}
-          {glaze1 && glaze2 && (
-            <p className="text-sm text-muted-foreground mb-4">
-              <span className="text-foreground">{glaze1.name}</span>
-              {' + '}
-              <span className="text-foreground">{glaze2.name}</span>
-            </p>
-          )}
-          {!glaze1 && <p className="text-sm text-muted-foreground mb-4">Select a base glaze first, then an accent.</p>}
+          <p className="text-sm text-muted-foreground mb-5">
+            {!glaze1
+              ? 'Select a base glaze. You can choose the same glaze twice for a single colour.'
+              : !glaze2
+              ? `Base: ${glaze1.name}. Now pick your accent — or click the same glaze for a single colour.`
+              : glaze1.id === glaze2.id
+              ? `${glaze1.name} — single colour`
+              : `${glaze1.name} (base) + ${glaze2.name} (accent)`
+            }
+          </p>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
             {glazes.map((glaze) => {
               const isBase = glaze.id === glaze1?.id;
               const isAccent = glaze.id === glaze2?.id;
-              const isDisabled = glazeStep === 2 && glaze.id === glaze1?.id;
+              const isSingle = isBase && isAccent;
 
               return (
                 <button
                   key={glaze.id}
                   onClick={() => handleGlazeClick(glaze)}
-                  disabled={isDisabled}
-                  className={`px-4 py-2 text-sm border transition-all ${
-                    isBase
-                      ? 'border-foreground bg-foreground text-background'
-                      : isAccent
-                      ? 'border-foreground bg-foreground/15 text-foreground'
-                      : isDisabled
-                      ? 'border-foreground/10 text-foreground/30 cursor-not-allowed'
-                      : 'border-foreground/20 hover:border-foreground/60'
+                  className={`text-left border transition-all overflow-hidden ${
+                    isSingle
+                      ? 'border-foreground ring-2 ring-foreground/20'
+                      : isBase || isAccent
+                      ? 'border-foreground'
+                      : 'border-foreground/15 hover:border-foreground/40'
                   }`}
                 >
-                  {glaze.name}
-                  {isBase && <span className="ml-1.5 text-xs opacity-50">base</span>}
-                  {isAccent && <span className="ml-1.5 text-xs opacity-50">accent</span>}
+                  <div className="relative aspect-square bg-muted/30">
+                    <img
+                      src={glazeSwatchUrl(glaze.slug)}
+                      alt={glaze.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                  </div>
+                  <div className="px-2 py-1.5">
+                    <p className="text-xs font-medium leading-tight">{glaze.name}</p>
+                    {isSingle && <p className="text-xs text-muted-foreground">single</p>}
+                    {isBase && !isSingle && <p className="text-xs text-muted-foreground">base</p>}
+                    {isAccent && !isSingle && <p className="text-xs text-muted-foreground">accent</p>}
+                  </div>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Step 2: Shape */}
+        {/* Step 2: Type */}
         <div>
-          <h2 className="text-xl tracking-tight mb-4">Choose your shape</h2>
+          <h2 className="text-xl tracking-tight mb-4">Choose your type</h2>
           {shapes.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No shapes available yet.</p>
+            <p className="text-sm text-muted-foreground">No types available yet.</p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {shapes.map((s) => (
@@ -172,37 +178,13 @@ export default function CustomMugConfigurator({ glazes, shapes, sizes, examples 
                   </div>
                   <div className="p-3">
                     <p className="text-sm font-medium">{s.name}</p>
+                    <p className="text-sm font-medium mt-0.5">{formatPrice(s.price_pence)}</p>
                     {s.description && (
                       <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                         {s.description}
                       </p>
                     )}
                   </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Step 3: Size */}
-        <div>
-          <h2 className="text-xl tracking-tight mb-4">Choose your size</h2>
-          {sizes.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No sizes available yet.</p>
-          ) : (
-            <div className="flex flex-wrap gap-3">
-              {sizes.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setSize(s)}
-                  className={`px-6 py-3 border text-sm transition-all ${
-                    size?.id === s.id
-                      ? 'border-foreground bg-foreground text-background'
-                      : 'border-foreground/20 hover:border-foreground/60'
-                  }`}
-                >
-                  <span className="font-medium">{s.name}</span>
-                  <span className="ml-2 opacity-60">{formatPrice(s.price_pence)}</span>
                 </button>
               ))}
             </div>
@@ -260,13 +242,14 @@ export default function CustomMugConfigurator({ glazes, shapes, sizes, examples 
             <div className="text-sm space-y-1 text-muted-foreground">
               <p>
                 <span className="text-foreground">{glaze1!.name}</span>
-                {' (base) + '}
-                <span className="text-foreground">{glaze2!.name}</span>
-                {' (accent)'}
+                {glaze1!.id === glaze2!.id
+                  ? ' — single colour'
+                  : <>{' (base) + '}<span className="text-foreground">{glaze2!.name}</span>{' (accent)'}</>
+                }
               </p>
               <p>Shape: <span className="text-foreground">{shape!.name}</span></p>
               <p className="text-lg text-foreground font-medium pt-1">
-                {formatPrice(size!.price_pence)}
+                {formatPrice(shape!.price_pence)}
               </p>
             </div>
           )}
@@ -280,7 +263,7 @@ export default function CustomMugConfigurator({ glazes, shapes, sizes, examples 
                 : 'bg-foreground/10 text-foreground/30 cursor-not-allowed'
             }`}
           >
-            {canAddToCart ? 'Add to basket' : 'Select glazes, shape & size'}
+            {canAddToCart ? 'Add to basket' : 'Select glazes & type'}
           </button>
 
           {canAddToCart && (

@@ -4,8 +4,7 @@ import { createContext, useContext, useCallback, useSyncExternalStore, useRef, u
 
 // ─── Types ───────────────────────────────────────────────────────
 export interface CustomMugDetails {
-  sizeId: string;
-  sizeName: string;
+  shapeId: string;
   glaze1Slug: string;
   glaze2Slug: string;
   glaze1Name: string;

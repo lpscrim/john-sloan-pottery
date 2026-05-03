@@ -1,4 +1,4 @@
-import { getGlazes, getMugShapes, getMugSizes, getMugExampleUrls } from '@/app/_lib/customMug';
+import { getGlazes, getMugShapes, getMugExampleUrls } from '@/app/_lib/customMug';
 import CustomMugConfigurator from './CustomMugConfigurator';
 
 export const metadata = {
@@ -7,10 +7,9 @@ export const metadata = {
 };
 
 export default async function CustomMugPage() {
-  const [glazes, shapes, sizes, examples] = await Promise.all([
+  const [glazes, shapes, examples] = await Promise.all([
     getGlazes(),
     getMugShapes(),
-    getMugSizes(),
     getMugExampleUrls(),
   ]);
 
@@ -20,13 +19,12 @@ export default async function CustomMugPage() {
         <div className="mb-16">
           <h1 className="text-3xl md:text-5xl tracking-tight">Build Your Mug</h1>
           <p className="mt-4 text-muted-foreground text-lg max-w-xl">
-            Choose your glazes and shape. Each piece is thrown and fired by hand to order.
+            Choose your glazes and type. Each piece is thrown and fired by hand to order.
           </p>
         </div>
         <CustomMugConfigurator
           glazes={glazes}
           shapes={shapes}
-          sizes={sizes}
           examples={examples}
         />
       </div>

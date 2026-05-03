@@ -11,6 +11,7 @@ export interface MugShape {
   name: string;
   slug: string;
   description: string | null;
+  price_pence: number;
 }
 
 export interface MugSize {
@@ -35,7 +36,7 @@ export async function getMugShapes(): Promise<MugShape[]> {
   const supabase = createServerSupabase();
   const { data, error } = await supabase
     .from('mug_shapes')
-    .select('id, name, slug, description')
+    .select('id, name, slug, description, price_pence')
     .eq('active', true)
     .order('name');
   if (error) throw new Error(error.message);
