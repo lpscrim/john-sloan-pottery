@@ -82,7 +82,33 @@ Practical step-by-step checklist to get the site fully live. Work through these 
 
 ---
 
-## Phase 6 — Add Real Products
+## Phase 6 — Etsy Sync (optional)
+
+> Skip this phase if the artist does not use Etsy.
+
+- [ ] Go to https://www.etsy.com/developers/register and create a new app
+  - Set the **Redirect URI** to `https://yourdomain.com/api/etsy/auth/callback`
+  - Copy the **Keystring** → `ETSY_API_KEY`
+  - Copy the **Shared secret** → `ETSY_API_SECRET`
+- [ ] Find the artist's **Shop ID** — visit `https://openapi.etsy.com/v3/application/shops?shop_name=YourShopName` → `ETSY_SHOP_ID`
+- [ ] Set `CRON_SECRET` to any random string (protects the stock-sync endpoint)
+- [ ] Add all four vars to Vercel env vars and redeploy
+- [ ] Log in to `/admin/etsy` and click **Connect Etsy** — authorise in the Etsy OAuth screen
+- [ ] Click **Pull listings**, then import any listings you want to sell through this site
+- [ ] Confirm imported products appear in `/work`
+
+**How stock stays in sync after go-live:**
+
+| Event | What happens |
+|---|---|
+| Sale on this site | Stripe webhook fires → Etsy listing quantity updated immediately |
+| Stock edited in admin | Save in `/admin/edit-product` → Etsy listing quantity updated immediately |
+| Sale on Etsy | Vercel Cron polls `/api/etsy/poll` every 10 min → app stock reduced to match |
+| Restock on Etsy | Next cron run detects higher Etsy qty and pushes app stock up |
+
+---
+
+## Phase 7 — Add Real Products
 
 > Test-mode products do not carry over to live mode. All products need to be re-added.
 
@@ -98,7 +124,7 @@ Practical step-by-step checklist to get the site fully live. Work through these 
 
 ---
 
-## Phase 7 — Settings
+## Phase 8 — Settings
 
 - [ ] Go to `/admin/settings`
 - [ ] Set shipping rates for **UK**, **EU**, and **International** — both prints and artwork rates
@@ -111,7 +137,7 @@ Practical step-by-step checklist to get the site fully live. Work through these 
 
 ---
 
-## Phase 8 — Final Checks Before Announcing
+## Phase 9 — Final Checks Before Announcing
 
 - [ ] Place a real purchase with a real card (a low-value item or a £1 test product)
   - Confirm payment appears in **the artist's** Stripe dashboard
@@ -126,6 +152,8 @@ Practical step-by-step checklist to get the site fully live. Work through these 
 - [ ] Confirm the cart persists across page refreshes
 - [ ] Confirm out-of-stock items show as unavailable
 - [ ] Place an EU/international order and confirm shipping rate updates in the checkout when country is selected
+- [ ] If using Etsy: import a listing, purchase it on this site, and confirm the Etsy listing quantity drops to 0
+- [ ] If using Etsy: manually trigger `/api/etsy/poll` (with the `Authorization: Bearer <CRON_SECRET>` header) and confirm it responds with `synced: 0` (nothing out of sync)
 
 ---
 
@@ -142,3 +170,6 @@ Practical step-by-step checklist to get the site fully live. Work through these 
 | Supabase keys | supabase.com → Project → Settings → API |
 | DNS records | your domain registrar's control panel |
 | Admin login | yourdomain.com/admin |
+| Etsy developer apps | etsy.com/developers |
+| Etsy sync admin | yourdomain.com/admin/etsy |
+| Cron secret | Vercel env var `CRON_SECRET` |

@@ -201,8 +201,9 @@ All payments are **direct charges** on the artist's connected account. Stripe fe
 ### How sync works
 
 - **App sale → Etsy**: When a Stripe payment is confirmed, the updated stock level is pushed to the linked Etsy listing immediately via the webhook
-- **Etsy sale → App**: A Vercel Cron job polls `/api/etsy/poll` every 5 minutes. If Etsy stock is lower than app stock, the app stock is reduced to match
-- **Cron note**: Vercel Cron requires a Pro plan. On the free plan you can trigger `/api/etsy/poll` manually from the admin Etsy Sync page
+- **Admin edit → Etsy**: When stock is changed via `/admin/edit-product` and saved, the new stock level is pushed to the linked Etsy listing immediately
+- **Etsy sale → App**: A Vercel Cron job polls `/api/etsy/poll` every 10 minutes. If Etsy stock is lower than app stock, the app stock is reduced to match. If Etsy stock is higher (manual restock on Etsy), the app stock is raised to match
+- **Cron config**: Already wired in `vercel.json`. Requires a Vercel Pro plan. On the free plan, trigger `/api/etsy/poll` manually from the admin Etsy Sync page or via cURL with the `Authorization: Bearer <CRON_SECRET>` header
 
 ---
 
@@ -311,9 +312,11 @@ Set all of the following in Vercel → Project → Settings → Environment Vari
 - Success banner auto-dismisses after 3 seconds
 
 ### Stock Management
-- Stock is set manually in the stock field
-- Stock decrements automatically when a purchase is completed
+- Stock is set manually in the stock field when adding or editing a product
+- Stock decrements automatically when a purchase is completed (Stripe webhook)
 - Stock restores automatically if a payment intent is cancelled
+- **Etsy-linked products**: saving a stock change in `/admin/edit-product` pushes the new quantity to Etsy immediately
+- **Etsy sales**: picked up by the cron every 10 minutes and reflected in app stock automatically
 
 ---
 
@@ -325,3 +328,5 @@ Set all of the following in Vercel → Project → Settings → Environment Vari
 - **Fee calculation** — platform fee is 5% of the order total. See `app/api/checkout/route.ts`.
 - **Categories visibility** — can be toggled on/off in `/admin/settings` without code changes.
 - **Supabase RLS** — not enabled; the service-role key is used exclusively server-side. Do not expose `SUPABASE_SERVICE_ROLE_KEY` to the browser.
+- **Etsy cron — Pro plan required** — Vercel Cron (configured in `vercel.json`) only runs on Pro plans. On the free plan the cron entry is silently ignored; trigger the poll endpoint manually if needed.
+- **Etsy sync is non-fatal** — if the Etsy API is unreachable, product saves and sales still complete normally; the sync failure is logged to the Vercel function logs.
