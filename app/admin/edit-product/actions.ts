@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { createServerSupabase } from '@/app/_lib/supabase';
 import { getStripe } from '@/app/_lib/stripe';
 import { requireAdminUser } from '@/app/_lib/adminAuth';
+import { updateListingInventory } from '@/app/_lib/etsy';
 
 const ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'];
 
@@ -206,6 +207,19 @@ export async function updateProduct(
         const msg = stripeErr instanceof Error ? stripeErr.message : '';
         // If the product no longer exists in Stripe, skip silently
         if (!msg.includes('No such product')) throw stripeErr;
+      }
+    }
+
+    // Sync updated stock level back to Etsy if this product was imported from there
+    if (existing.etsy_listing_id) {
+      try {
+        await updateListingInventory(
+          parseInt(existing.etsy_listing_id as string, 10),
+          stockLevel,
+        );
+      } catch (etsyErr) {
+        console.error('[ETSY SYNC] Failed to update stock on edit:', etsyErr);
+        // Non-fatal — product is saved, just log the failure
       }
     }
 
