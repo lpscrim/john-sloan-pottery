@@ -1,1 +1,8 @@
-{}
+{
+  "crons": [
+    {
+      "path": "/api/etsy/poll",
+      "schedule": "*/10 * * * *"
+    }
+  ]
+}
