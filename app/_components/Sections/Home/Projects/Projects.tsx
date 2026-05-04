@@ -11,7 +11,7 @@ export async function Projects() {
   return (
     <section id="work" className="py-24 xl:py-32 overflow-hidden">
       <div className="px-6 mb-16 xl:mb-24">
-        <h2 className="text-3xl md:text-5xl tracking-tight text-center">Recent Works</h2>
+        <h2 className="text-3xl md:text-5xl tracking-tight text-center"></h2>
       </div>
 
       <MarqueeBanner duration={projects.length * 6}>
