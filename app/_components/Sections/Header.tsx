@@ -68,7 +68,7 @@ export function Header() {
               alt="John Sloan Pottery"
               width={35}
               height={35}
-              className={`transition-all duration-500 ${
+              className={`transition-all nav-underline duration-500 ${
                 isLight
                   ? "opacity-0 pointer-events-none"
                   : "opacity-100 pointer-events-auto"
@@ -79,7 +79,7 @@ export function Header() {
               alt="John Sloan Pottery"
               width={35}
               height={35}
-              className={`absolute inset-0 transition-all duration-500 ${
+              className={`absolute inset-0 transition-all nav-underline duration-500 ${
                 isLight
                   ? "opacity-100 pointer-events-auto"
                   : "opacity-0 pointer-events-none"
@@ -169,7 +169,7 @@ export function Header() {
             aria-label="Open cart"
           >
             <span className="relative">
-              <ShoppingBag size={22} strokeWidth={1.5} />
+              <ShoppingBag size={22} strokeWidth={1.5} className="nav-underline"/>
               {count > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 text-[10px] leading-none">
                   {count}
@@ -237,7 +237,7 @@ export function Header() {
               Cart
               {count > 0 && (
                 <span
-                  className={`${isLight ? "text-card " : "text-foreground "}`}
+                  className={` ${isLight ? "text-card " : "text-foreground "}`}
                 >
                   {" "}
                   [{count}]
