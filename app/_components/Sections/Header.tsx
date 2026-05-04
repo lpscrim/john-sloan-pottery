@@ -68,7 +68,7 @@ export function Header() {
               alt="John Sloan Pottery"
               width={35}
               height={35}
-              className={`transition-all nav-underline duration-500 ${
+              className={`transition-all nav-underline duration-500 brightness-200 ${
                 isLight
                   ? "opacity-0 pointer-events-none"
                   : "opacity-100 pointer-events-auto"
