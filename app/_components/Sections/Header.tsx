@@ -139,6 +139,30 @@ export function Header() {
             </button>
             <button
               className={`relative nav text-2xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+            >
+              <Link href="/custom-mug">
+                <span
+                  className={`text-foreground transition-all duration-500 ${
+                    isLight
+                      ? "opacity-0 pointer-events-none"
+                      : "opacity-100 pointer-events-auto"
+                  }`}
+                >
+                  Create
+                </span>
+                <span
+                  className={`text-card absolute left-0 top-0 transition-all duration-500 ${
+                    isLight
+                      ? "opacity-100 pointer-events-auto"
+                      : "opacity-0 pointer-events-none"
+                  }`}
+                >
+                  Create
+                </span>
+              </Link>
+            </button>
+            <button
+              className={`relative nav text-2xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
               onClick={() => conditionalScrollTo("#contact")}
             >
               <span
@@ -215,7 +239,17 @@ export function Header() {
               </Link>
             </button>
             <button
+              onClick={() => setIsMenuOpen(false)}
               className={`nav pop-up-3 opacity-0 text-left transition-colors cursor-pointer ${
+                isLight ? "text-card " : "text-foreground "
+              }`}
+            >
+              <Link href="/custom-mug" className="cursor-pointer">
+                Create
+              </Link>
+            </button>
+            <button
+              className={`nav pop-up-4 opacity-0 text-left transition-colors cursor-pointer ${
                 isLight ? "text-card " : "text-foreground "
               }`}
               onClick={() => {
@@ -226,7 +260,7 @@ export function Header() {
               Contact
             </button>
             <button
-              className={`nav pop-up-4 opacity-0 text-left transition-colors cursor-pointer ${
+              className={`nav pop-up-5 opacity-0 text-left transition-colors cursor-pointer ${
                 isLight ? "text-card " : "text-foreground "
               }`}
               onClick={() => {

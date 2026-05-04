@@ -337,6 +337,9 @@ body {
 .pop-up-4 {
   animation: pop-up 0.3s ease 0.15s forwards;
 }
+.pop-up-5 {
+  animation: pop-up 0.3s ease 0.2s forwards;
+}
 
 fade-in {
   animation: fade-in 1s ease forwards;
