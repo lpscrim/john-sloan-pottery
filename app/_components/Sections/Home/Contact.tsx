@@ -60,8 +60,7 @@ export function Contact() {
               </div>
             </div>
             <div className="">
-              <p className="text-foreground mb-4">Social</p>
-              <div className="space-y-3 lg:flex lg:flex-row lg:gap-8 lg:space-y-0">
+              <div className="flex flex-row gap-8 space-y-0">
                 {/* TODO: Replace with Instagram URL */}
                 <a
                   href="https://www.instagram.com/yourhandle/"
@@ -81,16 +80,7 @@ export function Contact() {
                   <Newspaper size={20} className="text-foreground" />
                   <span>Newsletter</span>
                 </button>
-                {/* TODO: Replace with your external shop URL (e.g. Stored, Etsy) or remove */}
-                <a
-                  href="https://example.com/shop"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity whitespace-nowrap"
-                >
-                  <Globe size={20} className="text-foreground" />
-                  <span>Stored Shop</span>
-                </a>
+               
               </div>
             </div>
           </div>
