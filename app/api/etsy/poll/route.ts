@@ -3,7 +3,7 @@ import { fetchListingInventory, updateListingInventory } from '@/app/_lib/etsy';
 import { createServerSupabase } from '@/app/_lib/supabase';
 
 /**
- * Two-way Etsy stock sync — called by Vercel Cron every 10 minutes.
+ * Two-way Etsy stock sync — called by cron-job.org every minute (GitHub Actions as backup).
  *
  * Logic per linked product:
  *   - Etsy qty < app stock_level → Etsy sale detected → reduce app stock to match
@@ -11,16 +11,30 @@ import { createServerSupabase } from '@/app/_lib/supabase';
  *   - Equal → no action
  */
 export async function GET(req: NextRequest) {
-  // Verify cron secret when configured
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const authHeader = req.headers.get('authorization');
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 });
+  }
+  const authHeader = req.headers.get('authorization');
+  if (authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const supabase = createServerSupabase();
+
+  // Soft concurrency guard — skip if another sync started within the last 30 seconds
+  const { data: lockRow } = await supabase
+    .from('settings')
+    .select('value')
+    .eq('key', 'etsy_sync_last_started_at')
+    .single();
+  const lastStarted = lockRow ? parseInt(lockRow.value ?? '0', 10) : 0;
+  if (Date.now() - lastStarted < 30_000) {
+    return NextResponse.json({ synced: 0, message: 'Sync skipped: another sync started recently' });
+  }
+  await supabase
+    .from('settings')
+    .upsert({ key: 'etsy_sync_last_started_at', value: String(Date.now()) }, { onConflict: 'key' });
   const { data: products, error } = await supabase
     .from('products')
     .select('id, stock_level, etsy_listing_id')
@@ -69,8 +83,8 @@ export async function GET(req: NextRequest) {
               to: etsyQty,
             });
           } else if (appQty < etsyQty) {
-            // App stock is lower — push that value to Etsy
-            await updateListingInventory(listingId, appQty);
+            // App stock is lower — push that value to Etsy (reuse already-fetched inventory)
+            await updateListingInventory(listingId, appQty, inventory);
             results.push({
               listing_id: product.etsy_listing_id as string,
               action: 'pushed_to_etsy',

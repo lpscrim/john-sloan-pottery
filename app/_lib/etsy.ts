@@ -428,6 +428,7 @@ export async function fetchListingInventory(listingId: number): Promise<EtsyInve
 export async function updateListingInventory(
   listingId: number,
   newQuantity: number,
+  existingInventory?: EtsyInventory,
 ): Promise<void> {
   if (MOCK_MODE) {
     console.log(`[ETSY MOCK] updateListingInventory listing=${listingId} qty=${newQuantity}`);
@@ -436,8 +437,8 @@ export async function updateListingInventory(
   const apiKey = process.env.ETSY_API_KEY!;
   const accessToken = await getValidAccessToken();
 
-  // Read existing inventory first to preserve price/property structure
-  const inventory = await fetchListingInventory(listingId);
+  // Use provided inventory or fetch it to preserve price/property structure
+  const inventory = existingInventory ?? await fetchListingInventory(listingId);
 
   const updatedProducts = inventory.products.map((product) => ({
     ...product,
