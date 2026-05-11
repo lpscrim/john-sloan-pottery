@@ -32,13 +32,21 @@ export function MarqueeBanner({ duration, children }: Props) {
 
   return (
     <div
-      ref={ref}
-      className="flex gap-6 w-max animate-marquee"
-      style={{ animationDuration: `${duration}s` }}
-      onMouseEnter={() => animateRate(0.05)}
-      onMouseLeave={() => animateRate(1)}
+      className="overflow-hidden w-full"
+      style={{
+        maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+      }}
     >
-      {children}
+      <div
+        ref={ref}
+        className="flex gap-6 w-max animate-marquee"
+        style={{ animationDuration: `${duration}s` }}
+        onMouseEnter={() => animateRate(0.05)}
+        onMouseLeave={() => animateRate(1)}
+      >
+        {children}
+      </div>
     </div>
   );
 }

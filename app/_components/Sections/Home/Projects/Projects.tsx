@@ -6,7 +6,9 @@ import { MarqueeBanner } from "./MarqueeBanner";
 
 export async function Projects() {
   const projects = await getProjects();
-  const items = [...projects, ...projects];
+  const BASE_COUNT = Math.min(Math.max(projects.length, 1), 10);
+  const baseItems = Array.from({ length: BASE_COUNT }, (_, i) => projects[i % projects.length]);
+  const items = [...baseItems, ...baseItems];
 
   return (
     <section id="work" className="py-24 xl:py-32 overflow-hidden">
@@ -14,7 +16,7 @@ export async function Projects() {
         <h2 className="text-3xl md:text-5xl tracking-tight text-center"></h2>
       </div>
 
-      <MarqueeBanner duration={projects.length * 6}>
+      <MarqueeBanner duration={BASE_COUNT * 6}>
         {items.map((project, idx) => (
           <Link
             key={idx}
