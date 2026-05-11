@@ -133,79 +133,44 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
   return (
     <div className="space-y-16">
 
-      {/* ── Top bar: colour filters + glaze buttons + reset ─────── */}
-      <div className="space-y-4">
+      {/* ── Step 1: Choose glaze ─────────────────────────────────── */}
+      <div className="space-y-6">
+        <div>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-1">Step 1</p>
+          <h2 className="text-2xl tracking-tight">Choose your glaze</h2>
+        </div>
+
+        {/* Colour filter chips + reset */}
         <div className="flex items-start justify-between gap-4">
-          <div className="space-y-3 flex-1">
-            {/* Colour filter chips */}
-            {allColours.length > 0 && (
-              <div className="flex flex-wrap gap-2">
+          {allColours.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setColourFilters([])}
+                className={`px-4 py-2 text-sm border transition-all cursor-pointer ${
+                  colourFilters.length === 0 ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                }`}
+              >
+                All
+              </button>
+              {allColours.map(c => (
                 <button
-                  onClick={() => setColourFilters([])}
-                  className={`px-4 py-2 text-sm border transition-all cursor-pointer ${
-                    colourFilters.length === 0 ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                  key={c}
+                  onClick={() => toggleColour(c)}
+                  className={`px-4 py-2 text-sm border transition-all cursor-pointer capitalize ${
+                    colourFilters.includes(c) ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
                   }`}
                 >
-                  All
+                  {c}
                 </button>
-                {allColours.map(c => (
-                  <button
-                    key={c}
-                    onClick={() => toggleColour(c)}
-                    className={`px-4 py-2 text-sm border transition-all cursor-pointer capitalize ${
-                      colourFilters.includes(c) ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Glaze name buttons */}
-            <div className="flex flex-wrap gap-2">
-              {visibleGlazes.map((glaze) => {
-                const isBase = glaze.id === glaze1?.id;
-                const isAccent = glaze.id === glaze2?.id;
-                const isSingle = isBase && isAccent;
-                const isDisabled = glazeStep === 2 && glaze.id === glaze1?.id && !!glaze2;
-
-                return (
-                  <button
-                    key={glaze.id}
-                    onClick={() => handleGlazeClick(glaze)}
-                    disabled={isDisabled}
-                    className={`px-3 py-1 text-xs border transition-all cursor-pointer ${
-                      isSingle
-                        ? 'border-foreground bg-foreground text-background'
-                        : isBase
-                        ? 'border-foreground bg-foreground text-background'
-                        : isAccent
-                        ? 'border-foreground bg-foreground/15 text-foreground'
-                        : isDisabled
-                        ? 'border-foreground/10 text-foreground/30 cursor-not-allowed!'
-                        : 'border-foreground/20 hover:border-foreground/60'
-                    }`}
-                  >
-                    {glaze.name}
-                    {isSingle && <span className="ml-1.5 text-xs opacity-50">single</span>}
-                    {isBase && !isSingle && <span className="ml-1.5 text-xs opacity-50">base</span>}
-                    {isAccent && !isSingle && <span className="ml-1.5 text-xs opacity-50">accent</span>}
-                  </button>
-                );
-              })}
+              ))}
             </div>
-          </div>
-
-          {/* Reset button */}
+          )}
           {(glaze1 || glaze2) && (
             <Button size="sm" onClick={resetGlazes}>Reset</Button>
           )}
         </div>
-      </div>
 
-      {/* ── Tile grid — main display ────────────────────────────── */}
-      <div>
+        {/* Tile grid */}
         <div className="flex flex-wrap gap-1.5 items-start min-h-[80svh]">
           {visibleTileCombos.map((combo) => {
             const isSelected = combo.key === selectedKey;
@@ -240,18 +205,57 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             );
           })}
         </div>
+
+        {/* Glaze name buttons */}
+        <div className="flex flex-wrap gap-2">
+          {visibleGlazes.map((glaze) => {
+            const isBase = glaze.id === glaze1?.id;
+            const isAccent = glaze.id === glaze2?.id;
+            const isSingle = isBase && isAccent;
+            const isDisabled = glazeStep === 2 && glaze.id === glaze1?.id && !!glaze2;
+
+            return (
+              <button
+                key={glaze.id}
+                onClick={() => handleGlazeClick(glaze)}
+                disabled={isDisabled}
+                className={`px-3 py-1 text-xs border transition-all cursor-pointer ${
+                  isSingle
+                    ? 'border-foreground bg-foreground text-background'
+                    : isBase
+                    ? 'border-foreground bg-foreground text-background'
+                    : isAccent
+                    ? 'border-foreground bg-foreground/15 text-foreground'
+                    : isDisabled
+                    ? 'border-foreground/10 text-foreground/30 cursor-not-allowed!'
+                    : 'border-foreground/20 hover:border-foreground/60'
+                }`}
+              >
+                {glaze.name}
+                {isSingle && <span className="ml-1.5 text-xs opacity-50">single</span>}
+                {isBase && !isSingle && <span className="ml-1.5 text-xs opacity-50">base</span>}
+                {isAccent && !isSingle && <span className="ml-1.5 text-xs opacity-50">accent</span>}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* ── Type selector + confirm ──────────────────────────────── */}
-      <div className="grid md:grid-cols-2 gap-12 items-start">
-
-        {/* Type selector */}
+      {/* ── Step 2: Choose style + confirm ──────────────────────── */}
+      <div className="space-y-6">
         <div>
-          <h2 className="text-xl tracking-tight mb-4">Choose type</h2>
-          {shapes.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No types available yet.</p>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-1">Step 2</p>
+          <h2 className="text-2xl tracking-tight">Choose your style</h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+
+          {/* Style selector */}
+          <div>
+            {shapes.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No styles available yet.</p>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {shapes.map((s) => (
                 <button
                   key={s.id}
@@ -283,9 +287,9 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
               ))}
             </div>
           )}
-        </div>
+          </div>
 
-        {/* Confirm / add to cart */}
+          {/* Confirm / add to cart */}
         <div className="space-y-4">
           {canAddToCart && (
             <div className="text-sm space-y-1 text-muted-foreground">
@@ -317,6 +321,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             </p>
           )}
         </div>
+      </div>
       </div>
 
       {/* ── Examples gallery ─────────────────────────────────────── */}
