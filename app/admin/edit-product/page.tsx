@@ -1,12 +1,13 @@
 import { createServerSupabase } from '@/app/_lib/supabase';
 import EditProductClient from './EditProductClient';
 import type { AdminProduct } from './types';
+import { getGlazes, getMugShapes, type Glaze, type MugShape } from '@/app/_lib/customMug';
 
 async function getAdminProducts(): Promise<AdminProduct[]> {
   const supabase = createServerSupabase();
   const { data: products, error } = await supabase
     .from('products')
-    .select('id, name, description, price_hw, stock_level, categories, glaze, image_url, stripe_product_id, stripe_price_id')
+    .select('id, name, description, price_hw, stock_level, categories, glaze, image_url, stripe_product_id, stripe_price_id, mug_shape_slug')
     .order('id', { ascending: true });
 
   if (error || !products) {
@@ -43,6 +44,7 @@ async function getAdminProducts(): Promise<AdminProduct[]> {
         stripe_product_id: product.stripe_product_id ?? null,
         stripe_price_id: product.stripe_price_id ?? null,
         gallery,
+        mug_shape_slug: product.mug_shape_slug ?? null,
       };
     })
   );
@@ -51,6 +53,6 @@ async function getAdminProducts(): Promise<AdminProduct[]> {
 }
 
 export default async function EditProductPage() {
-  const products = await getAdminProducts();
-  return <EditProductClient products={products} />;
+  const [products, shapes, glazes] = await Promise.all([getAdminProducts(), getMugShapes(), getGlazes()]);
+  return <EditProductClient products={products} shapes={shapes} glazes={glazes} />;
 }

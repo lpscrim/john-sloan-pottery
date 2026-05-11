@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { getGlazes, getMugShapes, getMugExampleUrls } from '@/app/_lib/customMug';
 import CustomMugConfigurator from './CustomMugConfigurator';
 
@@ -22,11 +23,13 @@ export default async function CustomMugPage() {
             Choose your glazes and type. Each piece is thrown and fired by hand to order.
           </p>
         </div>
-        <CustomMugConfigurator
-          glazes={glazes}
-          shapes={shapes}
-          examples={examples}
-        />
+        <Suspense>
+          <CustomMugConfigurator
+            glazes={glazes}
+            shapes={shapes}
+            examples={examples}
+          />
+        </Suspense>
       </div>
     </main>
   );

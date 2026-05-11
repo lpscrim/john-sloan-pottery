@@ -1,7 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { useCart } from '@/app/_components/Cart/CartContext';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
 import Button from '@/app/_components/UI/Layout/Button';
@@ -28,11 +29,33 @@ function formatPrice(pence: number) {
 }
 
 export default function CustomMugConfigurator({ glazes, shapes, examples }: Props) {
+  const searchParams = useSearchParams();
   const [glaze1, setGlaze1] = useState<Glaze | null>(null);
   const [glaze2, setGlaze2] = useState<Glaze | null>(null);
   const [glazeStep, setGlazeStep] = useState<1 | 2>(1);
   const [shape, setShape] = useState<MugShape | null>(null);
   const [colourFilters, setColourFilters] = useState<string[]>([]);
+
+  // Pre-select from URL params (e.g. ?shape=bowl&g1=r1&g2=b2)
+  useEffect(() => {
+    const shapeSlug = searchParams.get('shape');
+    const g1Slug = searchParams.get('g1');
+    const g2Slug = searchParams.get('g2');
+    if (shapeSlug) {
+      const found = shapes.find(s => s.slug === shapeSlug);
+      if (found) setShape(found);
+    }
+    if (g1Slug) {
+      const found = glazes.find(g => g.slug === g1Slug);
+      if (found) { setGlaze1(found); setGlazeStep(2); }
+    }
+    if (g2Slug) {
+      const found = glazes.find(g => g.slug === g2Slug);
+      if (found) { setGlaze2(found); setGlazeStep(1); }
+    }
+  // Only run on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const allColours = useMemo(() => {
     const seen = new Set<string>();

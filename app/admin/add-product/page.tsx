@@ -1,10 +1,11 @@
 'use client';
 
-import { useActionState, useRef, useState, useEffect } from 'react';
+import { useActionState, useRef, useState, useEffect, useTransition } from 'react';
 import { addProduct, type AddProductState } from './actions';
 import { compressImage } from '../compressImage';
 import Button from '@/app/_components/UI/Layout/Button';
-import { ColourPicker } from '@/app/admin/ColourPicker';
+import { GlazeSelect } from '@/app/admin/GlazeSelect';
+import type { Glaze, MugShape } from '@/app/_lib/customMug';
 
 const initialState: AddProductState = { success: false };
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4 MB (post-compression safety net)
@@ -13,12 +14,20 @@ const MAX_SECONDARY = 4;
 
 export default function AddProductPage() {
   const [state, formAction, isPending] = useActionState(addProduct, initialState);
+  const [, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [secondaryPreviews, setSecondaryPreviews] = useState<(string | null)[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);
-  const [glazeColours, setGlazeColours] = useState(['', '', '']);
+  const [glazeResetKey, setGlazeResetKey] = useState(0);
+  const [glazes, setGlazes] = useState<Glaze[]>([]);
+  const [shapes, setShapes] = useState<MugShape[]>([]);
+
+  useEffect(() => {
+    fetch('/api/glazes').then(r => r.json()).then((data: { glazes: Glaze[] }) => setGlazes(data.glazes ?? [])).catch(() => {});
+    fetch('/api/mug-shapes').then(r => r.json()).then((data: { shapes: MugShape[] }) => setShapes(data.shapes ?? [])).catch(() => {});
+  }, []);
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -93,7 +102,7 @@ export default function AddProductPage() {
         return;
       }
 
-      formAction(formData);
+      startTransition(() => formAction(formData));
     } catch (err) {
       setFileError(`Image compression failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
@@ -112,7 +121,7 @@ export default function AddProductPage() {
           prev.forEach((url) => { if (url) URL.revokeObjectURL(url); });
           return [];
         });
-        setGlazeColours(['', '', '']);
+        setGlazeResetKey(k => k + 1);
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -188,18 +197,25 @@ export default function AddProductPage() {
             <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="grid grid-cols-3 gap-2">
-                  <input name={`glaze_${i}_name`} type="text" placeholder={`Glaze ${i + 1} label (shown to customer)`} className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
-                  <input name={`glaze_${i}_note`} type="text" placeholder="Description (sent to you on order)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
-                  <ColourPicker
-                    name={`glaze_${i}_colour`}
-                    value={glazeColours[i]}
-                    onChange={(hex) => setGlazeColours(prev => { const next = [...prev]; next[i] = hex; return next; })}
-                  />
-                </div>
+                <GlazeSelect key={`${glazeResetKey}-${i}`} index={i} glazes={glazes} />
               ))}
             </div>
           </div>
+
+          {shapes.length > 0 && (
+            <label className="block">
+              <span className="text-base font-medium">Mug shape <span className="text-muted-foreground font-normal">(optional — links sold-out buy button to Build a Mug)</span></span>
+              <select
+                name="mug_shape_slug"
+                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
+              >
+                <option value="">None</option>
+                {shapes.map(s => (
+                  <option key={s.id} value={s.slug}>{s.name}</option>
+                ))}
+              </select>
+            </label>
+          )}
 
           {/* Image */}
           <label className="block">

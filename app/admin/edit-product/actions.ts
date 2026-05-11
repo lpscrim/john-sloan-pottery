@@ -54,8 +54,10 @@ export async function updateProduct(
         name: ((formData.get(`glaze_${i}_name`) as string | null) ?? '').trim(),
         note: ((formData.get(`glaze_${i}_note`) as string | null) ?? '').trim(),
         colour: ((formData.get(`glaze_${i}_colour`) as string | null) ?? '').trim() || undefined,
+        slug: ((formData.get(`glaze_${i}_slug`) as string | null) ?? '').trim() || undefined,
       }))
       .filter((g) => g.name);
+    const mugShapeSlug = ((formData.get('mug_shape_slug') as string | null) ?? '').trim() || null;
     const removeCover = formData.get('removeCover') === 'on';
     const removeGallery = formData.getAll('removeGallery') as string[];
     const imageFile = formData.get('image') as File | null;
@@ -172,6 +174,7 @@ export async function updateProduct(
         glaze,
         image_url: imageUrl,
         type: 'pottery',
+        mug_shape_slug: mugShapeSlug,
       })
       .eq('id', productId);
 

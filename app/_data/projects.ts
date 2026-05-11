@@ -4,6 +4,7 @@ export interface GlazeEntry {
   name: string;  // customer-facing label, e.g. "r1"
   note: string;  // description sent to John on order, e.g. "Rutile reduction"
   colour?: string; // basic colour category for filtering, e.g. "green"
+  slug?: string; // matches slug on glazes table for custom mug linking
 }
 
 export interface Project {
@@ -17,6 +18,7 @@ export interface Project {
   price_hw: number;       // price in cents
   stock_level: number;
   stripe_price_id: string | null;
+  mug_shape_slug?: string; // if set, sold-out button links to custom mug builder
 }
 
 function getSupabaseClient() {
@@ -69,6 +71,7 @@ export async function getProjects(): Promise<Project[]> {
         price_hw: product.price_hw ?? 0,
         stock_level: product.stock_level ?? 0,
         stripe_price_id: product.stripe_price_id ?? null,
+        ...(product.mug_shape_slug ? { mug_shape_slug: product.mug_shape_slug as string } : {}),
       };
     })
   );

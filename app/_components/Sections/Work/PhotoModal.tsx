@@ -25,6 +25,7 @@ interface PhotoModalProps {
   stripePriceId: string | null;
   stockLevel: number;
   priceHw: number;
+  mugShapeSlug?: string;
 }
 
 export const PhotoModal: React.FC<PhotoModalProps> = ({
@@ -46,6 +47,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   stripePriceId,
   stockLevel,
   priceHw,
+  mugShapeSlug,
 }) => {
   // Refs for thumbnails
   const stripRef = useRef<HTMLDivElement | null>(null);
@@ -285,6 +287,8 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
                 priceHw={priceHw}
                 name={name}
                 imageUrl={images[0] || image}
+                mugShapeSlug={mugShapeSlug}
+                glaze={glaze}
               />
             </div>
             <div className="flex justify-center w-20  text-foreground z-100">

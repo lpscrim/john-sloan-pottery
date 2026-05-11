@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useRef, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import type { AdminProduct } from "./types";
@@ -11,7 +11,8 @@ import {
   type UpdateProductState,
 } from "./actions";
 import { compressImage } from "../compressImage";
-import { ColourPicker } from "@/app/admin/ColourPicker";
+import { GlazeSelect } from "@/app/admin/GlazeSelect";
+import type { Glaze, MugShape } from "@/app/_lib/customMug";
 
 const initialUpdateState: UpdateProductState = { success: false };
 const initialDeleteState: DeleteProductState = { success: false };
@@ -21,8 +22,12 @@ const MAX_SECONDARY = 4;
 
 export default function EditProductClient({
   products,
+  shapes,
+  glazes,
 }: {
   products: AdminProduct[];
+  shapes: MugShape[];
+  glazes: Glaze[];
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(
     () => products[0]?.id ?? null,
@@ -40,6 +45,7 @@ export default function EditProductClient({
     deleteProduct,
     initialDeleteState,
   );
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     if (updateState.success) {
@@ -57,7 +63,6 @@ export default function EditProductClient({
   }, [updateState.success, deleteState.success, router]);
 
   const [productSearch, setProductSearch] = useState('');
-  const [glazeColours, setGlazeColours] = useState<[string, string, string]>(['', '', '']);
 
   const filteredProducts = useMemo(() => {
     const q = productSearch.trim().toLowerCase();
@@ -83,16 +88,6 @@ export default function EditProductClient({
     const timer = setTimeout(() => setSavedAt(null), 3000);
     return () => clearTimeout(timer);
   }, [savedAt]);
-
-  // Sync glaze colours when selected product changes
-  useEffect(() => {
-    const sel = products.find((p) => p.id === resolvedSelectedId) ?? null;
-    setGlazeColours([
-      sel?.glaze[0]?.colour ?? '',
-      sel?.glaze[1]?.colour ?? '',
-      sel?.glaze[2]?.colour ?? '',
-    ]);
-  }, [resolvedSelectedId, products]);
 
   function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -155,7 +150,7 @@ export default function EditProductClient({
         return;
       }
 
-      updateAction(formData);
+      startTransition(() => updateAction(formData));
     } catch (err) {
       setFileError(`Image compression failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
@@ -302,18 +297,26 @@ export default function EditProductClient({
             <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="grid grid-cols-3 gap-2">
-                  <input name={`glaze_${i}_name`} type="text" defaultValue={selected.glaze[i]?.name ?? ''} placeholder={`Glaze ${i + 1} label (shown to customer)`} className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
-                  <input name={`glaze_${i}_note`} type="text" defaultValue={selected.glaze[i]?.note ?? ''} placeholder="Description (sent to you on order)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
-                  <ColourPicker
-                    name={`glaze_${i}_colour`}
-                    value={glazeColours[i]}
-                    onChange={(hex) => setGlazeColours(prev => { const next = [...prev] as [string,string,string]; next[i] = hex; return next; })}
-                  />
-                </div>
+                <GlazeSelect key={i} index={i} glazes={glazes} defaultEntry={selected.glaze[i]} />
               ))}
             </div>
           </div>
+
+          {shapes.length > 0 && (
+            <label className="block">
+              <span className="text-base font-medium">Mug shape <span className="text-muted-foreground font-normal">(optional — links sold-out buy button to Build a Mug)</span></span>
+              <select
+                name="mug_shape_slug"
+                defaultValue={selected.mug_shape_slug ?? ''}
+                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
+              >
+                <option value="">None</option>
+                {shapes.map(s => (
+                  <option key={s.id} value={s.slug}>{s.name}</option>
+                ))}
+              </select>
+            </label>
+          )}
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
