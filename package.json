@@ -5,6 +5,7 @@
   "scripts": {
     "clean": "node -e \"const fs=require('fs'); for (const p of ['.next','.turbo','node_modules/.cache']) fs.rmSync(p,{recursive:true,force:true});\"",
     "dev": "next dev",
+    "dev:webpack": "next dev --no-turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
