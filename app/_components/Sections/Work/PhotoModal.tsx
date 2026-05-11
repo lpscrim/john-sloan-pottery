@@ -294,11 +294,11 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
               />
             </div>
             <div className="flex justify-center w-20  text-foreground z-100">
-              {isProject && text && (
+              {isProject && (
               <Button onClick={() => setTextOpen(!textOpen)} size="lg">
                 Info
               </Button>
-                        )}
+              )}
             </div>
           <div className="flex justify-center w-20 text-foreground z-100">
             <Button onClick={onClose} size="lg">
@@ -315,16 +315,18 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           />
         </div>
       )}
-      {isProject && text && (
+      {isProject && (
         <div
           className={` flex w-full border-b border-muted z-90 py-16 bg-background items-center -translate-y-100 opacity-0 ${
             textOpen ? "translate-y-0 opacity-100" : ""
           }  transition-all duration-300 ease-in-out overflow-y-auto z-40`}
         >
-          <div
-            className={`max-w-3xl mx-auto px-6 text-center text-foreground `}
-          >
-            <p className="whitespace-pre-line text-lg">{text}</p>
+          <div className="max-w-3xl mx-auto px-6 text-center text-foreground flex flex-col gap-3">
+            {text && <p className="whitespace-pre-line text-lg">{text}</p>}
+            <p className="text-foreground/60 text-base">
+              {[shapeLabel, glaze?.map(g => g.name).join(', '), medium].filter(Boolean).join(' · ')}
+              {priceHw > 0 && <span className="ml-2">· £{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
+            </p>
           </div>
         </div>
       )}
