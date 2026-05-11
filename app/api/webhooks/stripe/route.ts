@@ -147,17 +147,12 @@ async function notifyClientFromCharge(charge: Stripe.Charge, stripe: ReturnType<
     itemsHtml = '<p>See Stripe dashboard for items</p>';
   }
 
-  const isCollection = pi?.metadata?.collection === 'true';
-
   const html = `
-    <h2>New Order — ${billingName ?? 'New Customer'}${isCollection ? ' 📦 COLLECTION' : ''}</h2>
+    <h2>New Order — ${billingName ?? 'New Customer'}</h2>
     <p><strong>Customer:</strong> ${billingName ?? 'Unknown'}<br>
     <strong>Email:</strong> ${billingEmail ?? 'Unknown'}<br>
     <strong>Phone:</strong> ${phone}</p>
-    ${isCollection
-      ? `<p style="background:#fffbeb;border:1px solid #f59e0b;padding:8px 12px;border-radius:4px;font-weight:600">⚠️ Customer has chosen to collect from Edinburgh — no shipping required.</p>`
-      : `<p><strong>Shipping address:</strong><br>${addressLines}</p>`
-    }
+    <p><strong>Shipping address:</strong><br>${addressLines}</p>
     <h3>Items</h3>
     <div>${itemsHtml}</div>
     <table style="width:100%;max-width:360px;border-collapse:collapse;margin-top:12px;font-size:14px">

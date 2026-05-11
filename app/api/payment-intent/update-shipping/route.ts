@@ -32,11 +32,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    // Don't update collection orders — shipping is always free
-    if (pi.metadata.collection === 'true') {
-      return NextResponse.json({ shippingRate: 0, total: pi.amount });
-    }
-
     // Only update while the PI can still be modified
     const updatable = ['requires_payment_method', 'requires_confirmation', 'requires_action'];
     if (!updatable.includes(pi.status)) {

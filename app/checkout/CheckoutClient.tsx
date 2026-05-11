@@ -25,7 +25,6 @@ export interface CheckoutPiData {
   paymentIntentId: string;
   cancelToken: string;
   stripeAccount?: string | null;
-  collect?: boolean;
 }
 
 // ── Inner form rendered inside <Elements> ─────────────────────────
@@ -33,7 +32,6 @@ function CheckoutForm({
   total,
   shippingRate,
   allowedCountries,
-  collect,
   paymentIntentId,
   cancelToken,
   onBack,
@@ -41,7 +39,6 @@ function CheckoutForm({
   total: number;
   shippingRate: number;
   allowedCountries: string[];
-  collect: boolean;
   paymentIntentId: string;
   cancelToken: string;
   onBack: () => void;
@@ -117,20 +114,7 @@ function CheckoutForm({
         />
       </div>
 
-      {collect ? (
-        // Collection: no shipping needed, but collect billing/contact address
-        <div>
-          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-            Billing address
-          </p>
-          <AddressElement
-            options={{
-              mode: 'billing',
-              fields: { phone: 'always' },
-            }}
-          />
-        </div>
-      ) : (
+      {(
         // Standard shipping: collect shipping address
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
@@ -158,14 +142,12 @@ function CheckoutForm({
 
       {/* Own billing-address toggle — all billing suppressed in PaymentElement
           so Stripe won't show its own 'same as shipping' checkbox alongside ours */}
-      {!collect && (
-        <div>
-          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-            Billing address
-          </p>
-          <AddressElement options={{ mode: 'billing', fields: { phone: 'never' } }} />
-        </div>
-      )}
+      <div>
+        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+          Billing address
+        </p>
+        <AddressElement options={{ mode: 'billing', fields: { phone: 'never' } }} />
+      </div>
 
       <div>
         <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
@@ -278,7 +260,6 @@ export default function CheckoutClient({ allowedCountries }: { allowedCountries?
   const piData: CheckoutPiData | null = parsed;
   const total = parsed?.total ?? 0;
   const shippingRate = parsed?.shippingRate ?? cartShippingRate;
-  const collect = parsed?.collect ?? false;
 
   // After hydration, redirect away if there's no PI data (or it was bad).
   // This effect only navigates — it never calls setState in this component.
@@ -371,7 +352,7 @@ export default function CheckoutClient({ allowedCountries }: { allowedCountries?
             </div>
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>{collect ? 'Edinburgh collection' : shippingRate === 0 ? 'Free' : `£${(shippingRate / 100).toFixed(2)}`}</span>
+              <span>{shippingRate === 0 ? 'Free' : `£${(shippingRate / 100).toFixed(2)}`}</span>
             </div>
             <div className="flex justify-between text-foreground font-semibold pt-1">
               <span>Total</span>
@@ -422,7 +403,6 @@ export default function CheckoutClient({ allowedCountries }: { allowedCountries?
               total={total}
               shippingRate={shippingRate}
               allowedCountries={allowedCountries ?? ['GB']}
-              collect={collect}
               paymentIntentId={piData.paymentIntentId}
               cancelToken={piData.cancelToken}
               onBack={handleBack}

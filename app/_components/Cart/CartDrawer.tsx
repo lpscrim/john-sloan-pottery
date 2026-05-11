@@ -10,12 +10,10 @@ export function CartDrawer() {
   const { items, count, isOpen, closeCart, removeItem, updateQuantity, clearCart, shippingRate } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [collect, setCollect] = useState(false);
   const router = useRouter();
 
   const subtotal = items.reduce((sum, i) => sum + i.priceHw * i.quantity, 0);
-  const effectiveShipping = collect ? 0 : shippingRate;
-  const total = subtotal + effectiveShipping;
+  const total = subtotal + shippingRate;
 
   async function handleCheckout() {
     if (items.length === 0 || loading) return;
@@ -32,7 +30,6 @@ export function CartDrawer() {
             quantity: i.quantity,
             ...(i.customMug ? { customMug: i.customMug } : {}),
           })),
-          collect,
         }),
       });
 
@@ -56,7 +53,6 @@ export function CartDrawer() {
             total: data.total,
             shippingRate: data.shippingRate,
             stripeAccount: data.stripeAccount ?? null,
-            collect: data.collect ?? false,
           })
         );
         closeCart();
@@ -174,38 +170,14 @@ export function CartDrawer() {
               <span className="text-muted-foreground">SUBTOTAL</span>
               <span>£{(subtotal / 100).toFixed(2)}</span>
             </div>
-            {/* Collect in person toggle */}
-            <div className="flex items-start gap-3 py-1">
-              <button
-                role="checkbox"
-                aria-checked={collect}
-                onClick={() => setCollect((v) => !v)}
-                className={`cursor-pointer mt-0.5 shrink-0 w-4 h-4 border transition-colors ${
-                  collect ? 'bg-foreground border-foreground' : 'bg-transparent border-foreground/40'
-                }`}
-              >
-                {collect && (
-                  <svg viewBox="0 0 10 10" className="w-full h-full text-background" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <polyline points="1.5,5 4,7.5 8.5,2.5" />
-                  </svg>
-                )}
-              </button>
-              <div>
-                <p className="text-base leading-snug">Collect from Edinburgh (free)</p>
-                <p className="text-xs text-muted-foreground leading-snug">Arrange collection directly with the artist</p>
-              </div>
-            </div>
-
             <div className="space-y-0.5">
               <div className="flex items-center justify-between text-base">
                 <span className="text-muted-foreground">SHIPPING</span>
-                <span>{effectiveShipping === 0 ? 'Free' : `£${(effectiveShipping / 100).toFixed(2)}`}</span>
+                <span>{shippingRate === 0 ? 'Free' : `£${(shippingRate / 100).toFixed(2)}`}</span>
               </div>
-              {!collect && (
-                <p className="text-xs text-muted-foreground">
-                  EU &amp; international shipping may be more at checkout
-                </p>
-              )}
+              <p className="text-xs text-muted-foreground">
+                EU &amp; international shipping may be more at checkout
+              </p>
             </div>
             <div className="flex items-center justify-between text-base font-semibold border-t border-muted pt-2">
               <span>TOTAL</span>

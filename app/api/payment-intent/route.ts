@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
     } else {
       return NextResponse.json({ error: 'Missing items' }, { status: 400 });
     }
-    const collect = body.collect === true;
 
     if (lineItems.length === 0) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
@@ -165,7 +164,7 @@ export async function POST(req: NextRequest) {
 
     // ── Calculate totals ────────────────────────────────────────────
     const shippingRates = await getShippingRates();
-    const shippingRatePence = collect ? 0 : resolveShippingRate(shippingRates);
+    const shippingRatePence = resolveShippingRate(shippingRates);
     const regularSubtotal = enrichedReservations.reduce((sum, r) => sum + r.price, 0);
     const totalAmount = regularSubtotal + customMugTotal + shippingRatePence;
 
@@ -206,7 +205,6 @@ export async function POST(req: NextRequest) {
           reserved_items: reservedItemsJson,
           shipping_amount: String(shippingRatePence),
           cancel_token: cancelToken,
-          ...(collect ? { collection: 'true' } : {}),
         },
       },
       clientAccountId ? { stripeAccount: clientAccountId } : undefined,
@@ -219,7 +217,6 @@ export async function POST(req: NextRequest) {
       total: totalAmount,
       shippingRate: shippingRatePence,
       stripeAccount: clientAccountId ?? null,
-      collect,
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to create payment';
