@@ -365,11 +365,11 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
               positionThumbStrip();
             }}
           />
-          {isProject && (
-          <span className="flex w-full justify-center text-foreground text-sm pt-4 pointer-events-none z-999">
-            {shapeLabel && <span>{shapeLabel}{(glaze && glaze.length > 0) || medium ? ', ' : ''}</span>}{glaze && glaze.length > 0 && <span>{glaze.map(g => g.name).join(', ')}{medium ? ', ' : ''}</span>}{medium && <span>{medium}</span>}{priceHw > 0 && <span>{(shapeLabel || glaze?.length || medium) ? ', ' : ''}£{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
-          </span>
-        )}
+          {isProject && stockLevel <= 0 && (
+            <span className="flex w-full justify-center text-foreground/50 text-sm pt-4 pointer-events-none z-999">
+              Sold out
+            </span>
+          )}
         </div>
         {hasNext && (
           <button
