@@ -6,7 +6,7 @@ async function getAdminProducts(): Promise<AdminProduct[]> {
   const supabase = createServerSupabase();
   const { data: products, error } = await supabase
     .from('products')
-    .select('id, name, description, price_hw, stock_level, categories, medium, glaze, image_url, stripe_product_id, stripe_price_id')
+    .select('id, name, description, price_hw, stock_level, categories, glaze, image_url, stripe_product_id, stripe_price_id')
     .order('id', { ascending: true });
 
   if (error || !products) {
@@ -38,7 +38,6 @@ async function getAdminProducts(): Promise<AdminProduct[]> {
         price_hw: product.price_hw ?? 0,
         stock_level: product.stock_level ?? 0,
         categories: product.categories ?? [],
-        medium: product.medium ?? '',
         glaze: product.glaze ?? [],
         image_url: product.image_url ?? '',
         stripe_product_id: product.stripe_product_id ?? null,

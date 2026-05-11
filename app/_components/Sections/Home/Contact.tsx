@@ -2,7 +2,7 @@
 
 import  Button  from "../../UI/Layout/Button";
 import { useState } from "react";
-import { Mail, Instagram, Globe, Newspaper } from "lucide-react";
+import { Mail, Instagram } from "lucide-react";
 
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -71,16 +71,7 @@ export function Contact() {
                   <Instagram size={20} className="text-foreground" />
                   <span>Instagram</span>
                 </a>
-                <button
-                  onClick={() =>
-                    window.dispatchEvent(new CustomEvent("open-mailing-list"))
-                  }
-                  className="flex items-center gap-3 cursor-pointer hover:opacity-70 transition-opacity whitespace-nowrap"
-                >
-                  <Newspaper size={20} className="text-foreground" />
-                  <span>Newsletter</span>
-                </button>
-               
+
               </div>
             </div>
           </div>

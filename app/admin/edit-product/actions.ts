@@ -49,7 +49,6 @@ export async function updateProduct(
     const priceStr = formData.get('price') as string | null;
     const stockStr = formData.get('stock') as string | null;
     const categoriesRaw = formData.get('categories') as string | null;
-    const medium = formData.get('medium') as string | null;
     const glaze = [formData.get('glaze_0'), formData.get('glaze_1'), formData.get('glaze_2')]
       .map((v) => (v as string | null)?.trim() ?? '')
       .filter(Boolean);
@@ -166,7 +165,6 @@ export async function updateProduct(
         price_hw: priceHw,
         stock_level: stockLevel,
         categories,
-        medium: (medium ?? '').trim(),
         glaze,
         image_url: imageUrl,
         type: 'pottery',

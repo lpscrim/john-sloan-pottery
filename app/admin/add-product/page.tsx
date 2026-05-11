@@ -181,18 +181,7 @@ export default function AddProductPage() {
             />
           </label>
 
-          {/* Medium */}
-          <label className="block">
-            <span className="text-base font-medium">Medium</span>
-            <input
-              name="medium"
-              type="text"
-              placeholder="Oil on canvas"
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
-            />
-          </label>
-
-          {/* Glaze */}
+}
           <div className="block">
             <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">

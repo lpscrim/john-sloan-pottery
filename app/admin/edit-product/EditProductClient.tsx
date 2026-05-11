@@ -286,19 +286,7 @@ export default function EditProductClient({
             />
           </label>
 
-          <label className="block">
-            <span className="text-base font-medium">Medium</span>
-            <input
-              name="medium"
-              type="text"
-              defaultValue={selected.medium}
-              placeholder="Oil on canvas"
-              className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
-            />
-          </label>
 
-          <div className="block">
-            <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
               <input name="glaze_0" type="text" defaultValue={selected.glaze[0] ?? ''} placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
               <input name="glaze_1" type="text" defaultValue={selected.glaze[1] ?? ''} placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
