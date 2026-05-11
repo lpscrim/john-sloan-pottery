@@ -341,8 +341,8 @@ body {
   animation: pop-up 0.3s ease 0.2s forwards;
 }
 
-fade-in {
-  animation: fade-in 1s ease forwards;
+.fade-in {
+  animation: fade-in 10s ease forwards;
 }
 
 /* Custom thin scrollbar */
