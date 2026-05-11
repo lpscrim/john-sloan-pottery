@@ -36,7 +36,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedGlazes, setSelectedGlazes] = useState<string[]>([]);
-  const [inStockOnly, setInStockOnly] = useState(false);
+  const [stockFilter, setStockFilter] = useState<'in-stock' | 'all' | 'sold'>('in-stock');
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState<string[]>([]);
@@ -102,17 +102,24 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
     if (selectedCategories.length > 0) {
       result = result.filter((p) => selectedCategories.every(cat => p.categories.includes(cat)));
     }
-    if (inStockOnly) {
+    if (stockFilter === 'in-stock') {
       result = result.filter((p) => getStock(p) > 0);
+    } else if (stockFilter === 'sold') {
+      result = result.filter((p) => getStock(p) <= 0);
     }
     if (selectedGlazes.length > 0) {
       result = result.filter((p) => selectedGlazes.every(g => p.glaze.some(gl => gl.colour === g)));
     }
     return result;
-  }, [projects, selectedCategories, selectedGlazes, inStockOnly, getStock]);
+  }, [projects, selectedCategories, selectedGlazes, stockFilter, getStock]);
 
   const inStockCount = useMemo(
     () => projects.filter((p) => getStock(p) > 0).length,
+    [projects, getStock]
+  );
+
+  const soldCount = useMemo(
+    () => projects.filter((p) => getStock(p) <= 0).length,
     [projects, getStock]
   );
 
@@ -138,11 +145,13 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
     if (selectedCategories.length > 0) {
       result = result.filter((p) => selectedCategories.every(cat => p.categories.includes(cat)));
     }
-    if (inStockOnly) {
+    if (stockFilter === 'in-stock') {
       result = result.filter((p) => getStock(p) > 0);
+    } else if (stockFilter === 'sold') {
+      result = result.filter((p) => getStock(p) <= 0);
     }
     return result;
-  }, [projects, selectedCategories, inStockOnly, getStock]);
+  }, [projects, selectedCategories, stockFilter, getStock]);
 
   // All colours that exist before glaze/colour filtering (to keep greyed-out options visible)
   const knownGlazes = useMemo(() => {
@@ -265,11 +274,12 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
         selectedGlazes={selectedGlazes}
         toggleGlaze={toggleGlaze}
         allGlazes={allGlazes}
-        inStockOnly={inStockOnly}
-        setInStockOnly={setInStockOnly}
+        stockFilter={stockFilter}
+        setStockFilter={setStockFilter}
         filteredProjects={filteredProjects}
         totalCount={projects.length}
         inStockCount={inStockCount}
+        soldCount={soldCount}
         sortedVisibleCategories={sortedVisibleCategories}
         toggleCategory={toggleCategory}
         onCardClick={handleCardClick}

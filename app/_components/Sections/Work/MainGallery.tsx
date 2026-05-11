@@ -22,11 +22,12 @@ export interface MainGalleryProps {
   selectedGlazes: string[];
   toggleGlaze: (g: string) => void;
   allGlazes: [string, number][];
-  inStockOnly: boolean;
-  setInStockOnly: React.Dispatch<React.SetStateAction<boolean>>;
+  stockFilter: 'in-stock' | 'all' | 'sold';
+  setStockFilter: React.Dispatch<React.SetStateAction<'in-stock' | 'all' | 'sold'>>;
   filteredProjects: Project[];
   totalCount: number;
   inStockCount: number;
+  soldCount: number;
   sortedVisibleCategories: [string, number][];
   toggleCategory: (cat: string) => void;
   onCardClick: (index: number, project: Project) => void;
@@ -40,11 +41,12 @@ export function MainGallery({
   selectedGlazes,
   toggleGlaze,
   allGlazes,
-  inStockOnly,
-  setInStockOnly,
+  stockFilter,
+  setStockFilter,
   filteredProjects,
   totalCount,
   inStockCount,
+  soldCount,
   sortedVisibleCategories,
   toggleCategory,
   onCardClick,
@@ -57,21 +59,22 @@ export function MainGallery({
         <div className="xl:w-1/2 text-base sm:text-lg py-4">
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => {
-                setSelectedCategories([]);
-                setInStockOnly(false);
-              }}
-              className={`cursor-crosshair transition-opacity ${selectedCategories.length === 0 && !inStockOnly ? "text-foreground" : "text-foreground/50"}`}
+              onClick={() => setStockFilter('in-stock')}
+              className={`cursor-crosshair transition-opacity ${stockFilter === 'in-stock' ? 'text-foreground' : 'text-foreground/50'}`}
+            >
+              In Stock <span className="text-accent">{inStockCount}</span>
+            </button>
+            <button
+              onClick={() => setStockFilter('all')}
+              className={`cursor-crosshair transition-opacity ${stockFilter === 'all' ? 'text-foreground' : 'text-foreground/50'}`}
             >
               All <span className="text-accent">{totalCount}</span>
             </button>
             <button
-              onClick={() => {
-                setInStockOnly(!inStockOnly);
-              }}
-              className={`cursor-crosshair transition-opacity ${inStockOnly ? "text-foreground font-semibold" : "text-foreground/50"}`}
+              onClick={() => setStockFilter('sold')}
+              className={`cursor-crosshair transition-opacity ${stockFilter === 'sold' ? 'text-foreground' : 'text-foreground/50'}`}
             >
-              Available <span className="text-accent">{inStockCount}</span>
+              Sold <span className="text-accent">{soldCount}</span>
             </button>
           </div>
           {showCategories && (
