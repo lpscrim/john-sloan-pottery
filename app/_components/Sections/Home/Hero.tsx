@@ -29,7 +29,7 @@ export function Hero() {
           className="object-cover object-center h-auto min-h-full w-full"
         />
         <div 
-          className="absolute inset-0 flex title items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
+          className="absolute inset-0 flex title -mt-12 items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
         >
           <Image src="/Logo.webp" alt="Logo" width="350" height="350" className="" loading='eager' />
 
@@ -48,7 +48,7 @@ export function Hero() {
           className="object-cover object-center h-auto min-h-full w-full"
         />
         <div 
-          className="absolute inset-0 flex title items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
+          className="absolute inset-0 flex title -mt-12 items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
         >
           <Image src="/Logo.webp" alt="Logo" width="200" height="200" className="" loading='eager' />
 
