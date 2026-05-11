@@ -11,6 +11,7 @@ import {
   type UpdateProductState,
 } from "./actions";
 import { compressImage } from "../compressImage";
+import { ColourPicker } from "@/app/admin/ColourPicker";
 
 const initialUpdateState: UpdateProductState = { success: false };
 const initialDeleteState: DeleteProductState = { success: false };
@@ -56,6 +57,7 @@ export default function EditProductClient({
   }, [updateState.success, deleteState.success, router]);
 
   const [productSearch, setProductSearch] = useState('');
+  const [glazeColours, setGlazeColours] = useState<[string, string, string]>(['', '', '']);
 
   const filteredProducts = useMemo(() => {
     const q = productSearch.trim().toLowerCase();
@@ -81,6 +83,16 @@ export default function EditProductClient({
     const timer = setTimeout(() => setSavedAt(null), 3000);
     return () => clearTimeout(timer);
   }, [savedAt]);
+
+  // Sync glaze colours when selected product changes
+  useEffect(() => {
+    const sel = products.find((p) => p.id === resolvedSelectedId) ?? null;
+    setGlazeColours([
+      sel?.glaze[0]?.colour ?? '',
+      sel?.glaze[1]?.colour ?? '',
+      sel?.glaze[2]?.colour ?? '',
+    ]);
+  }, [resolvedSelectedId, products]);
 
   function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -293,7 +305,11 @@ export default function EditProductClient({
                 <div key={i} className="grid grid-cols-3 gap-2">
                   <input name={`glaze_${i}_name`} type="text" defaultValue={selected.glaze[i]?.name ?? ''} placeholder={`Glaze ${i + 1} label (shown to customer)`} className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
                   <input name={`glaze_${i}_note`} type="text" defaultValue={selected.glaze[i]?.note ?? ''} placeholder="Description (sent to you on order)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
-                  <input name={`glaze_${i}_colour`} type="text" defaultValue={selected.glaze[i]?.colour ?? ''} placeholder="Colour (e.g. green)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base" />
+                  <ColourPicker
+                    name={`glaze_${i}_colour`}
+                    value={glazeColours[i]}
+                    onChange={(hex) => setGlazeColours(prev => { const next = [...prev] as [string,string,string]; next[i] = hex; return next; })}
+                  />
                 </div>
               ))}
             </div>

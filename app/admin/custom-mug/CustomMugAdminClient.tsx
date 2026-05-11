@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Button from '@/app/_components/UI/Layout/Button';
 import { compressImage } from '../compressImage';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
+import { ColourPicker } from '@/app/admin/ColourPicker';
 import {
   addGlaze, toggleGlazeActive, deleteGlaze,
   addShape, toggleShapeActive, deleteShape, updateShapePrice,
@@ -35,6 +36,7 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
   const [state, action, pending] = useActionState(addGlaze, {});
   const [, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
+  const [newColour, setNewColour] = useState('');
 
   return (
     <section className="space-y-6">
@@ -49,7 +51,10 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
                   <span className="text-muted-foreground ml-2">— {(g as Glaze & { note?: string }).note}</span>
                 )}
                 {(g as Glaze & { colour?: string }).colour && (
-                  <span className="text-muted-foreground ml-2">({(g as Glaze & { colour?: string }).colour})</span>
+                  <span
+                    className="inline-block w-3.5 h-3.5 rounded-full ml-2 shrink-0 align-middle border border-black/10"
+                    style={{ backgroundColor: (g as Glaze & { colour?: string }).colour }}
+                  />
                 )}
                 <span className="text-muted-foreground text-base ml-1">({g.slug})</span>
               </span>
@@ -77,6 +82,7 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
         action={async (fd) => {
           await action(fd);
           formRef.current?.reset();
+          setNewColour('');
         }}
         className="space-y-3"
       >
@@ -90,8 +96,8 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
             <input name="note" placeholder="e.g. Rutile reduction" className={inputCls()} />
           </div>
           <div>
-            <label className="block text-base text-muted-foreground mb-1">Colour <span className="text-muted-foreground/60">(filter category)</span></label>
-            <input name="colour" placeholder="e.g. green" className={inputCls()} />
+            <label className="block text-base text-muted-foreground mb-1">Colour <span className="text-muted-foreground/60">(filter circle)</span></label>
+            <ColourPicker name="colour" value={newColour} onChange={setNewColour} />
           </div>
         </div>
         <SaveButton pending={pending} />

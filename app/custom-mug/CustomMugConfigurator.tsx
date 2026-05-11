@@ -140,14 +140,16 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
           <h2 className="text-2xl tracking-tight">Choose your glaze</h2>
         </div>
 
-        {/* Colour filter chips + reset */}
-        <div className="flex items-start justify-between gap-4">
+        {/* Colour filter circles + reset */}
+        <div className="flex items-center justify-between gap-4">
           {allColours.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 items-center">
               <button
                 onClick={() => setColourFilters([])}
-                className={`px-4 py-2 text-sm border transition-all cursor-pointer ${
-                  colourFilters.length === 0 ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                className={`w-8 h-8 rounded-full border-2 transition-all cursor-pointer text-xs font-medium ${
+                  colourFilters.length === 0
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-foreground/30 text-foreground/60 hover:border-foreground/60'
                 }`}
               >
                 All
@@ -156,12 +158,14 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                 <button
                   key={c}
                   onClick={() => toggleColour(c)}
-                  className={`px-4 py-2 text-sm border transition-all cursor-pointer capitalize ${
-                    colourFilters.includes(c) ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                  title={c}
+                  className={`w-8 h-8 rounded-full border-2 transition-all cursor-pointer ${
+                    colourFilters.includes(c)
+                      ? 'border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background'
+                      : 'border-transparent hover:border-foreground/40'
                   }`}
-                >
-                  {c}
-                </button>
+                  style={{ backgroundColor: c }}
+                />
               ))}
             </div>
           )}

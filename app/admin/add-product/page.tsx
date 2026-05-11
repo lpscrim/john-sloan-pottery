@@ -4,6 +4,7 @@ import { useActionState, useRef, useState, useEffect } from 'react';
 import { addProduct, type AddProductState } from './actions';
 import { compressImage } from '../compressImage';
 import Button from '@/app/_components/UI/Layout/Button';
+import { ColourPicker } from '@/app/admin/ColourPicker';
 
 const initialState: AddProductState = { success: false };
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4 MB (post-compression safety net)
@@ -17,6 +18,7 @@ export default function AddProductPage() {
   const [secondaryPreviews, setSecondaryPreviews] = useState<(string | null)[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);
+  const [glazeColours, setGlazeColours] = useState(['', '', '']);
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -110,6 +112,7 @@ export default function AddProductPage() {
           prev.forEach((url) => { if (url) URL.revokeObjectURL(url); });
           return [];
         });
+        setGlazeColours(['', '', '']);
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -188,7 +191,11 @@ export default function AddProductPage() {
                 <div key={i} className="grid grid-cols-3 gap-2">
                   <input name={`glaze_${i}_name`} type="text" placeholder={`Glaze ${i + 1} label (shown to customer)`} className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
                   <input name={`glaze_${i}_note`} type="text" placeholder="Description (sent to you on order)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
-                  <input name={`glaze_${i}_colour`} type="text" placeholder="Colour (e.g. green)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+                  <ColourPicker
+                    name={`glaze_${i}_colour`}
+                    value={glazeColours[i]}
+                    onChange={(hex) => setGlazeColours(prev => { const next = [...prev]; next[i] = hex; return next; })}
+                  />
                 </div>
               ))}
             </div>

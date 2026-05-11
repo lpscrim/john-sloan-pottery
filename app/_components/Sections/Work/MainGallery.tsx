@@ -101,24 +101,25 @@ export function MainGallery({
           </div>
           )}
           {allGlazes.length > 0 && (
-          <div className="flex flex-wrap gap-0 mt-2">
+          <div className="flex flex-wrap gap-2 mt-2 items-center">
             {allGlazes.map(([glaze, count]) => {
               const isSelected = selectedGlazes.includes(glaze);
               const isUnselectable = count === 0;
               return (
-                <span
+                <button
                   key={glaze}
-                  className="inline-flex items-center text-base sm:text-lg transition-opacity"
-                >
-                  <button
-                    onClick={() => !isUnselectable && toggleGlaze(glaze)}
-                    disabled={isUnselectable}
-                    className={`pr-1 py-1 rounded transition-colors cursor-crosshair text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
-                  >
-                    {glaze}{" "}
-                    <span className="text-accent">{count}</span>
-                  </button>
-                </span>
+                  title={glaze}
+                  onClick={() => !isUnselectable && toggleGlaze(glaze)}
+                  disabled={isUnselectable}
+                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-crosshair ${
+                    isSelected
+                      ? 'border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background'
+                      : isUnselectable
+                      ? 'border-transparent opacity-25 cursor-not-allowed'
+                      : 'border-transparent hover:border-foreground/40'
+                  }`}
+                  style={{ backgroundColor: glaze }}
+                />
               );
             })}
           </div>
