@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import { ShoppingBag } from "lucide-react";
 import NavIcon from "../UI/Nav/NavIcon";
 import { useCart } from "../Cart/CartContext";
@@ -13,7 +12,6 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [onHero, setOnHero] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
   const isWorkPage = pathname === "/work";
   const isAdminPage = pathname.startsWith("/admin");
@@ -42,7 +40,7 @@ export function Header() {
         el.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      router.push("/" + hash);
+      window.location.href = "/" + hash;
     }
   };
 
