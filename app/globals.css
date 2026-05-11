@@ -342,7 +342,7 @@ body {
 }
 
 .fade-in {
-  animation: fade-in 10s ease forwards;
+  animation: fade-in 15s ease 0.5s forwards;
 }
 
 /* Custom thin scrollbar */
