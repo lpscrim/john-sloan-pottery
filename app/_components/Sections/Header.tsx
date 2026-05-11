@@ -57,7 +57,7 @@ export function Header() {
         <div className="relative flex items-center justify-between">
           {/* Logo with crossfade */}
           <button
-            className="relative cursor-pointer transition-colors duration-500"
+            className="relative cursor-pointer transition-colors duration-500 -mt-4 -mb-4"
             onClick={() => {
               conditionalScrollTo("");
               setIsMenuOpen(false);
