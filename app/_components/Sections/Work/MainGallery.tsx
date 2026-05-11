@@ -1,13 +1,13 @@
 "use client";
 
 import { Card } from "../../UI/Layout/Card";
+import type { GlazeEntry } from "@/app/_data/projects";
 
 interface Project {
   id: number;
   title: string;
   categories: string[];
-  medium: string;
-  glaze: string[];
+  glaze: GlazeEntry[];
   imageUrl: string;
   galleryImages?: string[];
   text?: string;

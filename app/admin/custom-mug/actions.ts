@@ -13,10 +13,12 @@ function toSlug(name: string) {
 export async function addGlaze(_prev: { error?: string }, formData: FormData) {
   await requireAdminUser();
   const name = (formData.get('name') as string | null)?.trim();
+  const note = (formData.get('note') as string | null)?.trim() ?? '';
+  const colour = (formData.get('colour') as string | null)?.trim() ?? '';
   if (!name) return { error: 'Name is required.' };
   const slug = toSlug(name);
   const supabase = createServerSupabase();
-  const { error } = await supabase.from('glazes').insert({ name, slug });
+  const { error } = await supabase.from('glazes').insert({ name, slug, note, colour });
   if (error) return { error: error.message };
   revalidatePath('/admin/custom-mug');
   revalidatePath('/custom-mug');

@@ -7,7 +7,7 @@ async function getData() {
   const supabase = createServerSupabase();
 
   const [glazesRes, shapesRes, examplesRes] = await Promise.all([
-    supabase.from('glazes').select('id, name, slug, active').order('name'),
+    supabase.from('glazes').select('id, name, slug, note, colour, active').order('name'),
     supabase.from('mug_shapes').select('id, name, slug, description, price_pence, active').order('name'),
     supabase.storage.from('mug-examples').list('', { limit: 50, sortBy: { column: 'name', order: 'asc' } }),
   ]);

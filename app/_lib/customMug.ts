@@ -4,6 +4,8 @@ export interface Glaze {
   id: string;
   name: string;
   slug: string;
+  note: string;
+  colour?: string;
 }
 
 export interface MugShape {
@@ -25,7 +27,7 @@ export async function getGlazes(): Promise<Glaze[]> {
   const supabase = createServerSupabase();
   const { data, error } = await supabase
     .from('glazes')
-    .select('id, name, slug')
+    .select('id, name, slug, note, colour')
     .eq('active', true)
     .order('name');
   if (error) throw new Error(error.message);

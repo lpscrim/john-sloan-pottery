@@ -9,6 +9,8 @@ export interface CustomMugDetails {
   glaze2Slug: string;
   glaze1Name: string;
   glaze2Name: string;
+  glaze1Note: string;
+  glaze2Note: string;
   shapeSlug: string;
   shapeName: string;
 }

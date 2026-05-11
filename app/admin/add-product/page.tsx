@@ -184,9 +184,13 @@ export default function AddProductPage() {
           <div className="block">
             <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
-              <input name="glaze_0" type="text" placeholder="Glaze 1" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
-              <input name="glaze_1" type="text" placeholder="Glaze 2" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
-              <input name="glaze_2" type="text" placeholder="Glaze 3" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="grid grid-cols-3 gap-2">
+                  <input name={`glaze_${i}_name`} type="text" placeholder={`Glaze ${i + 1} label (shown to customer)`} className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+                  <input name={`glaze_${i}_note`} type="text" placeholder="Description (sent to you on order)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+                  <input name={`glaze_${i}_colour`} type="text" placeholder="Colour (e.g. green)" className="block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground" />
+                </div>
+              ))}
             </div>
           </div>
 

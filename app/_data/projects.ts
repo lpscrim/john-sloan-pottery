@@ -1,11 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
+export interface GlazeEntry {
+  name: string;  // customer-facing label, e.g. "r1"
+  note: string;  // description sent to John on order, e.g. "Rutile reduction"
+  colour?: string; // basic colour category for filtering, e.g. "green"
+}
+
 export interface Project {
   id: number;
   title: string;
   categories: string[];
-  medium: string;
-  glaze: string[];
+  glaze: GlazeEntry[];
   imageUrl: string;       // Supabase Storage public URL
   galleryImages?: string[];
   text: string;
@@ -57,8 +62,7 @@ export async function getProjects(): Promise<Project[]> {
         id: product.id,
         title: (product.name ?? ''),
         categories: product.categories ?? [],
-        medium: product.medium ?? '',
-        glaze: product.glaze ?? [],
+        glaze: (product.glaze ?? []) as GlazeEntry[],
         imageUrl: product.image_url ?? '',
         ...(galleryImages.length > 0 && { galleryImages }),
         text: product.description ?? '',

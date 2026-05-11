@@ -32,6 +32,25 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
   const [glaze2, setGlaze2] = useState<Glaze | null>(null);
   const [glazeStep, setGlazeStep] = useState<1 | 2>(1);
   const [shape, setShape] = useState<MugShape | null>(null);
+  const [colourFilters, setColourFilters] = useState<string[]>([]);
+
+  const allColours = useMemo(() => {
+    const seen = new Set<string>();
+    glazes.forEach(g => { if (g.colour) seen.add(g.colour); });
+    return [...seen].sort();
+  }, [glazes]);
+
+  const toggleColour = (c: string) =>
+    setColourFilters(prev =>
+      prev.includes(c)
+        ? prev.filter(x => x !== c)
+        : prev.length < 2 ? [...prev, c] : [prev[1], c]
+    );
+
+  const visibleGlazes = useMemo(
+    () => colourFilters.length > 0 ? glazes.filter(g => g.colour && colourFilters.includes(g.colour)) : glazes,
+    [glazes, colourFilters]
+  );
 
   const { addItem } = useCart();
 
@@ -50,6 +69,14 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
     }
     return out;
   }, [glazes]);
+
+  // Filtered tile combos — a combo is visible if both glazes pass the colour filter
+  const visibleTileCombos = useMemo(() => {
+    if (colourFilters.length === 0) return tileCombos;
+    return tileCombos.filter(
+      c => visibleGlazes.some(g => g.id === c.g1.id) && visibleGlazes.some(g => g.id === c.g2.id)
+    );
+  }, [tileCombos, colourFilters, visibleGlazes]);
 
   const selectedKey = glaze1 && glaze2
     ? [glaze1.id, glaze2.id].sort().join('|')
@@ -95,6 +122,8 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
         glaze2Slug: glaze2.slug,
         glaze1Name: glaze1.name,
         glaze2Name: glaze2.name,
+        glaze1Note: glaze1.note,
+        glaze2Note: glaze2.note,
         shapeSlug: shape.slug,
         shapeName: shape.name,
       },
@@ -132,8 +161,32 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             }
           </p>
 
+          {allColours.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              <button
+                onClick={() => setColourFilters([])}
+                className={`px-3 py-1 text-xs border transition-all cursor-pointer ${
+                  colourFilters.length === 0 ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                }`}
+              >
+                All
+              </button>
+              {allColours.map(c => (
+                <button
+                  key={c}
+                  onClick={() => toggleColour(c)}
+                  className={`px-3 py-1 text-xs border transition-all cursor-pointer capitalize ${
+                    colourFilters.includes(c) ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-2">
-            {glazes.map((glaze) => {
+            {visibleGlazes.map((glaze) => {
               const isBase = glaze.id === glaze1?.id;
               const isAccent = glaze.id === glaze2?.id;
               const isSingle = isBase && isAccent;
@@ -219,7 +272,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             Click any tile to select that combination directly.
           </p>
           <div className="flex flex-wrap gap-1.5 items-start">
-            {tileCombos.map((combo) => {
+            {visibleTileCombos.map((combo) => {
               const isSelected = combo.key === selectedKey;
               const label = combo.g1.id === combo.g2.id
                 ? `${combo.g1.name} — single`

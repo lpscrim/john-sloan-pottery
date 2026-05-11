@@ -101,11 +101,32 @@ export async function POST(req: NextRequest) {
         price: (prices[i].unit_amount ?? 0) * regularItems[i].quantity,
         image: ((prices[i].product as Stripe.Product)?.images?.[0] ?? '') as string,
       }));
+
+      // Fetch glaze notes from Supabase to include in John's order email
+      const priceIds = enrichedReservations.map((r) => r.stripe_price_id);
+      const { data: glazeRows } = await supabase
+        .from('products')
+        .select('stripe_price_id, glaze')
+        .in('stripe_price_id', priceIds);
+
+      if (glazeRows) {
+        type GlazeEntry = { name: string; note: string };
+        const glazeMap = new Map(
+          glazeRows.map((p) => [
+            p.stripe_price_id,
+            ((p.glaze ?? []) as GlazeEntry[]).map((g) => g.note).filter(Boolean).join(', '),
+          ])
+        );
+        enrichedReservations = enrichedReservations.map((r) => ({
+          ...r,
+          type: glazeMap.get(r.stripe_price_id) || undefined,
+        }));
+      }
     }
 
     // ── Resolve custom mug prices from Supabase (server-authoritative) ─
     let customMugTotal = 0;
-    type EnrichedCustomItem = { title: string; qty: number; price: number; image: string };
+    type EnrichedCustomItem = { title: string; qty: number; price: number; image: string; type?: string };
     const enrichedCustomItems: EnrichedCustomItem[] = [];
 
     if (customMugItems.length > 0) {
@@ -130,13 +151,14 @@ export async function POST(req: NextRequest) {
         const itemPrice = mugShape.price_pence * item.quantity;
         customMugTotal += itemPrice;
         enrichedCustomItems.push({
-          title: [
-            `Custom ${mugShape.name} Mug`,
-            `Glazes: ${item.customMug!.glaze1Name} (base) + ${item.customMug!.glaze2Name} (accent)`,
-          ].join('\n'),
+          title: `Custom ${mugShape.name} Mug`,
           qty: item.quantity,
           price: itemPrice,
           image: '',
+          type: [
+            `${item.customMug!.glaze1Name} (base) — ${item.customMug!.glaze1Note || item.customMug!.glaze1Name}`,
+            `${item.customMug!.glaze2Name} (accent) — ${item.customMug!.glaze2Note || item.customMug!.glaze2Name}`,
+          ].join(', '),
         });
       }
     }

@@ -44,7 +44,15 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
         <ul className="space-y-2">
           {glazes.map((g) => (
             <li key={g.id} className="flex items-center justify-between gap-4 border border-muted rounded-sm px-3 py-2 text-base">
-              <span>{g.name} <span className="text-muted-foreground text-base">({g.slug})</span></span>
+              <span>{g.name}
+                {(g as Glaze & { note?: string; active?: boolean }).note && (
+                  <span className="text-muted-foreground ml-2">— {(g as Glaze & { note?: string }).note}</span>
+                )}
+                {(g as Glaze & { colour?: string }).colour && (
+                  <span className="text-muted-foreground ml-2">({(g as Glaze & { colour?: string }).colour})</span>
+                )}
+                <span className="text-muted-foreground text-base ml-1">({g.slug})</span>
+              </span>
               <div className="flex gap-4">
                 <button
                   onClick={() => startTransition(() => toggleGlazeActive(g.id, !(g as Glaze & { active?: boolean }).active))}
@@ -70,11 +78,21 @@ function GlazesSection({ glazes }: { glazes: Glaze[] }) {
           await action(fd);
           formRef.current?.reset();
         }}
-        className="flex gap-3 items-end"
+        className="space-y-3"
       >
-        <div className="flex-1">
-          <label className="block text-base text-muted-foreground mb-1">Glaze name</label>
-          <input name="name" required placeholder="e.g. Celadon" className={inputCls()} />
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="block text-base text-muted-foreground mb-1">Name <span className="text-muted-foreground/60">(shown to customer)</span></label>
+            <input name="name" required placeholder="e.g. r1" className={inputCls()} />
+          </div>
+          <div>
+            <label className="block text-base text-muted-foreground mb-1">Description <span className="text-muted-foreground/60">(sent to you on order)</span></label>
+            <input name="note" placeholder="e.g. Rutile reduction" className={inputCls()} />
+          </div>
+          <div>
+            <label className="block text-base text-muted-foreground mb-1">Colour <span className="text-muted-foreground/60">(filter category)</span></label>
+            <input name="colour" placeholder="e.g. green" className={inputCls()} />
+          </div>
         </div>
         <SaveButton pending={pending} />
       </form>

@@ -38,7 +38,7 @@ async function getAdminProducts(): Promise<AdminProduct[]> {
         price_hw: product.price_hw ?? 0,
         stock_level: product.stock_level ?? 0,
         categories: product.categories ?? [],
-        glaze: product.glaze ?? [],
+        glaze: (product.glaze ?? []) as AdminProduct['glaze'],
         image_url: product.image_url ?? '',
         stripe_product_id: product.stripe_product_id ?? null,
         stripe_price_id: product.stripe_price_id ?? null,

@@ -38,9 +38,13 @@ export async function addProduct(
     const priceStr = formData.get('price') as string | null;
     const stockStr = formData.get('stock') as string | null;
     const categoriesRaw = formData.get('categories') as string | null;
-    const glaze = [formData.get('glaze_0'), formData.get('glaze_1'), formData.get('glaze_2')]
-      .map((v) => (v as string | null)?.trim() ?? '')
-      .filter(Boolean);
+    const glaze = [0, 1, 2]
+      .map((i) => ({
+        name: ((formData.get(`glaze_${i}_name`) as string | null) ?? '').trim(),
+        note: ((formData.get(`glaze_${i}_note`) as string | null) ?? '').trim(),
+        colour: ((formData.get(`glaze_${i}_colour`) as string | null) ?? '').trim() || undefined,
+      }))
+      .filter((g) => g.name);
     const imageFile = formData.get('image') as File | null;
     const secondaryFiles = formData.getAll('secondary') as File[];
 

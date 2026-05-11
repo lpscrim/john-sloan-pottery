@@ -1,3 +1,4 @@
+import type { GlazeEntry } from "@/app/_data/projects";
 import { useEffect, useCallback, useRef, useState } from "react";
 
 import { ImageWithFallback } from "../../UI/Layout/ImageWithFallback";
@@ -17,7 +18,7 @@ interface PhotoModalProps {
   name: string;
   text?: string;
   medium?: string;
-  glaze?: string[];
+  glaze?: GlazeEntry[];
   images?: string[];
   index?: number;
   changePhotoId?: (idx: number) => void;
@@ -360,7 +361,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           />
           {isProject && (
           <span className="flex w-full justify-center text-foreground text-sm pt-4 pointer-events-none z-999">
-            {glaze && glaze.length > 0 && <span>{glaze.join(', ')}{medium ? ', ' : ''}</span>}{medium && <span>{medium}</span>}{priceHw > 0 && <span>{(glaze?.length || medium) ? ', ' : ''}£{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
+            {glaze && glaze.length > 0 && <span>{glaze.map(g => g.name).join(', ')}{medium ? ', ' : ''}</span>}{medium && <span>{medium}</span>}{priceHw > 0 && <span>{(glaze?.length || medium) ? ', ' : ''}£{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
           </span>
         )}
         </div>

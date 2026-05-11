@@ -5,13 +5,13 @@ import  { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PhotoModal } from "./PhotoModal";
 import { MainGallery } from "./MainGallery";
+import type { GlazeEntry } from "@/app/_data/projects";
 
 interface Project {
   id: number;
   title: string;
   categories: string[];
-  medium: string;
-  glaze: string[];
+  glaze: GlazeEntry[];
   imageUrl: string;
   galleryImages?: string[];
   text?: string;
@@ -47,7 +47,7 @@ export function WorkGallery({
   const [name, setName] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [medium, setMedium] = useState<string>("");
-  const [glaze, setGlaze] = useState<string[]>([]);
+  const [glaze, setGlaze] = useState<GlazeEntry[]>([]);
   const [stripePriceId, setStripePriceId] = useState<string | null>(null);
   const [stockLevel, setStockLevel] = useState<number>(0);
   const [priceHw, setPriceHw] = useState<number>(0);
@@ -106,7 +106,7 @@ export function WorkGallery({
       result = result.filter((p) => getStock(p) > 0);
     }
     if (selectedGlazes.length > 0) {
-      result = result.filter((p) => selectedGlazes.every(g => p.glaze.includes(g)));
+      result = result.filter((p) => selectedGlazes.every(g => p.glaze.some(gl => gl.colour === g)));
     }
     return result;
   }, [projects, selectedCategories, selectedGlazes, inStockOnly, getStock]);
@@ -144,19 +144,18 @@ export function WorkGallery({
     return result;
   }, [projects, selectedCategories, inStockOnly, getStock]);
 
-  // All glazes that exist before glaze filtering (to keep greyed-out options visible)
+  // All colours that exist before glaze/colour filtering (to keep greyed-out options visible)
   const knownGlazes = useMemo(() => {
     const seen = new Set<string>();
-    preGlazeFiltered.forEach((p) => p.glaze.forEach((g) => seen.add(g)));
+    preGlazeFiltered.forEach((p) => p.glaze.forEach((g) => { if (g.colour) seen.add(g.colour); }));
     return seen;
   }, [preGlazeFiltered]);
 
-  // Counts from the already-glaze-filtered results so only co-existing glazes are non-zero
+  // Colour counts from the already-filtered results so only co-existing colours are non-zero
   const allGlazes = useMemo(() => {
     const counts: Record<string, number> = {};
-    // Seed every known glaze with 0 so they all appear
     knownGlazes.forEach((g) => { counts[g] = 0; });
-    filteredProjects.forEach((p) => p.glaze.forEach((g) => { counts[g] = (counts[g] || 0) + 1; }));
+    filteredProjects.forEach((p) => p.glaze.forEach((g) => { if (g.colour) counts[g.colour] = (counts[g.colour] || 0) + 1; }));
     return Object.entries(counts).sort((a, b) => b[1] - a[1]) as [string, number][];
   }, [filteredProjects, knownGlazes]);
 
@@ -183,7 +182,6 @@ export function WorkGallery({
     setModalImages(imgs);
     setModalIndex(0);
     setText(project.text || "");
-    setMedium(project.medium || "");
     setGlaze(project.glaze ?? []);
     setStripePriceId(project.stripe_price_id ?? null);
     setStockLevel(getStock(project));
@@ -218,7 +216,6 @@ export function WorkGallery({
       setIsProject(true);
       setName(project.title);
       setText(project.text || "");
-      setMedium(project.medium || "");
       setGlaze(project.glaze ?? []);
       setStripePriceId(project.stripe_price_id ?? null);
       setStockLevel(getStock(project));

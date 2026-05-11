@@ -1,3 +1,5 @@
+import type { GlazeEntry } from '@/app/_data/projects';
+
 export interface AdminGalleryImage {
   path: string;
   url: string;
@@ -10,7 +12,7 @@ export interface AdminProduct {
   price_hw: number;
   stock_level: number;
   categories: string[];
-  glaze: string[];
+  glaze: GlazeEntry[];
   image_url: string;
   stripe_product_id: string | null;
   stripe_price_id: string | null;
