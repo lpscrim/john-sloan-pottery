@@ -131,97 +131,123 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-16 xl:gap-24">
-      {/* ── Left: configuration steps ─────────────────────────── */}
-      <div className="space-y-14">
+    <div className="space-y-16">
 
-        {/* Step 1: Glazes — individual selector */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl tracking-tight">
-              {!glaze1
-                ? 'Choose your base glaze'
-                : !glaze2
-                ? 'Now choose your accent glaze'
-                : 'Glazes'}
-            </h2>
-            {glaze1 && (
-              <Button size="sm" onClick={resetGlazes}>Reset</Button>
+      {/* ── Top bar: colour filters + glaze buttons + reset ─────── */}
+      <div className="space-y-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-3 flex-1">
+            {/* Colour filter chips */}
+            {allColours.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setColourFilters([])}
+                  className={`px-4 py-2 text-sm border transition-all cursor-pointer ${
+                    colourFilters.length === 0 ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                  }`}
+                >
+                  All
+                </button>
+                {allColours.map(c => (
+                  <button
+                    key={c}
+                    onClick={() => toggleColour(c)}
+                    className={`px-4 py-2 text-sm border transition-all cursor-pointer capitalize ${
+                      colourFilters.includes(c) ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
             )}
+
+            {/* Glaze name buttons */}
+            <div className="flex flex-wrap gap-2">
+              {visibleGlazes.map((glaze) => {
+                const isBase = glaze.id === glaze1?.id;
+                const isAccent = glaze.id === glaze2?.id;
+                const isSingle = isBase && isAccent;
+                const isDisabled = glazeStep === 2 && glaze.id === glaze1?.id && !!glaze2;
+
+                return (
+                  <button
+                    key={glaze.id}
+                    onClick={() => handleGlazeClick(glaze)}
+                    disabled={isDisabled}
+                    className={`px-3 py-1 text-xs border transition-all cursor-pointer ${
+                      isSingle
+                        ? 'border-foreground bg-foreground text-background'
+                        : isBase
+                        ? 'border-foreground bg-foreground text-background'
+                        : isAccent
+                        ? 'border-foreground bg-foreground/15 text-foreground'
+                        : isDisabled
+                        ? 'border-foreground/10 text-foreground/30 cursor-not-allowed!'
+                        : 'border-foreground/20 hover:border-foreground/60'
+                    }`}
+                  >
+                    {glaze.name}
+                    {isSingle && <span className="ml-1.5 text-xs opacity-50">single</span>}
+                    {isBase && !isSingle && <span className="ml-1.5 text-xs opacity-50">base</span>}
+                    {isAccent && !isSingle && <span className="ml-1.5 text-xs opacity-50">accent</span>}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-4">
-            {!glaze1
-              ? 'Pick a base glaze, then an accent. Or select a combination tile on the right.'
-              : !glaze2
-              ? `Base: ${glaze1.name}. Now pick your accent — or choose the same glaze for a single colour.`
-              : glaze1.id === glaze2.id
-              ? `${glaze1.name} — single colour`
-              : `${glaze1.name} (base) + ${glaze2.name} (accent)`
-            }
-          </p>
+          {/* Reset button */}
+          {(glaze1 || glaze2) && (
+            <Button size="sm" onClick={resetGlazes}>Reset</Button>
+          )}
+        </div>
+      </div>
 
-          {allColours.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
+      {/* ── Tile grid — main display ────────────────────────────── */}
+      <div>
+        <div className="flex flex-wrap gap-1.5 items-start min-h-[80svh]">
+          {visibleTileCombos.map((combo) => {
+            const isSelected = combo.key === selectedKey;
+            const label = combo.g1.id === combo.g2.id
+              ? `${combo.g1.name} — single`
+              : `${combo.g1.name} + ${combo.g2.name}`;
+
+            return (
               <button
-                onClick={() => setColourFilters([])}
-                className={`px-3 py-1 text-xs border transition-all cursor-pointer ${
-                  colourFilters.length === 0 ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
+                key={combo.key}
+                title={label}
+                onClick={() => handleTileSelect(combo)}
+                className={`relative overflow-hidden border transition-all duration-300 shrink-0 cursor-pointer ${
+                  isSelected
+                    ? 'w-64 h-64 border-foreground'
+                    : 'w-16 h-16 border-foreground/10 hover:border-foreground/40'
                 }`}
               >
-                All
+                <Image
+                  src={combo.url}
+                  alt={label}
+                  fill
+                  className="object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
+                />
+                {isSelected && (
+                  <div className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm px-2 py-1.5">
+                    <p className="text-xs font-medium leading-tight">{label}</p>
+                  </div>
+                )}
               </button>
-              {allColours.map(c => (
-                <button
-                  key={c}
-                  onClick={() => toggleColour(c)}
-                  className={`px-3 py-1 text-xs border transition-all cursor-pointer capitalize ${
-                    colourFilters.includes(c) ? 'border-foreground bg-foreground text-background' : 'border-foreground/20 hover:border-foreground/60'
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-2">
-            {visibleGlazes.map((glaze) => {
-              const isBase = glaze.id === glaze1?.id;
-              const isAccent = glaze.id === glaze2?.id;
-              const isSingle = isBase && isAccent;
-              const isDisabled = glazeStep === 2 && glaze.id === glaze1?.id && !!glaze2;
-
-              return (
-                <button
-                  key={glaze.id}
-                  onClick={() => handleGlazeClick(glaze)}
-                  disabled={isDisabled}
-                  className={`px-4 py-2 text-sm border transition-all cursor-pointer ${
-                    isSingle
-                      ? 'border-foreground bg-foreground text-background'
-                      : isBase
-                      ? 'border-foreground bg-foreground text-background'
-                      : isAccent
-                      ? 'border-foreground bg-foreground/15 text-foreground'
-                      : isDisabled
-                      ? 'border-foreground/10 text-foreground/30 cursor-not-allowed!'
-                      : 'border-foreground/20 hover:border-foreground/60'
-                  }`}
-                >
-                  {glaze.name}
-                  {isSingle && <span className="ml-1.5 text-xs opacity-50">single</span>}
-                  {isBase && !isSingle && <span className="ml-1.5 text-xs opacity-50">base</span>}
-                  {isAccent && !isSingle && <span className="ml-1.5 text-xs opacity-50">accent</span>}
-                </button>
-              );
-            })}
-          </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Step 2: Type */}
+      {/* ── Type selector + confirm ──────────────────────────────── */}
+      <div className="grid md:grid-cols-2 gap-12 items-start">
+
+        {/* Type selector */}
         <div>
-          <h2 className="text-xl tracking-tight mb-4">Choose your type</h2>
+          <h2 className="text-xl tracking-tight mb-4">Choose type</h2>
           {shapes.length === 0 ? (
             <p className="text-sm text-muted-foreground">No types available yet.</p>
           ) : (
@@ -258,72 +284,9 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             </div>
           )}
         </div>
-      </div>
 
-      {/* ── Right: tile grid + shape preview + cart ───────────── */}
-      <div className="space-y-8 lg:sticky lg:top-24 lg:self-start">
-
-        {/* Tile grid — all combinations */}
-        <div>
-          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-            Glaze combinations
-          </p>
-          <p className="text-sm text-muted-foreground mb-4">
-            Click any tile to select that combination directly.
-          </p>
-          <div className="flex flex-wrap gap-1.5 items-start">
-            {visibleTileCombos.map((combo) => {
-              const isSelected = combo.key === selectedKey;
-              const label = combo.g1.id === combo.g2.id
-                ? `${combo.g1.name} — single`
-                : `${combo.g1.name} + ${combo.g2.name}`;
-
-              return (
-                <button
-                  key={combo.key}
-                  title={label}
-                  onClick={() => handleTileSelect(combo)}
-                  className={`relative overflow-hidden border transition-all duration-300 shrink-0 cursor-pointer ${
-                    isSelected
-                      ? 'w-64 h-64 border-foreground'
-                      : 'w-14 h-14 border-foreground/10 hover:border-foreground/40'
-                  }`}
-                >
-                  <Image
-                    src={combo.url}
-                    alt={label}
-                    fill
-                    className="object-cover"
-                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
-                  />
-                  {isSelected && (
-                    <div className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm px-2 py-1.5">
-                      <p className="text-xs font-medium leading-tight">{label}</p>
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Shape preview */}
-        {shape && (
-          <div>
-            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Type</p>
-            <div className="relative aspect-square bg-muted/20 w-full max-w-sm">
-              <Image
-                src={shapeUrl(shape.slug)}
-                alt={shape.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Order summary + add to cart */}
-        <div className="space-y-4 max-w-sm">
+        {/* Confirm / add to cart */}
+        <div className="space-y-4">
           {canAddToCart && (
             <div className="text-sm space-y-1 text-muted-foreground">
               <p>
@@ -354,26 +317,26 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
             </p>
           )}
         </div>
-
-        {/* Examples gallery */}
-        {examples.length > 0 && (
-          <div>
-            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Examples</p>
-            <div className="grid grid-cols-3 gap-2 max-w-sm">
-              {examples.map((url, i) => (
-                <div key={i} className="relative aspect-square bg-muted/20">
-                  <Image
-                    src={url}
-                    alt={`Finished mug example ${i + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* ── Examples gallery ─────────────────────────────────────── */}
+      {examples.length > 0 && (
+        <div>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Examples</p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+            {examples.map((url, i) => (
+              <div key={i} className="relative aspect-square bg-muted/20">
+                <Image
+                  src={url}
+                  alt={`Finished mug example ${i + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
