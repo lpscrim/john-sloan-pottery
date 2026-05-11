@@ -5,6 +5,7 @@ import { addProduct, type AddProductState } from './actions';
 import { compressImage } from '../compressImage';
 import Button from '@/app/_components/UI/Layout/Button';
 import { GlazeSelect } from '@/app/admin/GlazeSelect';
+import { ShapeSelect } from '@/app/admin/ShapeSelect';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
 
 const initialState: AddProductState = { success: false };
@@ -203,18 +204,12 @@ export default function AddProductPage() {
           </div>
 
           {shapes.length > 0 && (
-            <label className="block">
-              <span className="text-base font-medium">Mug shape <span className="text-muted-foreground font-normal">(optional — links sold-out buy button to Build a Mug)</span></span>
-              <select
-                name="mug_shape_slug"
-                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-foreground"
-              >
-                <option value="">None</option>
-                {shapes.map(s => (
-                  <option key={s.id} value={s.slug}>{s.name}</option>
-                ))}
-              </select>
-            </label>
+            <div className="block">
+              <span className="text-base font-medium">Style / Shape <span className="text-muted-foreground font-normal">(optional)</span></span>
+              <div className="mt-1">
+                <ShapeSelect key={glazeResetKey} shapes={shapes} />
+              </div>
+            </div>
           )}
 
           {/* Image */}

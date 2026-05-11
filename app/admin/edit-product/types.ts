@@ -18,4 +18,5 @@ export interface AdminProduct {
   stripe_price_id: string | null;
   gallery: AdminGalleryImage[];
   mug_shape_slug: string | null;
+  shape_label: string | null;
 }

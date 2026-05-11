@@ -26,6 +26,7 @@ interface PhotoModalProps {
   stockLevel: number;
   priceHw: number;
   mugShapeSlug?: string;
+  shapeLabel?: string;
 }
 
 export const PhotoModal: React.FC<PhotoModalProps> = ({
@@ -48,6 +49,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   stockLevel,
   priceHw,
   mugShapeSlug,
+  shapeLabel,
 }) => {
   // Refs for thumbnails
   const stripRef = useRef<HTMLDivElement | null>(null);
@@ -365,7 +367,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           />
           {isProject && (
           <span className="flex w-full justify-center text-foreground text-sm pt-4 pointer-events-none z-999">
-            {glaze && glaze.length > 0 && <span>{glaze.map(g => g.name).join(', ')}{medium ? ', ' : ''}</span>}{medium && <span>{medium}</span>}{priceHw > 0 && <span>{(glaze?.length || medium) ? ', ' : ''}£{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
+            {shapeLabel && <span>{shapeLabel}{(glaze && glaze.length > 0) || medium ? ', ' : ''}</span>}{glaze && glaze.length > 0 && <span>{glaze.map(g => g.name).join(', ')}{medium ? ', ' : ''}</span>}{medium && <span>{medium}</span>}{priceHw > 0 && <span>{(shapeLabel || glaze?.length || medium) ? ', ' : ''}£{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}</span>}
           </span>
         )}
         </div>

@@ -19,6 +19,7 @@ export interface Project {
   stock_level: number;
   stripe_price_id: string | null;
   mug_shape_slug?: string; // if set, sold-out button links to custom mug builder
+  shape_label?: string;   // display label for the shape/style (set even when not in Build a Mug)
 }
 
 function getSupabaseClient() {
@@ -72,6 +73,7 @@ export async function getProjects(): Promise<Project[]> {
         stock_level: product.stock_level ?? 0,
         stripe_price_id: product.stripe_price_id ?? null,
         ...(product.mug_shape_slug ? { mug_shape_slug: product.mug_shape_slug as string } : {}),
+        ...(product.shape_label ? { shape_label: product.shape_label as string } : {}),
       };
     })
   );

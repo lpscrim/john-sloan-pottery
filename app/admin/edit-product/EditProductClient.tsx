@@ -12,6 +12,7 @@ import {
 } from "./actions";
 import { compressImage } from "../compressImage";
 import { GlazeSelect } from "@/app/admin/GlazeSelect";
+import { ShapeSelect } from "@/app/admin/ShapeSelect";
 import type { Glaze, MugShape } from "@/app/_lib/customMug";
 
 const initialUpdateState: UpdateProductState = { success: false };
@@ -303,19 +304,12 @@ export default function EditProductClient({
           </div>
 
           {shapes.length > 0 && (
-            <label className="block">
-              <span className="text-base font-medium">Mug shape <span className="text-muted-foreground font-normal">(optional — links sold-out buy button to Build a Mug)</span></span>
-              <select
-                name="mug_shape_slug"
-                defaultValue={selected.mug_shape_slug ?? ''}
-                className="mt-1 block w-full rounded-md border border-muted bg-background px-3 py-2 text-base"
-              >
-                <option value="">None</option>
-                {shapes.map(s => (
-                  <option key={s.id} value={s.slug}>{s.name}</option>
-                ))}
-              </select>
-            </label>
+            <div className="block">
+              <span className="text-base font-medium">Style / Shape <span className="text-muted-foreground font-normal">(optional)</span></span>
+              <div className="mt-1">
+                <ShapeSelect shapes={shapes} defaultSlug={selected.mug_shape_slug} defaultLabel={selected.shape_label} />
+              </div>
+            </div>
           )}
 
           <div className="space-y-3">

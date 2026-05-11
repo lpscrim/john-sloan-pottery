@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getProjects } from "../_data/projects";
-import { WorkGallery } from "../_components/Sections/Work/WorkGallery";
+import WorkGallery from "../_components/Sections/Work/WorkGallery";
 import { getCategoriesVisible } from "../_lib/shippingSettings";
 
 export const metadata: Metadata = {

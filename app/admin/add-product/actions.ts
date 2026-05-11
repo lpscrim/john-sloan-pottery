@@ -48,6 +48,7 @@ export async function addProduct(
       }))
       .filter((g) => g.name);
     const mugShapeSlug = ((formData.get('mug_shape_slug') as string | null) ?? '').trim() || null;
+    const shapeLabel = ((formData.get('shape_label') as string | null) ?? '').trim() || null;
     const secondaryFiles = formData.getAll('secondary') as File[];
 
     // ---------- Validation ----------
@@ -123,6 +124,7 @@ export async function addProduct(
         glaze,
         type: 'pottery',
         ...(mugShapeSlug ? { mug_shape_slug: mugShapeSlug } : {}),
+        ...(shapeLabel ? { shape_label: shapeLabel } : {}),
       })
       .select()
       .single();

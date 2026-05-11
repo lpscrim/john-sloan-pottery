@@ -19,6 +19,7 @@ interface Project {
   stock_level: number;
   stripe_price_id: string | null;
   mug_shape_slug?: string;
+  shape_label?: string;
 }
 
 interface WorkGalleryProps {
@@ -27,11 +28,7 @@ interface WorkGalleryProps {
   showCategories: boolean;
 }
 
-export function WorkGallery({
-  projects,
-  categoryCounts,
-  showCategories,
-}: WorkGalleryProps) {
+export default function WorkGallery({ projects, categoryCounts, showCategories }: WorkGalleryProps) {
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -53,6 +50,7 @@ export function WorkGallery({
   const [stockLevel, setStockLevel] = useState<number>(0);
   const [priceHw, setPriceHw] = useState<number>(0);
   const [mugShapeSlug, setMugShapeSlug] = useState<string | undefined>(undefined);
+  const [shapeLabel, setShapeLabel] = useState<string | undefined>(undefined);
 
   const lastOpenedProjectIdRef = useRef<string | null>(null);
 
@@ -189,6 +187,7 @@ export function WorkGallery({
     setStockLevel(getStock(project));
     setPriceHw(project.price_hw);
     setMugShapeSlug(project.mug_shape_slug ?? undefined);
+    setShapeLabel(project.shape_label ?? undefined);
     setModalOpen(true);
     lastOpenedProjectIdRef.current = String(project.id);
     const next = new URLSearchParams(searchParams.toString());
@@ -224,6 +223,7 @@ export function WorkGallery({
       setStockLevel(getStock(project));
       setPriceHw(project.price_hw);
       setMugShapeSlug(project.mug_shape_slug ?? undefined);
+      setShapeLabel(project.shape_label ?? undefined);
       setModalImages(imgs);
       setModalIndex(0);
       setModalOpen(true);
@@ -295,6 +295,7 @@ export function WorkGallery({
         stockLevel={displayedStockLevel}
         priceHw={priceHw}
         mugShapeSlug={mugShapeSlug}
+        shapeLabel={shapeLabel}
       />
     </section>
   );
