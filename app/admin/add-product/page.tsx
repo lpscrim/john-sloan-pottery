@@ -181,7 +181,6 @@ export default function AddProductPage() {
             />
           </label>
 
-}
           <div className="block">
             <span className="text-base font-medium">Glaze</span>
             <div className="mt-1 space-y-2">
