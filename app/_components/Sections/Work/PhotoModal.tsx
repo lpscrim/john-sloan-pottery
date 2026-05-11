@@ -27,6 +27,7 @@ interface PhotoModalProps {
   priceHw: number;
   mugShapeSlug?: string;
   shapeLabel?: string;
+  etsyListingId?: string | null;
 }
 
 export const PhotoModal: React.FC<PhotoModalProps> = ({
@@ -50,6 +51,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
   priceHw,
   mugShapeSlug,
   shapeLabel,
+  etsyListingId,
 }) => {
   // Refs for thumbnails
   const stripRef = useRef<HTMLDivElement | null>(null);
@@ -368,8 +370,18 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
             }}
           />
           {isProject && stockLevel <= 0 && (
-            <span className="flex w-full justify-center text-foreground/50 text-sm pt-4 pointer-events-none z-999">
+            <span className="flex w-full justify-center text-foreground/80 text-lg -mb-4 pt-2 pointer-events-none z-999">
               Sold out
+            </span>
+          )}
+          {isProject && stockLevel > 0 && !etsyListingId && (
+            <span className="flex w-full justify-center text-foreground/80 text-lg -mb-4 pt-2 pointer-events-none z-999">
+              Website exclusive  - £{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}
+            </span>
+          )}
+          {isProject && stockLevel > 0 && etsyListingId && priceHw > 0 && (
+            <span className="flex w-full justify-center text-foreground/80 text-lg -mb-4 pt-2 pointer-events-none z-999">
+              £{(priceHw / 100).toLocaleString('en-GB', { minimumFractionDigits: 0 })}
             </span>
           )}
         </div>

@@ -20,6 +20,7 @@ interface Project {
   stripe_price_id: string | null;
   mug_shape_slug?: string;
   shape_label?: string;
+  etsy_listing_id?: string | null;
 }
 
 interface WorkGalleryProps {
@@ -51,6 +52,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
   const [priceHw, setPriceHw] = useState<number>(0);
   const [mugShapeSlug, setMugShapeSlug] = useState<string | undefined>(undefined);
   const [shapeLabel, setShapeLabel] = useState<string | undefined>(undefined);
+  const [etsyListingId, setEtsyListingId] = useState<string | null>(null);
 
   const lastOpenedProjectIdRef = useRef<string | null>(null);
 
@@ -197,6 +199,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
     setPriceHw(project.price_hw);
     setMugShapeSlug(project.mug_shape_slug ?? undefined);
     setShapeLabel(project.shape_label ?? undefined);
+    setEtsyListingId(project.etsy_listing_id ?? null);
     setModalOpen(true);
     lastOpenedProjectIdRef.current = String(project.id);
     const next = new URLSearchParams(searchParams.toString());
@@ -221,7 +224,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
 
       setSelectedCategories([]);
       setSelectedGlazes([]);
-      setInStockOnly(false);
+      setStockFilter('all');
 
       const imgs = [project.imageUrl, ...(project.galleryImages || [])];
       setIsProject(true);
@@ -233,6 +236,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
       setPriceHw(project.price_hw);
       setMugShapeSlug(project.mug_shape_slug ?? undefined);
       setShapeLabel(project.shape_label ?? undefined);
+      setEtsyListingId(project.etsy_listing_id ?? null);
       setModalImages(imgs);
       setModalIndex(0);
       setModalOpen(true);
@@ -306,6 +310,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
         priceHw={priceHw}
         mugShapeSlug={mugShapeSlug}
         shapeLabel={shapeLabel}
+        etsyListingId={etsyListingId}
       />
     </section>
   );
