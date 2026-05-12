@@ -101,9 +101,7 @@ export function ProjectsCarousel({ projects }: Props) {
   return (
     <section id="work" className="py-8 lg:py-12 xl:py-16">
       <div className="px-4">
-        <div>
-            <h2 className="text-3xl md:text-5xl pb-16 tracking-tight text-center">Recent Work</h2>
-        </div>
+
 
         <div className="relative">
           <div

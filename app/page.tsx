@@ -4,6 +4,7 @@ import { Contact } from "./_components/Sections/Home/Contact";
 import { Hero } from "./_components/Sections/Home/Hero";
 import { Projects } from "./_components/Sections/Home/Projects/Projects";
 import { ProjectsSkeleton } from "./_components/Sections/Home/Projects/ProjectsSkeleton";
+import { Create } from "./_components/Sections/Home/Create";
 
 function OrganizationJsonLd() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
@@ -36,6 +37,7 @@ export default function Home() {
       <Suspense>
         <About />
       </Suspense>
+      <Create />
       <Contact />
     </main>
   );
