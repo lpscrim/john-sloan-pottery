@@ -4,11 +4,8 @@ export function ProjectsSkeleton() {
       <div className="px-12 lg:px-16">
         <div className="flex gap-6 overflow-hidden animate-pulse">
           {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="shrink-0 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.33%-1rem)]"
-            >
-              <div className="relative aspect-4/5 bg-muted rounded-sm" />
+            <div key={i} className="shrink-0 h-[80vh] aspect-4/5">
+              <div className="h-full bg-muted rounded-sm" />
             </div>
           ))}
         </div>

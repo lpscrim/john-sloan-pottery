@@ -44,32 +44,22 @@ export function ProjectsCarousel({ projects }: Props) {
     t.scrollBy({ left: dir * step, behavior: 'smooth' });
   }
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
-    const t = trackRef.current;
-    if (!t) return;
-    dragRef.current = { active: true, startX: e.pageX - t.offsetLeft, scrollLeft: t.scrollLeft, moved: false };
-    t.style.scrollSnapType = 'none'; // disable snap during drag
-    t.style.cursor = 'grabbing';
-    t.style.userSelect = 'none';
-  }, []);
-
-  const onMouseMove = useCallback((e: React.MouseEvent) => {
+  const endDrag = useCallback(() => {
     const t = trackRef.current;
     const d = dragRef.current;
     if (!d.active || !t) return;
-    const dx = e.pageX - t.offsetLeft - d.startX;
-    if (Math.abs(dx) > 4) d.moved = true;
-    t.scrollLeft = d.scrollLeft - dx;
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    const t = trackRef.current;
-    if (!t) return;
-    dragRef.current.active = false;
+    d.active = false;
     t.style.cursor = '';
     t.style.userSelect = '';
+    window.removeEventListener('mousemove', handleWindowMouseMove);
+    window.removeEventListener('mouseup', endDrag);
 
-    // Snap smoothly to the nearest card then re-enable CSS snap
+    if (!d.moved) {
+      t.style.scrollSnapType = '';
+      return;
+    }
+
+    // Snap smoothly to the nearest card
     const cards = Array.from(t.children) as HTMLElement[];
     let nearest = cards[0];
     let minDist = Infinity;
@@ -78,66 +68,94 @@ export function ProjectsCarousel({ projects }: Props) {
       if (dist < minDist) { minDist = dist; nearest = card; }
     }
     t.scrollTo({ left: nearest.offsetLeft, behavior: 'smooth' });
-    // Re-enable snap after the smooth scroll settles
-    t.addEventListener('scrollend', () => { t.style.scrollSnapType = ''; }, { once: true });
+    const restore = () => { t.style.scrollSnapType = ''; };
+    t.addEventListener('scrollend', restore, { once: true });
+    setTimeout(restore, 600);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Defined outside useCallback so endDrag can reference it for removeEventListener
+  function handleWindowMouseMove(e: MouseEvent) {
+    const t = trackRef.current;
+    const d = dragRef.current;
+    if (!d.active || !t) return;
+    const dx = e.clientX - d.startX;
+    if (Math.abs(dx) > 4) d.moved = true;
+    t.scrollLeft = d.scrollLeft - dx;
+  }
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    const t = trackRef.current;
+    if (!t) return;
+    e.preventDefault(); // stop native browser image-drag
+    dragRef.current = { active: true, startX: e.clientX, scrollLeft: t.scrollLeft, moved: false };
+    t.style.scrollSnapType = 'none';
+    t.style.cursor = 'grabbing';
+    t.style.userSelect = 'none';
+    // Attach to window so mousemove/mouseup are never lost to child elements
+    window.addEventListener('mousemove', handleWindowMouseMove);
+    window.addEventListener('mouseup', endDrag);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endDrag]);
 
   return (
     <section id="work" className="py-8 lg:py-12 xl:py-16">
-      <div className="relative px-12 lg:px-16">
-
-        {/* Card track — native scroll for touch, mouse-drag for desktop */}
-        <div
-          ref={trackRef}
-          className="flex gap-6 overflow-x-auto snap-x snap-mandatory cursor-grab"
-          style={{ scrollbarWidth: 'none' }}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseUp}
-        >
-          {projects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/work?project=${project.id}`}
-              onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
-              className="group cursor-crosshair snap-start shrink-0 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.33%-1rem)]"
-            >
-              <div className="relative aspect-4/5 bg-muted overflow-hidden rounded-sm">
-                <ImageWithFallback
-                  src={project.imageUrl}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-all duration-500 scale-110 group-hover:scale-115"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-              </div>
-            </Link>
-          ))}
+      <div className="px-4">
+        <div>
+            <h2 className="text-3xl md:text-5xl pb-16 tracking-tight text-center">Recent Work</h2>
         </div>
 
-        {/* Prev button */}
-        <button
-          onClick={() => scrollBy(-1)}
-          disabled={!canPrev}
-          aria-label="Previous project"
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background border border-muted shadow-sm hover:bg-muted/50 transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10 12L6 8l4-4" />
-          </svg>
-        </button>
+        <div className="relative">
+          <div
+            ref={trackRef}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory cursor-grab"
+            style={{ scrollbarWidth: 'none' }}
+            onMouseDown={onMouseDown}
+          >
+            {projects.map((project, idx) => (
+              <Link
+                key={project.id}
+                href={`/work?project=${project.id}`}
+                onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
+                className="group snap-start shrink-0"
+              >
+                <div className="relative h-[80vh] aspect-4/5 bg-muted overflow-hidden rounded-sm">
+                  <ImageWithFallback
+                    src={project.imageUrl}
+                    alt={project.title}
+                    priority={idx === 0}
+                    className="w-full h-full object-cover transition-all duration-500 scale-110 group-hover:scale-115"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                </div>
+              </Link>
+            ))}
+          </div>
 
-        {/* Next button */}
-        <button
-          onClick={() => scrollBy(1)}
-          disabled={!canNext}
-          aria-label="Next project"
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background border border-muted shadow-sm hover:bg-muted/50 transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 4l4 4-4 4" />
-          </svg>
-        </button>
+          {/* Prev button */}
+          <button
+            onClick={() => scrollBy(-1)}
+            disabled={!canPrev}
+            aria-label="Previous project"
+            className="invisible sm:visible absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0 border border-muted shadow-sm hover:bg-muted/50 transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 12L6 8l4-4" />
+            </svg>
+          </button>
+
+          {/* Next button */}
+          <button
+            onClick={() => scrollBy(1)}
+            disabled={!canNext}
+            aria-label="Next project"
+            className="invisible sm:visible absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0 border border-muted shadow-sm hover:bg-muted/50 transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 4l4 4-4 4" />
+            </svg>
+          </button>
+        </div>
 
       </div>
     </section>
