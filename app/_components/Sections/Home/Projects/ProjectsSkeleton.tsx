@@ -1,16 +1,22 @@
 export function ProjectsSkeleton() {
   return (
-    <section id="work" className="py-24 overflow-hidden">
-      <div className="px-6 mb-16">
-        <h2 className="text-3xl md:text-5xl tracking-tight">Recent work</h2>
-      </div>
-      <div className="flex gap-4">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="shrink-0 w-56 md:w-72 animate-pulse">
-            <div className="relative aspect-4/5 bg-muted rounded-xs" />
-            <div className="mt-3 h-4 bg-muted rounded w-2/3" />
-          </div>
-        ))}
+    <section id="work" className="py-8 lg:py-12 xl:py-16 overflow-hidden">
+      <div
+        className="overflow-hidden w-full"
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent 0%, black 8%, black 85%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, black 8%, black 85%, transparent 100%)",
+        }}
+      >
+        <div className="flex gap-6 w-max animate-pulse">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="shrink-0 w-64 lg:w-75 xl:w-85">
+              <div className="relative aspect-4/5 bg-muted rounded-sm" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
