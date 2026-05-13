@@ -16,7 +16,7 @@ export default async function CustomMugPage() {
 
   return (
     <main className="min-h-screen px-6 py-24 xl:py-32">
-      <div className="max-w-7xl mx-auto">
+      <div className=" mx-auto">
         <div className="mb-16">
           <h1 className="text-3xl md:text-5xl tracking-tight">Build Your Own</h1>
           <p className="mt-4 text-muted-foreground text-lg max-w-xl">

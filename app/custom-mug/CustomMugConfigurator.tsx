@@ -182,7 +182,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                   key={c}
                   onClick={() => toggleColour(c)}
                   title={c}
-                  className={`w-8 h-8 rounded-full border-2 transition-all cursor-pointer ${
+                  className={`w-8 h-8 rounded-lg border-2 transition-all cursor-pointer ${
                     colourFilters.includes(c)
                       ? 'border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background'
                       : 'border-transparent hover:border-foreground/40'
@@ -198,7 +198,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
         </div>
 
         {/* Tile grid */}
-        <div className="flex flex-wrap gap-1.5 items-start min-h-[80svh]">
+        <div className="grid auto-rows-[8rem] grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] grid-flow-dense gap-1.5 min-h-[80svh]">
           {visibleTileCombos.map((combo) => {
             const isSelected = combo.key === selectedKey;
             const label = combo.g1.id === combo.g2.id
@@ -210,10 +210,10 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                 key={combo.key}
                 title={label}
                 onClick={() => handleTileSelect(combo)}
-                className={`relative overflow-hidden border transition-all duration-300 shrink-0 cursor-pointer ${
+                className={`relative overflow-hidden border rounded-md transition-all duration-300 cursor-pointer ${
                   isSelected
-                    ? 'w-64 h-64 border-foreground'
-                    : 'w-16 h-16 border-foreground/10 hover:border-foreground/40'
+                    ? 'col-span-4 row-span-4 border-foreground'
+                    : 'col-span-1 row-span-1 border-foreground/10 hover:border-foreground/40'
                 }`}
               >
                 <Image
