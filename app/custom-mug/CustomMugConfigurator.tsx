@@ -287,7 +287,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
                 <button
                   key={s.id}
                   onClick={() => setShape(s)}
-                  className={`text-left border transition-all overflow-hidden cursor-pointer ${
+                  className={`text-left border rounded-xl transition-all overflow-hidden cursor-pointer ${
                     shape?.id === s.id
                       ? 'border-foreground'
                       : 'border-foreground/20 hover:border-foreground/50'
