@@ -47,9 +47,9 @@ create policy "Public read mug_shapes" on mug_shapes for select using (true);
 create policy "Public read mug_sizes"  on mug_sizes  for select using (true);
 
 -- Service role can do everything (admin panel uses service key)
-create policy "Service role all glazes"    on glazes    using (auth.role() = 'service_role') with check (true);
-create policy "Service role all shapes"    on mug_shapes using (auth.role() = 'service_role') with check (true);
-create policy "Service role all sizes"     on mug_sizes  using (auth.role() = 'service_role') with check (true);
+create policy "Service role all glazes"    on glazes    for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+create policy "Service role all shapes"    on mug_shapes for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+create policy "Service role all sizes"     on mug_sizes  for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
 
 -- ─── Storage buckets ─────────────────────────────────────────────────────────
 -- Create these in Supabase dashboard → Storage → New bucket (set to Public):
