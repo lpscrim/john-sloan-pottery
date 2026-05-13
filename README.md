@@ -6,7 +6,7 @@ An artist portfolio and e-commerce boilerplate. Built with **Next.js 16**, **Tai
 
 - **Product Gallery** — Showcase work with categories, filters, and details
 - **Shopping Cart** — localStorage-based cart with item counts in header, slide-out drawer
-- **Stripe Checkout** — Secure hosted payments with automatic stock management
+- **Stripe Payments** — Embedded checkout with Stripe Elements and automatic stock reservation
 - **Photo Modal** — Swipe gestures, thumbnails, lazy loading, blur placeholders
 - **Admin Dashboard** — Secure Supabase auth with email allowlist
   - Add products with cover + up to 4 gallery images
@@ -64,13 +64,13 @@ They're linked: every product exists in both systems. Supabase stores Stripe's I
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      CUSTOMER CHECKS OUT                            │
 │                                                                     │
-│  1. CartDrawer POSTs to /api/checkout:                              │
-│     { items: [{ priceId: "price_XYZ", quantity: 1 }] }             │
-│  2. Server creates a Stripe Checkout Session with those line items  │
-│  3. Returns { url: "https://checkout.stripe.com/..." }              │
-│  4. Browser clears local cart, redirects to Stripe's hosted page    │
-│  5. Customer enters card details ON STRIPE (never on your site)     │
-│  6. After payment, Stripe redirects to /work?checkout=success       │
+│  1. CartDrawer POSTs to /api/payment-intent                         │
+│     { items: [{ priceId: "price_XYZ", quantity: 1 }] }            │
+│  2. Server reserves stock and creates a Stripe PaymentIntent        │
+│  3. Browser stores checkout state and routes to /checkout           │
+│  4. Customer enters address + payment details via Stripe Elements   │
+│  5. Shipping is recalculated when destination country changes       │
+│  6. Stripe redirects to /purchase/success after confirmation        │
 └─────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -78,11 +78,11 @@ They're linked: every product exists in both systems. Supabase stores Stripe's I
 │                                                                     │
 │  Stripe POSTs to /api/webhooks/stripe (server-to-server)            │
 │                                                                     │
-│  1. Verify request signature with STRIPE_WEBHOOK_SECRET             │
-│  2. Read line items from the completed checkout session              │
-│  3. For each item: find product in Supabase by stripe_product_id    │
-│  4. Call decrement_stock RPC → stock_level decreases                │
-│  5. Next page load shows updated stock (BuyButton shows N/A at 0)   │
+│  1. Verify request signature with Stripe webhook secret(s)          │
+│  2. On charge.succeeded: send order email + sync Etsy stock         │
+│  3. On payment_intent.canceled: restore reserved stock              │
+│  4. Stock is reserved before payment, not decremented afterwards    │
+│  5. Next page load shows updated availability immediately           │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -97,8 +97,10 @@ They're linked: every product exists in both systems. Supabase stores Stripe's I
 | `app/_data/projects.ts` | Fetches products from Supabase + gallery images from Storage |
 | `app/admin/add-product/actions.ts` | Server Action: upload images, insert DB row, create Stripe Product+Price |
 | `app/admin/edit-product/actions.ts` | Server Action: update/delete product in both Supabase and Stripe |
-| `app/api/checkout/route.ts` | Creates Stripe Checkout Session from cart items |
-| `app/api/webhooks/stripe/route.ts` | Handles post-payment: verifies signature, decrements stock |
+| `app/api/payment-intent/route.ts` | Reserves stock and creates Stripe PaymentIntents |
+| `app/api/payment-intent/update-shipping/route.ts` | Recalculates shipping by destination country |
+| `app/api/payment-intent/cancel/route.ts` | Cancels a PaymentIntent and restores reserved stock |
+| `app/api/webhooks/stripe/route.ts` | Handles order email, Etsy sync, and stock restoration |
 | `app/api/admin/session/route.ts` | Sets/clears admin session cookie after Supabase Auth login |
 | `app/api/revalidate/route.ts` | Cache revalidation endpoint (secret-protected) |
 | `app/_components/Cart/CartContext.tsx` | React context + localStorage cart with stock-level capping |
@@ -110,11 +112,11 @@ They're linked: every product exists in both systems. Supabase stores Stripe's I
 | What | How it's protected |
 | --- | --- |
 | Admin actions | Email allowlist + Supabase Auth token in httpOnly cookie, verified on every Server Action |
-| Card numbers | Never touch your server — Stripe's hosted checkout handles them |
+| Card numbers | Never touch your server — Stripe Elements sends payment data directly to Stripe |
 | Webhook | Signature verification with `STRIPE_WEBHOOK_SECRET` prevents spoofed requests |
 | Secret keys | `SUPABASE_SERVICE_ROLE_KEY` and `STRIPE_SECRET_KEY` only used in server-side code |
 | Price tampering | Customers send a `stripe_price_id`, not a raw amount — Stripe looks up the real price |
-| Stock | Decremented server-side via webhook after confirmed payment, not when added to cart |
+| Stock | Reserved server-side before payment and restored automatically on cancellation |
 | Admin session | httpOnly, sameSite: lax, secure in production, 1-hour expiry |
 
 ---
@@ -150,6 +152,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 # Stripe (required)
 STRIPE_SECRET_KEY=sk_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 
 # Admin auth (required for /admin routes)
@@ -188,32 +191,29 @@ Create a **public** Storage bucket called `product-images` in Supabase.
 
 The app reads gallery images by listing all files under `product-images/{product_id}/`.
 
-### Decrement Stock RPC
+### Stock RPCs
 
-Create this SQL function in Supabase (SQL Editor → New Query → Run):
+Create these SQL functions in Supabase (SQL Editor → New Query → Run):
 
 ```sql
-CREATE OR REPLACE FUNCTION decrement_stock(product_id uuid, quantity int)
-RETURNS void AS $$
-BEGIN
-  UPDATE products
-  SET stock_level = GREATEST(stock_level - quantity, 0)
-  WHERE id = product_id;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- reserve_stock(items jsonb)
+-- restore_stock(items jsonb)
 ```
 
-This is called by the Stripe webhook after a successful payment. `GREATEST(..., 0)` ensures stock never goes negative.
+The live checkout flow reserves stock before payment intent creation and restores it if the payment is cancelled or expires.
 
 ## Setup Checklist
 
 - [ ] Create Supabase project → get `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
 - [ ] Create `products` table in Supabase (see schema above)
 - [ ] Create `product-images` Storage bucket in Supabase (set to **public**)
-- [ ] Create `decrement_stock` RPC function in Supabase (see above)
+- [ ] Create the `reserve_stock` and `restore_stock` RPC functions in Supabase
 - [ ] Create Stripe account → get `STRIPE_SECRET_KEY`
-- [ ] Set up Stripe webhook pointing to `https://your-domain.com/api/webhooks/stripe` → get `STRIPE_WEBHOOK_SECRET`
-  - Subscribe to `checkout.session.completed` event
+- [ ] Set `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- [ ] Set up Stripe webhook pointing to `https://your-domain.com/api/webhooks/stripe`
+  - Use `STRIPE_WEBHOOK_SECRET` for the standard endpoint
+  - Use `STRIPE_CONNECT_WEBHOOK_SECRET` as well if using a connected account
+  - Subscribe to `charge.succeeded` and `payment_intent.canceled`
 - [ ] Add your email to `ADMIN_EMAIL_ALLOWLIST` in `.env.local`
 - [ ] Create a Supabase Auth user with that email (Authentication → Users → Add User)
 - [ ] Add hero video(s) to `public/` (`Banner Landscape.mp4`, `Banner Portrait.mp4`) or swap the Hero component for an image
@@ -269,7 +269,7 @@ A GitHub Actions workflow (`.github/workflows/keep-alive.yml`) pings this endpoi
 2. Import project in Vercel
 3. Add environment variables in project settings
 4. Deploy with `npm run build`
-5. Set up Stripe webhook pointing to your Vercel URL
+5. Set up the Stripe webhook(s) pointing to your Vercel URL
 
 ### Self-Hosted
 
