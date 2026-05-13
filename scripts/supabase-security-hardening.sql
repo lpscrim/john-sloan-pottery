@@ -102,6 +102,8 @@ end;
 $$;
 
 -- Only server-side code should execute these RPCs.
+revoke all on function public.reserve_stock(jsonb) from public;
+revoke all on function public.restore_stock(jsonb) from public;
 revoke all on function public.reserve_stock(jsonb) from anon, authenticated;
 revoke all on function public.restore_stock(jsonb) from anon, authenticated;
 grant execute on function public.reserve_stock(jsonb) to service_role;
