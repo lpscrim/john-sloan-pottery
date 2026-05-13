@@ -9,7 +9,6 @@ import { ShapeSelect } from '@/app/admin/ShapeSelect';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
 
 const initialState: AddProductState = { success: false };
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4 MB (post-compression safety net)
 const MAX_TOTAL_SIZE = 4 * 1024 * 1024; // 4 MB total — Vercel serverless limit
 const MAX_SECONDARY = 4;
 

@@ -186,7 +186,11 @@ export async function POST(req: NextRequest) {
     // If still too large, return an error rather than silently truncating order data.
     let reservedItemsJson = JSON.stringify(allReservedItems);
     if (reservedItemsJson.length > 40_000) {
-      allReservedItems = allReservedItems.map(({ image: _image, ...rest }) => rest) as typeof allReservedItems;
+      allReservedItems = allReservedItems.map((item) => {
+        const { image, ...rest } = item;
+        void image;
+        return rest;
+      }) as typeof allReservedItems;
       reservedItemsJson = JSON.stringify(allReservedItems);
     }
     if (reservedItemsJson.length > 50_000) {

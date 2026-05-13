@@ -17,7 +17,6 @@ import type { Glaze, MugShape } from "@/app/_lib/customMug";
 
 const initialUpdateState: UpdateProductState = { success: false };
 const initialDeleteState: DeleteProductState = { success: false };
-const MAX_FILE_SIZE = 4 * 1024 * 1024;
 const MAX_TOTAL_SIZE = 4 * 1024 * 1024; // Vercel serverless limit
 const MAX_SECONDARY = 4;
 

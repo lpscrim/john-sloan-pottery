@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ImageWithFallback } from '@/app/_components/UI/Layout/ImageWithFallback';
 import type { Project } from '@/app/_data/projects';
@@ -44,7 +44,16 @@ export function ProjectsCarousel({ projects }: Props) {
     t.scrollBy({ left: dir * step, behavior: 'smooth' });
   }
 
-  const endDrag = useCallback(() => {
+  function handleWindowMouseMove(e: MouseEvent) {
+    const t = trackRef.current;
+    const d = dragRef.current;
+    if (!d.active || !t) return;
+    const dx = e.clientX - d.startX;
+    if (Math.abs(dx) > 4) d.moved = true;
+    t.scrollLeft = d.scrollLeft - dx;
+  }
+
+  function endDrag() {
     const t = trackRef.current;
     const d = dragRef.current;
     if (!d.active || !t) return;
@@ -71,20 +80,9 @@ export function ProjectsCarousel({ projects }: Props) {
     const restore = () => { t.style.scrollSnapType = ''; };
     t.addEventListener('scrollend', restore, { once: true });
     setTimeout(restore, 600);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Defined outside useCallback so endDrag can reference it for removeEventListener
-  function handleWindowMouseMove(e: MouseEvent) {
-    const t = trackRef.current;
-    const d = dragRef.current;
-    if (!d.active || !t) return;
-    const dx = e.clientX - d.startX;
-    if (Math.abs(dx) > 4) d.moved = true;
-    t.scrollLeft = d.scrollLeft - dx;
   }
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
+  function onMouseDown(e: React.MouseEvent) {
     const t = trackRef.current;
     if (!t) return;
     e.preventDefault(); // stop native browser image-drag
@@ -95,8 +93,7 @@ export function ProjectsCarousel({ projects }: Props) {
     // Attach to window so mousemove/mouseup are never lost to child elements
     window.addEventListener('mousemove', handleWindowMouseMove);
     window.addEventListener('mouseup', endDrag);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [endDrag]);
+  }
 
   return (
     <section id="work" className="py-8 lg:py-12 xl:py-16">

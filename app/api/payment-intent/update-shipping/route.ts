@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/app/_lib/stripe';
 import { getShippingRates, resolveRateForCountry } from '@/app/_lib/shippingSettings';
+import {
+  calculateUpdatedPaymentIntentTotal,
+  isUpdatablePaymentIntentStatus,
+  isValidCountryCode,
+} from '@/app/_lib/paymentIntentShipping';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +21,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate country is a 2-letter ISO 3166-1 alpha-2 code
-    if (!/^[A-Z]{2}$/.test(country)) {
+    if (!isValidCountryCode(country)) {
       return NextResponse.json({ error: 'Invalid country code' }, { status: 400 });
     }
 
@@ -33,16 +38,18 @@ export async function POST(req: NextRequest) {
     }
 
     // Only update while the PI can still be modified
-    const updatable = ['requires_payment_method', 'requires_confirmation', 'requires_action'];
-    if (!updatable.includes(pi.status)) {
+    if (!isUpdatablePaymentIntentStatus(pi.status)) {
       return NextResponse.json({ error: 'Payment intent cannot be updated' }, { status: 400 });
     }
 
     const rates = await getShippingRates();
     const newShippingRate = resolveRateForCountry(rates, country);
     const prevShipping = parseInt(pi.metadata.shipping_amount ?? '0', 10);
-    const subtotal = pi.amount - prevShipping;
-    const newTotal = subtotal + newShippingRate;
+    const newTotal = calculateUpdatedPaymentIntentTotal(
+      pi.amount,
+      prevShipping,
+      newShippingRate,
+    );
 
     await stripe.paymentIntents.update(
       paymentIntentId,

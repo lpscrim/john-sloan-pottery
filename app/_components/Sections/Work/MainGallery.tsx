@@ -18,7 +18,6 @@ interface Project {
 
 export interface MainGalleryProps {
   selectedCategories: string[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
   selectedGlazes: string[];
   toggleGlaze: (g: string) => void;
   allGlazes: [string, number][];
@@ -37,7 +36,6 @@ export interface MainGalleryProps {
 
 export function MainGallery({
   selectedCategories,
-  setSelectedCategories,
   selectedGlazes,
   toggleGlaze,
   allGlazes,

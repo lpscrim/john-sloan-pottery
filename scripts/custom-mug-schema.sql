@@ -42,11 +42,17 @@ alter table glazes    enable row level security;
 alter table mug_shapes enable row level security;
 alter table mug_sizes  enable row level security;
 
+drop policy if exists "Public read glazes" on glazes;
+drop policy if exists "Public read mug_shapes" on mug_shapes;
+drop policy if exists "Public read mug_sizes" on mug_sizes;
 create policy "Public read glazes"    on glazes    for select using (true);
 create policy "Public read mug_shapes" on mug_shapes for select using (true);
 create policy "Public read mug_sizes"  on mug_sizes  for select using (true);
 
 -- Service role can do everything (admin panel uses service key)
+drop policy if exists "Service role all glazes" on glazes;
+drop policy if exists "Service role all shapes" on mug_shapes;
+drop policy if exists "Service role all sizes" on mug_sizes;
 create policy "Service role all glazes"    on glazes    for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
 create policy "Service role all shapes"    on mug_shapes for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
 create policy "Service role all sizes"     on mug_sizes  for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');

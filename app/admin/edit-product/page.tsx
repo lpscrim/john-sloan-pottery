@@ -1,7 +1,7 @@
 import { createServerSupabase } from '@/app/_lib/supabase';
 import EditProductClient from './EditProductClient';
 import type { AdminProduct } from './types';
-import { getGlazes, getMugShapes, type Glaze, type MugShape } from '@/app/_lib/customMug';
+import { getGlazes, getMugShapes } from '@/app/_lib/customMug';
 
 async function getAdminProducts(): Promise<AdminProduct[]> {
   const supabase = createServerSupabase();

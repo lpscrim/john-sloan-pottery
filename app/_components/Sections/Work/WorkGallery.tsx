@@ -45,7 +45,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
   const [isProject, setIsProject] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [text, setText] = useState<string>("");
-  const [medium, setMedium] = useState<string>("");
+  const [medium] = useState<string>("");
   const [glaze, setGlaze] = useState<GlazeEntry[]>([]);
   const [stripePriceId, setStripePriceId] = useState<string | null>(null);
   const [stockLevel, setStockLevel] = useState<number>(0);
@@ -274,7 +274,6 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
       {!modalOpen && <MainGallery
         getStockLevel={getStock}
         selectedCategories={selectedCategories}
-        setSelectedCategories={setSelectedCategories}
         selectedGlazes={selectedGlazes}
         toggleGlaze={toggleGlaze}
         allGlazes={allGlazes}
