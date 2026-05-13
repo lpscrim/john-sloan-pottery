@@ -31,7 +31,9 @@ export function Hero() {
         <div 
           className="absolute inset-0 flex title -mt-12 items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
         >
-          <Image src="/Logo.webp" alt="Logo" width="350" height="350" className="opacity-0 fade-in" loading='eager' />
+          <div className="relative w-[350px] h-[350px]">
+            <Image src="/Logo.webp" alt="Logo" fill sizes="350px" className="object-contain opacity-0 fade-in" loading='eager' />
+          </div>
 
 
         </div>
@@ -50,7 +52,9 @@ export function Hero() {
         <div 
           className="absolute inset-0 flex title -mt-12 items-center text-center font-medium justify-center tracking-wide z-20 flex-col "
         >
-          <Image src="/Logo.webp" alt="Logo" width="200" height="200" className="opacity-0 fade-in" loading='eager' />
+          <div className="relative w-[200px] h-[200px]">
+            <Image src="/Logo.webp" alt="Logo" fill sizes="200px" className="object-contain opacity-0 fade-in" loading='eager' />
+          </div>
 
         </div>
       </div>

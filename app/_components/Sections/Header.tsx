@@ -61,28 +61,30 @@ export function Header() {
               setIsMenuOpen(false);
             }}
           >
-            <Image
-              src="/LogoB.webp"
-              alt="John Sloan Pottery"
-              width={35}
-              height={35}
-              className={`transition-all nav-underline duration-500  ${
-                isLight
-                  ? "opacity-0 pointer-events-none"
-                  : "opacity-100 pointer-events-auto"
-              }`}
-            />
-            <Image
-              src="/Logo.webp"
-              alt="John Sloan Pottery"
-              width={35}
-              height={35}
-              className={`absolute top-0 left-0 transition-all nav-underline duration-500 brightness-200 ${
-                isLight
-                  ? "opacity-100 pointer-events-auto"
-                  : "opacity-0 pointer-events-none"
-              }`}
-            />
+            <span className="relative block w-[35px] h-[35px]">
+              <Image
+                src="/LogoB.webp"
+                alt="John Sloan Pottery"
+                fill
+                sizes="35px"
+                className={`object-contain transition-all nav-underline duration-500 ${
+                  isLight
+                    ? "opacity-0 pointer-events-none"
+                    : "opacity-100 pointer-events-auto"
+                }`}
+              />
+              <Image
+                src="/Logo.webp"
+                alt="John Sloan Pottery"
+                fill
+                sizes="35px"
+                className={`object-contain absolute top-0 left-0 transition-all nav-underline duration-500 brightness-200 ${
+                  isLight
+                    ? "opacity-100 pointer-events-auto"
+                    : "opacity-0 pointer-events-none"
+                }`}
+              />
+            </span>
           </button>
 
           {/* Desktop Navigation — centred */}
