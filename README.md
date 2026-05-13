@@ -138,6 +138,8 @@ Open `http://localhost:3000`.
 | `npm run build` | Production build |
 | `npm run start` | Run production server |
 | `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript checks |
+| `npm run test` | Run Vitest unit tests |
 | `npm run clean` | Remove `.next`, `.turbo`, `node_modules/.cache` |
 
 ## Environment Variables

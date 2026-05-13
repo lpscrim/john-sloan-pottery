@@ -335,25 +335,28 @@ Environment variable:
 
 ```
 Browser Cart
-    │
-    ▼
-POST /api/checkout
-    ├── Supabase RPC: reserve_stock          ← decrements stock atomically
-    ├── Stripe: prices.retrieve              ← get product names/images
-    ├── Supabase: products.select (type)     ← get artwork/print type
-    └── Stripe: checkout.sessions.create     ← returns hosted checkout URL
-            │
-            ▼
-    Customer completes Stripe checkout
-            │
-    ┌───────┴───────────────────┐
-    │                           │
-    ▼                           ▼
-checkout.session.completed  checkout.session.expired
-    │                           │
-    ▼                           ▼
-notifyClient()           Supabase RPC: restore_stock
-(Resend email)
+  │
+  ▼
+POST /api/payment-intent
+  ├── Supabase RPC: reserve_stock          ← reserves stock atomically
+  ├── Stripe: prices.retrieve              ← get product names/images
+  ├── Supabase: products.select            ← get glaze and custom mug metadata
+  └── Stripe: paymentIntents.create        ← returns client secret
+      │
+      ▼
+  Browser stores checkout state and routes to /checkout
+      │
+      ▼
+  Stripe Elements confirmation
+      │
+  ┌───────┴───────────────────┐
+  │                           │
+  ▼                           ▼
+charge.succeeded         payment_intent.canceled
+  │                           │
+  ▼                           ▼
+notifyClient() +         Supabase RPC: restore_stock
+syncEtsyStockAfterSale()
 ```
 
 ---
@@ -440,12 +443,9 @@ The site uses **Stripe Connect destination charges**. The platform (your) Stripe
 Environment variable:
 - `STRIPE_CONNECT_CLIENT_ACCOUNT_ID` — the artist's connected Stripe account ID (e.g. `acct_...`)
 
-**Fee logic** (`app/api/checkout/route.ts`):
+**Fee logic** (`app/api/payment-intent/route.ts`):
 ```ts
-const percentFee = Math.round(totalAmount * 0.05);      // 5% platform fee
-const estimatedStripeFee = Math.round(totalAmount * 0.015) + 20; // ~Stripe's fee
-// Only add flat 20p if 5% alone doesn't cover the Stripe flat fee (orders < ~£5.71)
-applicationFeeAmount = percentFee >= estimatedStripeFee ? percentFee : percentFee + 20;
+applicationFeeAmount = Math.round(totalAmount * 0.05);
 ```
 
 If `STRIPE_CONNECT_CLIENT_ACCOUNT_ID` is not set, no fee splitting occurs — the full payment stays on the platform account.
@@ -461,41 +461,37 @@ Each product in Supabase has a matching Stripe Product and Stripe Price:
 
 ## Checkout Flow
 
-**File:** `app/api/checkout/route.ts`
+**File:** `app/api/payment-intent/route.ts`
 
 ### Step 1 — Validate cart
-Accepts either `{ items: [{ priceId, quantity }] }` or legacy `{ priceId }`.
+Accepts `{ items: [{ priceId, quantity, customMug? }] }`.
 
-### Step 2 — Reserve stock
+### Step 2 — Reserve stock for regular items
 Calls `reserve_stock` RPC. If any items are out of stock:
 - Rolls back successful reservations via `restore_stock`
 - Returns HTTP 409 with `outOfStock` array
 
-### Step 3 — Fetch metadata
-- Fetches Stripe price/product data (name, image) for each item
-- Fetches `type` (`artwork`/`print`) from Supabase by `stripe_price_id`
-- Builds `enrichedReservations` array stored in session metadata
+### Step 3 — Resolve order metadata server-side
+- Fetches Stripe price/product data for regular items
+- Fetches glaze notes and custom mug shape pricing from Supabase
+- Builds the `reserved_items` metadata payload used by the success page and notification email
 
-### Step 4 — Create Stripe session
+### Step 4 — Create PaymentIntent
 ```ts
-stripe.checkout.sessions.create({
-  mode: 'payment',
-  line_items: [...],
-  payment_intent_data: {          // only if Connect is configured
-    application_fee_amount: ...,
-    transfer_data: { destination: clientAccountId },
-  },
+stripe.paymentIntents.create({
+  amount: totalAmount,
+  currency: 'gbp',
+  automatic_payment_methods: { enabled: true },
+  application_fee_amount: Math.round(totalAmount * 0.05),
   metadata: {
-    reserved_items: JSON.stringify([{ stripe_price_id, qty, title, price, image, type }]),
-    cancel_token: uuid,           // used to verify cancel requests
+    reserved_items: JSON.stringify(allReservedItems),
+    shipping_amount: String(shippingRatePence),
+    cancel_token: uuid,
   },
-  expires_at: now + 30 minutes,
-  success_url: '/purchase/success?session_id={CHECKOUT_SESSION_ID}',
-  cancel_url:  '/purchase/cancelled?session_id={CHECKOUT_SESSION_ID}&cancel_token=...',
 })
 ```
 
-Returns `{ url }` — the browser redirects to Stripe's hosted checkout page.
+Returns `{ clientSecret, paymentIntentId, cancelToken, total, shippingRate }`.
 
 ---
 
@@ -505,17 +501,13 @@ Returns `{ url }` — the browser redirects to Stripe's hosted checkout page.
 
 **File:** `app/purchase/success/page.tsx`
 
-Server component. Retrieves the session from Stripe, verifies `payment_status === 'paid'`, displays order summary. Also renders `<ClearCart />` (client component that empties localStorage cart).
+Server component. Retrieves the PaymentIntent from Stripe, verifies `status === 'succeeded'`, displays order summary, and renders `<ClearCart />`.
 
 ### Cancelled — `/purchase/cancelled`
 
 **File:** `app/purchase/cancelled/page.tsx`
 
-Client component. On mount, calls `POST /api/checkout/expire` with `sessionId` and `cancelToken`. This explicitly expires the Stripe session, which triggers the `checkout.session.expired` webhook to restore stock.
-
-### Manual session expiry — `/api/checkout/expire`
-
-Verifies the `cancel_token` matches the session metadata before expiring. This prevents malicious expiry of other users' sessions.
+Static page. The live checkout flow restores stock via `POST /api/payment-intent/cancel` when the customer backs out of `/checkout`, and also via Stripe's `payment_intent.canceled` webhook as a safety net.
 
 ---
 
@@ -525,12 +517,12 @@ Verifies the `cancel_token` matches the session metadata before expiring. This p
 
 Verifies Stripe's signature using `STRIPE_WEBHOOK_SECRET` before processing any event.
 
-### `checkout.session.completed`
+### `charge.succeeded`
 - Logs the order
-- Calls `notifyClient()` to send order email via Resend
-- Stock is **not** restored — the reservation becomes the sale
+- Calls `notifyClientFromCharge()` to send order email via Resend
+- Calls `syncEtsyStockAfterSale()` for linked Etsy listings
 
-### `checkout.session.expired`
+### `payment_intent.canceled`
 - Parses `reserved_items` from session metadata
 - Calls `restore_stock` RPC to return items to available stock
 
@@ -551,7 +543,7 @@ Email contents:
 - Items: image thumbnail, title, type (Artwork/Print), quantity, price
 - Financial table: Subtotal / Shipping / Total / Fees / Net to you
 
-Fee note in email is informational only — the actual fee deducted is calculated in the checkout route and applied by Stripe.
+Fee note in email is informational only — the actual fee deducted is calculated in the payment-intent route and applied by Stripe.
 
 ---
 

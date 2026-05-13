@@ -1,34 +1,14 @@
 import { createServerSupabase } from './supabase';
+import {
+  ALLOWED_COUNTRIES,
+  resolveRateForCountry,
+  resolveShippingRate,
+  type ShippingRates,
+  type ShippingRegion,
+} from './shippingRules';
 
-export interface ShippingRates {
-  gbRate: number;
-  euRate: number;
-  intRate: number;
-}
-
-// EU/EEA countries (excluding GB) — used to bucket a customer's country
-const EU_COUNTRY_SET = new Set([
-  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI',
-  'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT',
-  'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH', 'NO', 'IS',
-]);
-
-export type ShippingRegion = 'gb' | 'eu' | 'international';
-
-export const ALLOWED_COUNTRIES: Record<ShippingRegion, string[]> = {
-  gb: ['GB'],
-  eu: [
-    'GB', 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI',
-    'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT',
-    'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH', 'NO', 'IS',
-  ],
-  international: [
-    'GB', 'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI',
-    'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT',
-    'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH', 'NO', 'IS',
-    'US', 'CA', 'AU', 'NZ', 'JP', 'SG', 'HK', 'AE', 'SA',
-  ],
-};
+export { ALLOWED_COUNTRIES, resolveRateForCountry, resolveShippingRate };
+export type { ShippingRates, ShippingRegion };
 
 export async function getShippingRegion(): Promise<ShippingRegion> {
   const supabase = createServerSupabase();
@@ -64,18 +44,6 @@ export async function getShippingRates(): Promise<ShippingRates> {
     euRate:  parse(SHIPPING_RATE_KEYS.eu),
     intRate: parse(SHIPPING_RATE_KEYS.int),
   };
-}
-
-/** Returns the GB shipping rate (used at PI creation time before country is known). */
-export function resolveShippingRate(rates: ShippingRates): number {
-  return resolveRateForCountry(rates, 'GB');
-}
-
-/** Returns the shipping rate for a specific destination country. */
-export function resolveRateForCountry(rates: ShippingRates, country: string): number {
-  if (country === 'GB') return rates.gbRate;
-  if (EU_COUNTRY_SET.has(country)) return rates.euRate;
-  return rates.intRate;
 }
 
 /** @deprecated Use getShippingRates + resolveShippingRate instead */

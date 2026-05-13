@@ -325,7 +325,7 @@ Set all of the following in Vercel → Project → Settings → Environment Vari
 - **Stripe Prices are immutable** — changing a product price creates a new Stripe Price. Old prices remain in Stripe but become inactive.
 - **Image size limit** — 4 MB per image in admin upload. The `compress-images` script in `scripts/` can be used to pre-compress images locally.
 - **Session metadata limit** — Stripe caps metadata values at 500 characters. The `reserved_items` JSON includes image URLs which can be long. Monitor if issues arise with large carts.
-- **Fee calculation** — platform fee is 5% of the order total. See `app/api/checkout/route.ts`.
+- **Fee calculation** — platform fee is 5% of the order total. See `app/api/payment-intent/route.ts`.
 - **Categories visibility** — can be toggled on/off in `/admin/settings` without code changes.
 - **Supabase RLS** — not enabled; the service-role key is used exclusively server-side. Do not expose `SUPABASE_SERVICE_ROLE_KEY` to the browser.
 - **Etsy cron — Pro plan required** — Vercel Cron (configured in `vercel.json`) only runs on Pro plans. On the free plan the cron entry is silently ignored; trigger the poll endpoint manually if needed.
