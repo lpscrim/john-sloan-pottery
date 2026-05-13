@@ -55,6 +55,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
   const [etsyListingId, setEtsyListingId] = useState<string | null>(null);
 
   const lastOpenedProjectIdRef = useRef<string | null>(null);
+  const lastAppliedCategoryFilterRef = useRef<string>('');
 
   // ── Live stock map (single batched poll) ─────────────────────────
   const [liveStock, setLiveStock] = useState<Record<string, number>>({});
@@ -208,6 +209,22 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
   };
 
   // Deep link: /work?project={project.id}
+  useEffect(() => {
+    const fromQuery = Array.from(
+      new Set(
+        searchParams
+          .getAll('category')
+          .flatMap((value) => value.split(','))
+          .map((value) => value.trim())
+          .filter(Boolean)
+      )
+    );
+    const key = fromQuery.join('|');
+    if (key === lastAppliedCategoryFilterRef.current) return;
+    lastAppliedCategoryFilterRef.current = key;
+    setSelectedCategories(fromQuery);
+  }, [searchParams]);
+
   useEffect(() => {
     const projectParam = searchParams.get("project");
     if (!projectParam) return;

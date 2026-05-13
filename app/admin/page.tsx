@@ -18,6 +18,7 @@ export default function AdminHomePage() {
           <Button size="base" onClick={() => router.push('/admin/orders')}>Orders</Button>
           <Button size="base" onClick={() => router.push('/admin/about')}>About page</Button>
           <Button size="base" onClick={() => router.push('/admin/home-about')}>Home about section</Button>
+          <Button size="base" onClick={() => router.push('/admin/home-featured')}>Home featured collections</Button>
           <Button size="base" onClick={() => router.push('/admin/custom-mug')}>Custom mug builder</Button>
           <Button size="base" onClick={() => router.push('/admin/settings')}>Settings</Button>
           <Button size="base" onClick={() => router.push('/admin/etsy')}>Etsy sync</Button>
