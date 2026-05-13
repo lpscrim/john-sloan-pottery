@@ -198,7 +198,7 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
         </div>
 
         {/* Tile grid */}
-        <div className="grid auto-rows-[8rem] grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] grid-flow-dense gap-1.5 min-h-[80svh]">
+        <div className="grid auto-rows-[6rem] md:auto-rows-[8rem] grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] md:grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] grid-flow-dense gap-1.5 min-h-[80svh]">
           {visibleTileCombos.map((combo) => {
             const isSelected = combo.key === selectedKey;
             const label = combo.g1.id === combo.g2.id
