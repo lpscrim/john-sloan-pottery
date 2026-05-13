@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import { useCart } from '@/app/_components/Cart/CartContext';
 import type { Glaze, MugShape } from '@/app/_lib/customMug';
@@ -27,6 +28,12 @@ function shapeUrl(slug: string) {
 function formatPrice(pence: number) {
   return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(pence / 100);
 }
+
+const tileLayoutTransition = {
+  type: 'tween',
+  duration: 0.22,
+  ease: [0.22, 1, 0.36, 1],
+} as const;
 
 export default function CustomMugConfigurator({ glazes, shapes, examples }: Props) {
   const searchParams = useSearchParams();
@@ -198,7 +205,11 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
         </div>
 
         {/* Tile grid */}
-        <div className="grid auto-rows-[6rem] md:auto-rows-[8rem] grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] md:grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] grid-flow-dense gap-1.5 min-h-[80svh]">
+        <motion.div
+          layout
+          transition={{ layout: tileLayoutTransition }}
+          className="grid auto-rows-[6rem] md:auto-rows-[8rem] grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] md:grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] grid-flow-dense gap-1.5 min-h-[80svh]"
+        >
           {visibleTileCombos.map((combo) => {
             const isSelected = combo.key === selectedKey;
             const label = combo.g1.id === combo.g2.id
@@ -206,32 +217,42 @@ export default function CustomMugConfigurator({ glazes, shapes, examples }: Prop
               : `${combo.g1.name} + ${combo.g2.name}`;
 
             return (
-              <button
+              <motion.button
+                layout
                 key={combo.key}
                 title={label}
                 onClick={() => handleTileSelect(combo)}
+                transition={{ layout: tileLayoutTransition }}
                 className={`relative overflow-hidden border rounded-md transition-all duration-300 cursor-pointer ${
                   isSelected
-                    ? 'col-span-4 row-span-4 border-foreground'
+                    ? 'col-span-3 row-span-3 border-foreground'
                     : 'col-span-1 row-span-1 border-foreground/10 hover:border-foreground/40'
                 }`}
               >
-                <Image
-                  src={combo.url}
-                  alt={label}
-                  fill
-                  className="object-cover"
-                  onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
-                />
+                <motion.div layout="position" className="absolute inset-0">
+                  <Image
+                    src={combo.url}
+                    alt={label}
+                    fill
+                    className="object-cover"
+                    onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0'; }}
+                  />
+                </motion.div>
                 {isSelected && (
-                  <div className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm px-2 py-1.5">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="absolute inset-x-0 bottom-0 bg-background/85 backdrop-blur-sm px-2 py-1.5"
+                  >
                     <p className="text-xs font-medium leading-tight">{label}</p>
-                  </div>
+                  </motion.div>
                 )}
-              </button>
+              </motion.button>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Glaze name buttons */}
         <div className="flex flex-wrap gap-2">
