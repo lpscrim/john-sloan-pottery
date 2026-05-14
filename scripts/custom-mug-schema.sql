@@ -36,6 +36,11 @@ create table if not exists mug_sizes (
   created_at  timestamptz not null default now()
 );
 
+-- Explicit Data API grants for fresh projects.
+-- Supabase will no longer expose new public-schema tables by default.
+grant select on public.glazes, public.mug_shapes, public.mug_sizes to anon, authenticated;
+grant select, insert, update, delete on public.glazes, public.mug_shapes, public.mug_sizes to service_role;
+
 -- ─── Row-level security ──────────────────────────────────────────────────────
 -- Public read (the configurator page needs unauthenticated reads)
 alter table glazes    enable row level security;

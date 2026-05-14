@@ -15,6 +15,14 @@ revoke all on public.products from anon, authenticated;
 revoke all on public.settings from anon, authenticated;
 revoke all on public.about_content from anon, authenticated;
 revoke all on public.order_tracking from anon, authenticated;
+grant select, insert, update, delete on public.products to service_role;
+grant select, insert, update, delete on public.settings to service_role;
+grant select, insert, update, delete on public.about_content to service_role;
+grant select, insert, update, delete on public.order_tracking to service_role;
+
+-- Fresh projects after May 30 also need explicit grants for these Data API tables.
+grant select on public.glazes, public.mug_shapes, public.mug_sizes to anon, authenticated;
+grant select, insert, update, delete on public.glazes, public.mug_shapes, public.mug_sizes to service_role;
 
 -- 2. Tighten custom mug service-role policies so they do not use WITH CHECK (true).
 drop policy if exists "Service role all glazes" on public.glazes;
