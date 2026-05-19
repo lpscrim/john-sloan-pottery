@@ -20,6 +20,35 @@ grant select, insert, update, delete on public.settings to service_role;
 grant select, insert, update, delete on public.about_content to service_role;
 grant select, insert, update, delete on public.order_tracking to service_role;
 
+drop policy if exists "Service role all products" on public.products;
+drop policy if exists "Service role all settings" on public.settings;
+drop policy if exists "Service role all about content" on public.about_content;
+drop policy if exists "Service role all order tracking" on public.order_tracking;
+
+create policy "Service role all products"
+  on public.products
+  for all
+  using (auth.role() = 'service_role')
+  with check (auth.role() = 'service_role');
+
+create policy "Service role all settings"
+  on public.settings
+  for all
+  using (auth.role() = 'service_role')
+  with check (auth.role() = 'service_role');
+
+create policy "Service role all about content"
+  on public.about_content
+  for all
+  using (auth.role() = 'service_role')
+  with check (auth.role() = 'service_role');
+
+create policy "Service role all order tracking"
+  on public.order_tracking
+  for all
+  using (auth.role() = 'service_role')
+  with check (auth.role() = 'service_role');
+
 -- Fresh projects after May 30 also need explicit grants for these Data API tables.
 grant select on public.glazes, public.mug_shapes, public.mug_sizes to anon, authenticated;
 grant select, insert, update, delete on public.glazes, public.mug_shapes, public.mug_sizes to service_role;
