@@ -114,7 +114,7 @@ export function ProjectsCarousel({ projects }: Props) {
                 onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
                 className="group snap-start shrink-0"
               >
-                <div className="relative h-[80vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
+                <div className="relative h-[60vh] sm:h-[80vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
                   <ImageWithFallback
                     src={project.imageUrl}
                     alt={project.title}
@@ -132,7 +132,7 @@ export function ProjectsCarousel({ projects }: Props) {
             onClick={() => scrollBy(-1)}
             disabled={!canPrev}
             aria-label="Previous project"
-            className="invisible sm:visible absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0 border border-muted shadow-sm hover:bg-muted/50 transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
+            className="text-foreground/25 hover:text-foreground visible absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0  hover:shadow-sm transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 12L6 8l4-4" />
@@ -144,7 +144,7 @@ export function ProjectsCarousel({ projects }: Props) {
             onClick={() => scrollBy(1)}
             disabled={!canNext}
             aria-label="Next project"
-            className="invisible sm:visible absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0 border border-muted shadow-sm hover:bg-muted/50 transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
+            className="text-foreground/50 hover:text-foreground visible absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0  hover:shadow-sm transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 4l4 4-4 4" />
