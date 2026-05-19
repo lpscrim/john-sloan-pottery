@@ -13,7 +13,7 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
     <button
       type="submit"
       disabled={pending}
-      className="cursor-crosshair text-base transition-all duration-250 group disabled:opacity-50"
+      className="cursor-pointer text-base transition-all duration-250 group disabled:opacity-50"
     >
       <span className="group-hover:px-0.5 transition-all duration-250">[</span>{' '}
       {pending ? 'Saving…' : label}{' '}
@@ -208,7 +208,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
                 type="file"
                 accept="image/*"
                 onChange={handlePortraitChange}
-                className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-crosshair"
+                className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-pointer"
               />
               <div>
                 <SaveButton pending={isPending} label="Upload portrait" />
@@ -273,7 +273,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
                 type="file"
                 accept="image/*"
                 onChange={handleSecondaryChange}
-                className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-crosshair"
+                className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-pointer"
               />
               <div>
                 <SaveButton pending={isPending} label="Upload image" />
@@ -313,7 +313,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
                 <button
                   type="button"
                   onClick={() => handleRemoveGallery(url)}
-                  className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-base cursor-crosshair"
+                  className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-base cursor-pointer"
                 >
                   Remove
                 </button>
@@ -331,7 +331,7 @@ export default function AboutClient({ initial }: { initial: AboutContent }) {
             multiple
             onChange={handleGalleryUpload}
             disabled={isPending}
-            className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-crosshair disabled:opacity-50"
+            className="text-base text-muted-foreground file:mr-3 file:border-0 file:bg-muted file:px-3 file:py-1 file:text-base file:cursor-pointer disabled:opacity-50"
           />
         </div>
         <StatusMsg {...galleryStatus} />

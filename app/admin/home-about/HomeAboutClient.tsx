@@ -16,7 +16,7 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
     <button
       type="submit"
       disabled={pending}
-      className="cursor-crosshair text-base transition-all duration-250 group disabled:opacity-50"
+      className="cursor-pointer text-base transition-all duration-250 group disabled:opacity-50"
     >
       <span className="group-hover:px-0.5 transition-all duration-250">[</span>{' '}
       {pending ? 'Saving…' : label}{' '}
@@ -146,7 +146,7 @@ export default function HomeAboutClient({ initial }: { initial: HomeAboutContent
                 type="button"
                 onClick={() => handleRemove(url)}
                 disabled={removingUrl === url}
-                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-base tracking-widest cursor-crosshair disabled:opacity-50"
+                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity text-white text-base tracking-widest cursor-pointer disabled:opacity-50"
               >
                 {removingUrl === url ? 'Removing…' : 'REMOVE'}
               </button>

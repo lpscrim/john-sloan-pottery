@@ -28,7 +28,7 @@ export default function AboutGallery({ images }: { images: string[] }) {
           return (
             <button
               key={url}
-              className="relative overflow-hidden rounded-sm cursor-crosshair group"
+              className="relative overflow-hidden rounded-sm cursor-pointer group"
               style={{ gridRow: `span ${isLandscape ? 1 : 2}` }}
               onClick={() => setLightbox(url)}
               aria-label={`View image ${i + 1} larger`}
@@ -64,7 +64,7 @@ export default function AboutGallery({ images }: { images: string[] }) {
           <button
             onClick={() => setLightbox(null)}
             aria-label="Close"
-            className="absolute top-4 right-5 text-white/70 hover:text-white text-3xl leading-none cursor-crosshair"
+            className="absolute top-4 right-5 text-white/70 hover:text-white text-3xl leading-none cursor-pointer"
           >
             ×
           </button>

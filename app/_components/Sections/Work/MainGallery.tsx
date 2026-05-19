@@ -58,19 +58,19 @@ export function MainGallery({
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setStockFilter('in-stock')}
-              className={`cursor-crosshair transition-opacity ${stockFilter === 'in-stock' ? 'text-foreground' : 'text-foreground/50'}`}
+              className={`cursor-pointer transition-opacity ${stockFilter === 'in-stock' ? 'text-foreground' : 'text-foreground/50'}`}
             >
               In Stock <span className="text-accent">{inStockCount}</span>
             </button>
             <button
               onClick={() => setStockFilter('all')}
-              className={`cursor-crosshair transition-opacity ${stockFilter === 'all' ? 'text-foreground' : 'text-foreground/50'}`}
+              className={`cursor-pointer transition-opacity ${stockFilter === 'all' ? 'text-foreground' : 'text-foreground/50'}`}
             >
               All <span className="text-accent">{totalCount}</span>
             </button>
             <button
               onClick={() => setStockFilter('sold')}
-              className={`cursor-crosshair transition-opacity ${stockFilter === 'sold' ? 'text-foreground' : 'text-foreground/50'}`}
+              className={`cursor-pointer transition-opacity ${stockFilter === 'sold' ? 'text-foreground' : 'text-foreground/50'}`}
             >
               Sold <span className="text-accent">{soldCount}</span>
             </button>
@@ -91,7 +91,7 @@ export function MainGallery({
                       !isUnselectable && toggleCategory(categoryStr)
                     }
                     disabled={isUnselectable}
-                    className={`pr-1 py-1 rounded transition-colors cursor-crosshair text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
+                    className={`pr-1 py-1 rounded transition-colors cursor-pointer text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
                   >
                     {categoryStr}{" "}
                     <span className="text-accent">{count}</span>
@@ -112,7 +112,7 @@ export function MainGallery({
                   title={glaze}
                   onClick={() => !isUnselectable && toggleGlaze(glaze)}
                   disabled={isUnselectable}
-                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-crosshair ${
+                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-pointer ${
                     isSelected
                       ? 'border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background'
                       : isUnselectable

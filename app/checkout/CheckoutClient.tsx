@@ -188,7 +188,7 @@ function CheckoutForm({
         <button
           type="submit"
           disabled={!stripe || !elements || submitting}
-          className="cursor-crosshair group flex-1 border border-foreground py-3 px-6 text-sm tracking-widest uppercase transition-colors hover:bg-foreground hover:text-background disabled:opacity-50 disabled:cursor-not-allowed"
+          className="cursor-pointer group flex-1 border border-foreground py-3 px-6 text-sm tracking-widest uppercase transition-colors hover:bg-foreground hover:text-background disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="inline-block transition-transform group-hover:scale-105">
             {submitting ? 'Processing...' : `[ Pay £${(displayTotal / 100).toFixed(2)} ]`}
@@ -198,7 +198,7 @@ function CheckoutForm({
           type="button"
           onClick={onBack}
           disabled={submitting}
-          className="cursor-crosshair border border-foreground/30 py-3 px-6 text-sm tracking-widest uppercase text-muted-foreground hover:border-foreground hover:text-foreground transition-colors disabled:opacity-50"
+          className="cursor-pointer border border-foreground/30 py-3 px-6 text-sm tracking-widest uppercase text-muted-foreground hover:border-foreground hover:text-foreground transition-colors disabled:opacity-50"
         >
           [ Back ]
         </button>

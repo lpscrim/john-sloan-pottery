@@ -15,7 +15,7 @@ function SaveButton({ pending, label = 'Save' }: { pending: boolean; label?: str
     <button
       type="submit"
       disabled={pending}
-      className="cursor-crosshair text-base transition-all duration-250 group disabled:opacity-50"
+      className="cursor-pointer text-base transition-all duration-250 group disabled:opacity-50"
     >
       <span className="group-hover:px-0.5 transition-all duration-250">[</span>{' '}
       {pending ? 'Saving…' : label}{' '}
