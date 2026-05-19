@@ -61,7 +61,7 @@ export function Header() {
               setIsMenuOpen(false);
             }}
           >
-            <span className="relative block w-[35px] h-[35px]">
+            <span className="relative block w-8.75 h-8.75">
               <Image
                 src="/LogoB.webp"
                 alt="John Sloan Pottery"
