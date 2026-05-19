@@ -91,7 +91,7 @@ export function MainGallery({
                       !isUnselectable && toggleCategory(categoryStr)
                     }
                     disabled={isUnselectable}
-                    className={`pr-1 py-1 rounded transition-colors cursor-pointer text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
+                    className={`pr-1 rounded transition-colors cursor-pointer text-foreground ${isSelected ? "underline font-semibold" : ""} ${isUnselectable ? "opacity-30 cursor-not-allowed" : "hover:bg-background/10"}`}
                   >
                     {categoryStr}{" "}
                     <span className="text-accent">{count}</span>

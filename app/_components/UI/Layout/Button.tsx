@@ -11,7 +11,7 @@ export default function Button(props: Readonly<{
     <button 
       type={props.type}
       disabled={disabled}
-      className={` cursor-pointer rounded-sm ${light ? ' bg-muted/0  text-background border-background hover:bg-background hover:text-foreground' : 'bg-muted  text-foreground border hover:bg-muted'} text-${size} py-2 px-4 shadow-sm active:shadow-none border active:translate-y-px active:-translate-x-px transition-all duration-100 ` } onClick={onClick}>
+      className={` cursor-pointer rounded-sm ${light ? ' bg-muted/0  text-background border-background hover:bg-background hover:text-foreground' : 'bg-muted/75  text-foreground border hover:bg-muted'} text-${size} py-2 px-4 shadow-sm active:shadow-none border active:translate-y-px active:-translate-x-px transition-all duration-300 ` } onClick={onClick}>
       {children}
     </button>
   );

@@ -275,7 +275,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
       {...swipeHandlers}
     >
       <div className="relative py-0 flex flex-row w-full justify-between z-100 bg-background ">
-        <div className="flex py-2 px-6 w-full items-center z-100">
+        <div className="flex px-6 w-full items-center z-100">
           {isProject && (
             <span className="text-foreground text-xl">
               {name} 
@@ -283,7 +283,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
           )}
           {!isProject && <span className="opacity-0">{"0"}</span>}
         </div>
-        <div className="flex flex-row mr-3 w-60">
+        <div className="flex flex-row items-center mr-3 w-60">
             <div className="flex justify-center w-20 text-foreground z-100">
               <BuyButton
                 stripePriceId={stripePriceId}
@@ -297,13 +297,13 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
             </div>
             <div className="flex justify-center w-20  text-foreground z-100">
               {isProject && (
-              <Button onClick={() => setTextOpen(!textOpen)} size="lg">
+              <Button onClick={() => setTextOpen(!textOpen)} size="md">
                 Info
               </Button>
               )}
             </div>
           <div className="flex justify-center w-20 text-foreground z-100">
-            <Button onClick={onClose} size="lg">
+            <Button onClick={onClose} size="md">
               Back
             </Button>
           </div>

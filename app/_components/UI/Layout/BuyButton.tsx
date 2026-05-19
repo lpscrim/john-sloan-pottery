@@ -59,7 +59,7 @@ export function BuyButton({ stripePriceId, stockLevel, priceHw, name, imageUrl, 
       <Button
         onClick={handleClick}
         disabled={!canBuildMug && (outOfStock || notAvailable)}
-        size='lg'
+        size='md'
       >
         <div className="relative inline-flex alttext">
           <span className={`transition-opacity duration-200 ${outOfStock && !canBuildMug ? 'opacity-100 text-red-600' : 'group-hover:opacity-0 opacity-100'}`}>
