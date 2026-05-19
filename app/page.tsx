@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { About } from "./_components/Sections/Home/About";
 import { Contact } from "./_components/Sections/Home/Contact";
-import { FeaturedCollections } from "./_components/Sections/Home/FeaturedCollections";
+import { FeaturedCollections } from "./_components/Sections/Home/Featured/FeaturedCollections";
 import { Hero } from "./_components/Sections/Home/Hero";
 import { Projects } from "./_components/Sections/Home/Projects/Projects";
 import { ProjectsSkeleton } from "./_components/Sections/Home/Projects/ProjectsSkeleton";

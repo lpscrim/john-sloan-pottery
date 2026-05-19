@@ -32,7 +32,7 @@ export function Contact() {
     >
       <div className=" mx-auto w-full">
         <div className="mb-16 lg:mb-32 ">
-          <h2 className="text-3xl md:text-5xl tracking-tight text-center">
+          <h2 className="text-3xl md:text-4xl  tracking-tight text-center">
             Stay in touch
           </h2>
         </div>

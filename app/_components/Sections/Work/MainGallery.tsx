@@ -112,7 +112,7 @@ export function MainGallery({
                   title={glaze}
                   onClick={() => !isUnselectable && toggleGlaze(glaze)}
                   disabled={isUnselectable}
-                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-pointer ${
+                  className={`w-7 h-7 rounded-lg border-2 transition-all cursor-pointer ${
                     isSelected
                       ? 'border-foreground ring-2 ring-foreground ring-offset-2 ring-offset-background'
                       : isUnselectable

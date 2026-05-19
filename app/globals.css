@@ -33,22 +33,6 @@
 }
 
 @font-face {
-  font-family: 'EB Garamond';
-  src: url('/font/EBGaramond-VariableFont_wght.ttf') format('truetype');
-  font-weight: 200 400 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'EB Garamond';
-  src: url('/font/EBGaramond-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 800;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'TAY BigBird';
   src: url('/font/TAYBigBirdRegular.woff2') format('woff2');
   font-weight: 400;
@@ -64,21 +48,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'TAY Wingman';
-  src: url('/font/TAYWingmanRegular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'TAY Tallboy';
-  src: url('/font/TAYTallboy.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 @font-face {
   font-family: 'Futura PT';
@@ -88,17 +57,9 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'TAY Taxidriver';
-  src: url('/font/TAYTaxidriverRegular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 
 :root {
-  font-family: 'EB Garamond', monospace;
+  font-family: 'Futura PT', monospace;
   --font-size: 16px;
   --background: rgb(245, 243, 233);
   --foreground: oklch(0.145 0 0);
@@ -250,21 +211,30 @@ html {
   font-size: var(--font-size);
 }
 
-.title {
-  font-family: 'TAY Taxidriver', sans-serif;
-  font-weight: 400;
-}
 
-h1, h2, h3, h4, .nav {
-  font-family: 'TAY Birdie', sans-serif;
+h1, h2, h3, h4 {
+  font-family: 'TAY Bigbird', sans-serif;
   text-transform: none;
    font-weight: 200;
 }
 
-button, #contact a  {
-   font-family: 'TAY Birdie', sans-serif;
+button {
+  font-family: 'TAY Birdie', sans-serif;
+  text-transform: none;
+  font-weight: 400;
+}
+
+ #contact a, #contact span {
+   font-family: 'Futura PT', sans-serif;
   text-transform: none;
   font-weight: 200;
+}
+
+.nav {
+  font-family: 'Futura PT', sans-serif;
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
 body {
