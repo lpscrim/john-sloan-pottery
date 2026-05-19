@@ -1,8 +1,8 @@
 "use client";
 
-import  Button  from "../../UI/Layout/Button";
+import Button from "../../UI/Layout/Button";
 import { useState } from "react";
-import { Mail, Instagram } from "lucide-react";
+import { Mail, Instagram, Globe } from "lucide-react";
 
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -32,7 +32,9 @@ export function Contact() {
     >
       <div className=" mx-auto w-full">
         <div className="mb-16 lg:mb-32 ">
-          <h2 className="text-3xl md:text-5xl tracking-tight text-center">Stay in touch</h2>
+          <h2 className="text-3xl md:text-5xl tracking-tight text-center">
+            Stay in touch
+          </h2>
         </div>
 
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
@@ -43,24 +45,22 @@ export function Contact() {
               requirements — get in touch to discuss.
             </p>
 
-            <div className="flex flex-row gap-8 items-center justify-between">
+            <div className="flex flex-col gap-4 items-start">
               {/* TODO: Replace href and span text with contact email */}
               <a
-                href="mailto:your@email.com"
+                href="mailto:Johnsloanpottery@gmail.com"
                 className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor-pointer group text-lg"
               >
                 <Mail size={20} className="text-foreground " />
-                <span>your@email.com</span>{" "}
+                <span>Johnsloanpottery@gmail.com</span>{" "}
                 {/* TODO: Replace with contact email */}
               </a>
 
-              <div className="flex items-center gap-3 text-lg text-foreground justify-end">
-                <span className="w-5" />
+              <div className="flex items-center gap-3 text-lg text-foreground">
+                <Globe size={20} className="text-foreground " />
                 <span>Isle of Skye, Scotland</span>
               </div>
-            </div>
-            <div className="">
-              <div className="flex flex-row gap-8 space-y-0">
+              <div className="flex flex-row gap-3 space-y-0 text-lg">
                 {/* TODO: Replace with Instagram URL */}
                 <a
                   href="https://www.instagram.com/yourhandle/"
@@ -71,9 +71,9 @@ export function Contact() {
                   <Instagram size={20} className="text-foreground" />
                   <span>Instagram</span>
                 </a>
-
               </div>
             </div>
+              
           </div>
 
           <div className="space-y-8 lg:col-start-3 lg:col-span-2 text-lg">
