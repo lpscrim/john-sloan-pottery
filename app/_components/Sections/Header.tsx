@@ -51,7 +51,7 @@ export function Header() {
       {!isLight && (
         <div className="absolute inset-0 w-full h-full  bg-background z-0 pointer-events-none transition-all duration-500" />
       )}
-      <div className="relative mx-auto py-2 z-10">
+      <div className="relative mx-auto py-2 z-10 ">
         <div className="relative flex min-h-5.5 md:min-h-0 items-center justify-between">
           {/* Logo with crossfade */}
           <button
