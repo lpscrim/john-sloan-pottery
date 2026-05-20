@@ -97,9 +97,9 @@ export function EtsyClient({ connected, initialError, justConnected }: Props) {
     setSuccessMsg(null);
     try {
       const res = await fetch('/api/etsy/poll');
-      const data = await res.json() as { synced?: number; error?: string };
+      const data = await res.json() as { synced?: number; message?: string; error?: string };
       if (!res.ok) throw new Error(data.error ?? 'Sync failed');
-      setSuccessMsg(`Stock sync complete — ${data.synced ?? 0} product(s) updated.`);
+      setSuccessMsg(data.message ?? `Stock sync triggered — Etsy stock will update shortly.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/app/_lib/stripe';
 import { createServerSupabase } from '@/app/_lib/supabase';
-import { updateListingInventory } from '@/app/_lib/etsy';
 import type Stripe from 'stripe';
 import { Resend } from 'resend';
 
@@ -181,13 +180,17 @@ async function notifyClientFromCharge(charge: Stripe.Charge, stripe: ReturnType<
 }
 
 /**
- * After a confirmed sale, push the updated stock level to any linked Etsy listings.
+ * After a confirmed sale, notify Make.com to update the linked Etsy listing quantity.
  * Stock is already decremented in Supabase by the time charge.succeeded fires.
+ * Make.com handles the actual Etsy API call.
  */
 async function syncEtsyStockAfterSale(
   charge: Stripe.Charge,
   stripe: ReturnType<typeof import('@/app/_lib/stripe').getStripe>,
 ): Promise<void> {
+  const makeWebhookUrl = process.env.MAKE_ETSY_WEBHOOK_URL;
+  if (!makeWebhookUrl) return;
+
   const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
   const stripeOpts = clientAccountId ? { stripeAccount: clientAccountId } : undefined;
 
@@ -196,7 +199,7 @@ async function syncEtsyStockAfterSale(
     try {
       pi = await stripe.paymentIntents.retrieve(charge.payment_intent, undefined, stripeOpts);
     } catch {
-      return; // No PI metadata — nothing to sync
+      return;
     }
   }
 
@@ -223,15 +226,17 @@ async function syncEtsyStockAfterSale(
 
   for (const product of products) {
     try {
-      await updateListingInventory(
-        parseInt(product.etsy_listing_id as string, 10),
-        product.stock_level ?? 0,
-      );
-      console.log(
-        `[ETSY SYNC] Updated listing ${product.etsy_listing_id} → qty ${product.stock_level}`,
-      );
+      await fetch(makeWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listing_id: product.etsy_listing_id,
+          quantity: product.stock_level ?? 0,
+        }),
+      });
+      console.log(`[ETSY SYNC] Triggered Make for listing ${product.etsy_listing_id} → qty ${product.stock_level}`);
     } catch (err) {
-      console.error(`[ETSY SYNC] Failed to update listing ${product.etsy_listing_id}:`, err);
+      console.error(`[ETSY SYNC] Failed to trigger Make for listing ${product.etsy_listing_id}:`, err);
     }
   }
 }
