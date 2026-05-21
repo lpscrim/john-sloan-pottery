@@ -339,6 +339,19 @@ export default function EditProductClient({
             />
           </div>
 
+          {selected.video_url && (
+            <div className="space-y-3">
+              <span className="text-base font-medium">Video</span>
+              <video
+                src={selected.video_url}
+                controls
+                muted
+                playsInline
+                className="w-full max-w-60 rounded-md bg-muted"
+              />
+            </div>
+          )}
+
           <div className="space-y-3">
             <span className="text-base font-medium">Gallery Images</span>
             {selected.gallery.length > 0 ? (

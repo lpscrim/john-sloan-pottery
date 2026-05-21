@@ -19,4 +19,5 @@ export interface AdminProduct {
   gallery: AdminGalleryImage[];
   mug_shape_slug: string | null;
   shape_label: string | null;
+  video_url: string | null;
 }
