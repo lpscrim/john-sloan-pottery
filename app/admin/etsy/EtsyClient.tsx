@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { deleteAllProducts } from './actions';
 
 interface CachedListing {
   listing_id: number;
@@ -10,6 +11,7 @@ interface CachedListing {
   price_pence: number;
   image_url: string | null;
   image_urls: string[];
+  video_url: string | null;
   etsy_url: string;
   already_imported: boolean;
 }
@@ -23,6 +25,8 @@ export function EtsyClient() {
   const [imported, setImported] = useState<Record<number, boolean>>({});
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [deleteAllConfirm, setDeleteAllConfirm] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   useEffect(() => {
     if (!successMsg) return;
@@ -91,6 +95,7 @@ export function EtsyClient() {
           price_pence: listing.price_pence,
           quantity: listing.quantity,
           image_urls: listing.image_urls,
+          video_url: listing.video_url,
         }),
       });
       const data = await res.json() as { success?: boolean; warning?: string; error?: string };
@@ -101,6 +106,27 @@ export function EtsyClient() {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setImporting((prev) => ({ ...prev, [listing.listing_id]: false }));
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    if (!deleteAllConfirm) {
+      setDeleteAllConfirm(true);
+      return;
+    }
+    setDeletingAll(true);
+    setError(null);
+    try {
+      const result = await deleteAllProducts();
+      if (!result.success) throw new Error(result.error ?? 'Delete failed');
+      setListings((prev) => prev.map((l) => ({ ...l, already_imported: false })));
+      setImported({});
+      setSuccessMsg('All website products deleted. You can now re-import from Etsy.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setDeletingAll(false);
+      setDeleteAllConfirm(false);
     }
   };
 
@@ -129,6 +155,31 @@ export function EtsyClient() {
         >
           {syncing ? 'Syncing…' : 'Sync stock now'}
         </button>
+        {!deleteAllConfirm ? (
+          <button
+            onClick={() => setDeleteAllConfirm(true)}
+            className="rounded-md border border-red-400 bg-background text-red-600 px-4 py-2 text-base font-medium hover:bg-red-50 transition-colors"
+          >
+            Delete all website products
+          </button>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="text-base text-red-600 font-medium">Are you sure? This removes all products from the website (not Etsy).</span>
+            <button
+              onClick={handleDeleteAll}
+              disabled={deletingAll}
+              className="rounded-md border border-red-600 bg-red-600 text-white px-4 py-2 text-base font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+            >
+              {deletingAll ? 'Deleting…' : 'Yes, delete all'}
+            </button>
+            <button
+              onClick={() => setDeleteAllConfirm(false)}
+              className="rounded-md border border-muted bg-background text-foreground px-4 py-2 text-base font-medium hover:border-foreground transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Messages */}

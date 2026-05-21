@@ -19,11 +19,13 @@ export async function POST(req: NextRequest) {
     quantity: number;
     image_urls?: string[];
     image_url?: string | null;
+    video_url?: string | null;
   };
 
   const { listing_id, title, description, price_pence, quantity } = body;
   const imageUrls = body.image_urls?.filter(Boolean) ??
     (body.image_url ? [body.image_url] : []);
+  const videoUrl = body.video_url ?? null;
 
   if (!listing_id || !title || !price_pence) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -74,6 +76,7 @@ export async function POST(req: NextRequest) {
       glaze: [],
       type: 'pottery',
       etsy_listing_id: String(listing_id),
+      video_url: videoUrl,
     })
     .select()
     .single();

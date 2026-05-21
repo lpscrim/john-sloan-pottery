@@ -14,6 +14,7 @@ interface EtsyListing {
   quantity: number;
   price: { amount: number; divisor: number };
   images?: { url_fullxfull?: string }[] | null;
+  videos?: { video_url?: string; state?: string }[] | null;
   url: string;
 }
 
@@ -25,6 +26,7 @@ export interface SimplifiedListing {
   price_pence: number;
   image_url: string | null;
   image_urls: string[];
+  video_url: string | null;
   etsy_url: string;
 }
 
@@ -55,6 +57,8 @@ export async function POST(req: NextRequest) {
     const imageUrls = (l.images ?? [])
       .map((img) => img.url_fullxfull)
       .filter((u): u is string => Boolean(u));
+    const videoUrl = (l.videos ?? [])
+      .find((v) => v.state === 'active' && v.video_url)?.video_url ?? null;
     return {
       listing_id: l.listing_id,
       title: l.title,
@@ -63,6 +67,7 @@ export async function POST(req: NextRequest) {
       price_pence: Math.round((l.price.amount / l.price.divisor) * 100),
       image_url: imageUrls[0] ?? null,
       image_urls: imageUrls,
+      video_url: videoUrl,
       etsy_url: l.url,
     };
   });

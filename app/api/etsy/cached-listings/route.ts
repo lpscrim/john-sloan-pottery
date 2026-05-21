@@ -15,6 +15,7 @@ export interface CachedListing {
   price_pence: number;
   image_url: string | null;
   image_urls: string[];
+  video_url: string | null;
   etsy_url: string;
   already_imported: boolean;
 }
@@ -45,6 +46,7 @@ export async function GET() {
     listings = raw.map((l) => ({
       ...l,
       image_urls: l.image_urls ?? (l.image_url ? [l.image_url] : []),
+      video_url: l.video_url ?? null,
       already_imported: importedIds.has(String(l.listing_id)),
     }));
   } catch {

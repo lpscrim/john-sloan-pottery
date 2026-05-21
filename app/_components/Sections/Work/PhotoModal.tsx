@@ -6,6 +6,10 @@ import Button from "../../UI/Layout/Button";
 import { useSwipeable } from "react-swipeable";
 import { BuyButton } from "../../UI/Layout/BuyButton";
 
+function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm|mov)(\?|$)/i.test(url) || url.includes('v.etsystatic.com');
+}
+
 interface PhotoModalProps {
   isOpen: boolean;
   image: string;
@@ -349,26 +353,40 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
         <div
           ref={(el) => {
             imageWrapRef.current = el;
-            // Start the progress bar when the modal mounts or when the image element remounts.
-            // (Avoids setState-in-effect lint while still reacting to image changes.)
             startProgressIfNeeded();
           }}
           className=""
         >
         
-          <ImageWithFallback
-            src={image}
-            alt="Gallery"
-            width={1200}
-            height={800}
-            fill={false}
-            sizes="90vw"
-            className="max-h-[82vh] max-w-[90vw] object-contain"
-            onLoad={() => {
-              finishProgress();
-              positionThumbStrip();
-            }}
-          />
+          {isVideoUrl(image) ? (
+            <video
+              key={image}
+              src={image}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="max-h-[82vh] max-w-[90vw] object-contain"
+              onLoadedData={() => {
+                finishProgress();
+                positionThumbStrip();
+              }}
+            />
+          ) : (
+            <ImageWithFallback
+              src={image}
+              alt="Gallery"
+              width={1200}
+              height={800}
+              fill={false}
+              sizes="90vw"
+              className="max-h-[82vh] max-w-[90vw] object-contain"
+              onLoad={() => {
+                finishProgress();
+                positionThumbStrip();
+              }}
+            />
+          )}
           {isProject && stockLevel <= 0 && (
             <span className="flex w-full justify-center text-foreground/80 text-lg -mb-4 pt-2 pointer-events-none z-999">
               Sold out
@@ -416,17 +434,34 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
               } rounded-none overflow-x-hidden  focus:outline-none shrink-0`}
               style={{ width: 30, height: 40 }}
             >
-              <ImageWithFallback
-                src={img}
-                alt={`Thumbnail ${idx + 1}`}
-                width={30}
-                height={40}
-                fill={false}
-                sizes="30px"
-                className={`object-cover h-full ${
-                  idx === index ? "brightness-110" : "brightness-50"
-                }`}
-              />
+              {isVideoUrl(img) ? (
+                <div
+                  className={`w-full h-full flex items-center justify-center bg-foreground/20 ${
+                    idx === index ? "brightness-110" : "brightness-50"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-4 h-4 text-foreground"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              ) : (
+                <ImageWithFallback
+                  src={img}
+                  alt={`Thumbnail ${idx + 1}`}
+                  width={30}
+                  height={40}
+                  fill={false}
+                  sizes="30px"
+                  className={`object-cover h-full ${
+                    idx === index ? "brightness-110" : "brightness-50"
+                  }`}
+                />
+              )}
             </button>
           ))}
         </div>

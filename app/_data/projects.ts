@@ -21,6 +21,7 @@ export interface Project {
   mug_shape_slug?: string; // if set, sold-out button links to custom mug builder
   shape_label?: string;   // display label for the shape/style (set even when not in Build a Mug)
   etsy_listing_id?: string | null;
+  video_url?: string | null;
 }
 
 function getSupabaseClient() {
@@ -68,8 +69,14 @@ export async function getProjects(): Promise<Project[]> {
         categories: product.categories ?? [],
         glaze: (product.glaze ?? []) as GlazeEntry[],
         imageUrl: product.image_url ?? '',
-        ...(galleryImages.length > 0 && { galleryImages }),
+        ...(galleryImages.length > 0 || product.video_url
+          ? { galleryImages: [
+              ...(product.video_url ? [product.video_url as string] : []),
+              ...galleryImages,
+            ] }
+          : {}),
         text: product.description ?? '',
+        video_url: product.video_url ?? null,
         price_hw: product.price_hw ?? 0,
         stock_level: product.stock_level ?? 0,
         stripe_price_id: product.stripe_price_id ?? null,
