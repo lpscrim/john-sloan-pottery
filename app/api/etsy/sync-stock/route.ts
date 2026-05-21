@@ -6,7 +6,7 @@ import { createServerSupabase } from '@/app/_lib/supabase';
  * Reduces Supabase stock where Etsy quantity is lower (Etsy sale detected).
  * Never increases Supabase stock — website is source of truth for additions.
  *
- * Expected body: { listings: Array<{ listing_id: number | string; quantity: number }> }
+ * Expected body: the raw Etsy GET /listings response — { count: number; results: Array<{ listing_id: number | string; quantity: number }> }
  * Authorization: Bearer <ETSY_WEBHOOK_SECRET>
  */
 
@@ -32,7 +32,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const listings = (body as Record<string, unknown>)?.listings as ListingQuantity[] | undefined;
+  const parsed = body as Record<string, unknown>;
+  // Accept either { results: [...] } (raw Etsy response) or { listings: [...] }
+  const listings = (parsed?.results ?? parsed?.listings) as ListingQuantity[] | undefined;
   if (!Array.isArray(listings) || listings.length === 0) {
     return NextResponse.json({ error: 'Missing or empty listings array' }, { status: 400 });
   }
