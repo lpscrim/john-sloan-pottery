@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { requireAdminUser } from '@/app/_lib/adminAuth';
 import { createServerSupabase } from '@/app/_lib/supabase';
 import { getStripe } from '@/app/_lib/stripe';
@@ -95,5 +96,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  revalidatePath('/');
+  revalidatePath('/work');
   return NextResponse.json({ success: true, product_id: product.id });
 }
