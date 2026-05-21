@@ -81,6 +81,7 @@ export async function deleteAllProducts(): Promise<{ success: boolean; error?: s
 
     revalidatePath('/');
     revalidatePath('/work');
+    revalidatePath('/admin/edit-product');
 
     return { success: true };
   } catch (err) {
