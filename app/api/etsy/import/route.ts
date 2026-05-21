@@ -149,5 +149,6 @@ export async function POST(req: NextRequest) {
 
   revalidatePath('/');
   revalidatePath('/work');
+  revalidatePath('/admin/edit-product');
   return NextResponse.json({ success: true, product_id: product.id });
 }
