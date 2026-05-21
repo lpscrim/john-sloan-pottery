@@ -17,6 +17,17 @@ interface EtsyListing {
   url: string;
 }
 
+export interface SimplifiedListing {
+  listing_id: number;
+  title: string;
+  description: string;
+  quantity: number;
+  price_pence: number;
+  image_url: string | null;
+  image_urls: string[];
+  etsy_url: string;
+}
+
 export async function POST(req: NextRequest) {
   const secret = process.env.ETSY_WEBHOOK_SECRET;
   if (!secret) {
@@ -40,15 +51,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing or empty listings array' }, { status: 400 });
   }
 
-  const simplified = listings.map((l) => ({
-    listing_id: l.listing_id,
-    title: l.title,
-    description: l.description ?? '',
-    quantity: l.quantity ?? 0,
-    price_pence: Math.round((l.price.amount / l.price.divisor) * 100),
-    image_url: l.images?.[0]?.url_fullxfull ?? null,
-    etsy_url: l.url,
-  }));
+  const simplified = listings.map((l) => {
+    const imageUrls = (l.images ?? [])
+      .map((img) => img.url_fullxfull)
+      .filter((u): u is string => Boolean(u));
+    return {
+      listing_id: l.listing_id,
+      title: l.title,
+      description: l.description ?? '',
+      quantity: l.quantity ?? 0,
+      price_pence: Math.round((l.price.amount / l.price.divisor) * 100),
+      image_url: imageUrls[0] ?? null,
+      image_urls: imageUrls,
+      etsy_url: l.url,
+    };
+  });
 
   const supabase = createServerSupabase();
   const { error } = await supabase

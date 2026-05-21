@@ -9,6 +9,7 @@ interface CachedListing {
   quantity: number;
   price_pence: number;
   image_url: string | null;
+  image_urls: string[];
   etsy_url: string;
   already_imported: boolean;
 }
@@ -89,7 +90,7 @@ export function EtsyClient() {
           description: listing.description,
           price_pence: listing.price_pence,
           quantity: listing.quantity,
-          image_url: listing.image_url,
+          image_urls: listing.image_urls,
         }),
       });
       const data = await res.json() as { success?: boolean; warning?: string; error?: string };

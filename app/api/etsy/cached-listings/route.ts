@@ -14,6 +14,7 @@ export interface CachedListing {
   quantity: number;
   price_pence: number;
   image_url: string | null;
+  image_urls: string[];
   etsy_url: string;
   already_imported: boolean;
 }
@@ -43,6 +44,7 @@ export async function GET() {
     const raw = JSON.parse(cacheSetting.value) as Omit<CachedListing, 'already_imported'>[];
     listings = raw.map((l) => ({
       ...l,
+      image_urls: l.image_urls ?? (l.image_url ? [l.image_url] : []),
       already_imported: importedIds.has(String(l.listing_id)),
     }));
   } catch {
