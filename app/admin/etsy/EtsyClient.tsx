@@ -28,6 +28,7 @@ export function EtsyClient() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [deleteAllConfirm, setDeleteAllConfirm] = useState(false);
   const [deletingAll, setDeletingAll] = useState(false);
+  const [addingAll, setAddingAll] = useState(false);
 
   useEffect(() => {
     if (!successMsg) return;
@@ -110,6 +111,17 @@ export function EtsyClient() {
     }
   };
 
+  const handleAddAll = async () => {
+    setAddingAll(true);
+    setError(null);
+    const toImport = listings.filter((l) => !l.already_imported && !imported[l.listing_id]);
+    for (const listing of toImport) {
+      await handleImport(listing);
+    }
+    setAddingAll(false);
+    setSuccessMsg(`Imported ${toImport.length} listing${toImport.length !== 1 ? 's' : ''}.`);
+  };
+
   const handleDeleteAll = async () => {
     if (!deleteAllConfirm) {
       setDeleteAllConfirm(true);
@@ -149,13 +161,16 @@ export function EtsyClient() {
         >
           {refreshing ? 'Triggering…' : 'Refresh Etsy Listings'}
         </button>
-        <button
-          onClick={handleSyncNow}
-          disabled={syncing}
-          className="rounded-md border border-muted bg-background text-foreground px-4 py-2 text-base font-medium hover:border-foreground transition-colors disabled:opacity-50"
-        >
-          {syncing ? 'Syncing…' : 'Sync stock now'}
-        </button>
+        <div className="flex flex-col gap-0.5">
+          <button
+            onClick={handleSyncNow}
+            disabled={syncing}
+            className="rounded-md border border-muted bg-background text-foreground px-4 py-2 text-base font-medium hover:border-foreground transition-colors disabled:opacity-50"
+          >
+            {syncing ? 'Syncing…' : 'Sync stock now'}
+          </button>
+          <span className="text-xs text-muted-foreground px-1">Uses Make.com credits — don’t use too often</span>
+        </div>
         {!deleteAllConfirm ? (
           <button
             onClick={() => setDeleteAllConfirm(true)}
@@ -206,9 +221,18 @@ export function EtsyClient() {
         <div className="space-y-6">
           {notYetImported.length > 0 && (
             <div>
-              <h2 className="text-base font-medium mb-2">
-                Not on website ({notYetImported.length})
-              </h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-base font-medium">
+                  Not on website ({notYetImported.length})
+                </h2>
+                <button
+                  onClick={handleAddAll}
+                  disabled={addingAll}
+                  className="rounded-md border border-foreground bg-foreground text-background px-3 py-1.5 text-base font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+                >
+                  {addingAll ? 'Adding…' : 'Add all to website'}
+                </button>
+              </div>
               <ListingTable
                 listings={notYetImported}
                 importing={importing}
