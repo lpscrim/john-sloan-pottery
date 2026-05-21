@@ -14,7 +14,7 @@ interface EtsyListing {
   quantity: number;
   price: { amount: number; divisor: number };
   images?: { url_fullxfull?: string }[] | null;
-  videos?: { video_url?: string; state?: string }[] | null;
+  videos?: { video_url?: string | null; state?: string }[] | null;
   url: string;
 }
 
@@ -57,8 +57,9 @@ export async function POST(req: NextRequest) {
     const imageUrls = (l.images ?? [])
       .map((img) => img.url_fullxfull)
       .filter((u): u is string => Boolean(u));
+    // Take the first video with a non-empty URL, regardless of state
     const videoUrl = (l.videos ?? [])
-      .find((v) => v.state === 'active' && v.video_url)?.video_url ?? null;
+      .find((v) => v.video_url)?.video_url ?? null;
     return {
       listing_id: l.listing_id,
       title: l.title,
@@ -72,6 +73,15 @@ export async function POST(req: NextRequest) {
     };
   });
 
+  const withVideos = simplified.filter((l) => l.video_url).length;
+  // Debug: log a sample of what Etsy sent for the first listing with videos
+  const firstWithVideo = listings.find((l) => (l.videos ?? []).length > 0);
+  if (firstWithVideo) {
+    console.log('[cache-listings] First listing with videos array:', JSON.stringify(firstWithVideo.videos?.slice(0, 1)));
+  } else {
+    console.log('[cache-listings] No listings had a videos array. Sample listing keys:', Object.keys(listings[0] ?? {}));
+  }
+
   const supabase = createServerSupabase();
   const { error } = await supabase
     .from('settings')
@@ -81,5 +91,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ cached: simplified.length });
+  return NextResponse.json({ cached: simplified.length, with_videos: withVideos });
 }
