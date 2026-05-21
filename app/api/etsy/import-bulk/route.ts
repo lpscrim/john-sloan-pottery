@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { createServerSupabase } from '@/app/_lib/supabase';
 import { getStripe } from '@/app/_lib/stripe';
 
@@ -115,6 +116,11 @@ export async function POST(req: NextRequest) {
     }
 
     imported++;
+  }
+
+  if (imported > 0) {
+    revalidatePath('/');
+    revalidatePath('/work');
   }
 
   return NextResponse.json({ imported, skipped, errors });
