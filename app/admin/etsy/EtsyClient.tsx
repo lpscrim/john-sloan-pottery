@@ -14,6 +14,7 @@ interface CachedListing {
   video_url: string | null;
   etsy_url: string;
   already_imported: boolean;
+  product_id: string | null;
 }
 
 export function EtsyClient() {
@@ -278,6 +279,14 @@ function ListingTable({
             >
               View
             </a>
+            {listing.product_id && (
+              <a
+                href={`/admin/edit-product?id=${listing.product_id}`}
+                className="rounded-md border border-muted bg-background text-foreground px-3 py-1.5 text-base hover:border-foreground transition-colors"
+              >
+                Edit
+              </a>
+            )}
             {showImportButton && (
               <button
                 onClick={() => onImport(listing)}

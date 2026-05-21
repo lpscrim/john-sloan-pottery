@@ -24,13 +24,15 @@ export default function EditProductClient({
   products,
   shapes,
   glazes,
+  initialId,
 }: {
   products: AdminProduct[];
   shapes: MugShape[];
   glazes: Glaze[];
+  initialId?: string | null;
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(
-    () => products[0]?.id ?? null,
+    () => (initialId && products.some((p) => p.id === initialId) ? initialId : products[0]?.id ?? null),
   );
   const [fileError, setFileError] = useState<string | null>(null);
   const [compressing, setCompressing] = useState(false);

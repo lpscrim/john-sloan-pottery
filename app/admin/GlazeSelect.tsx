@@ -58,7 +58,7 @@ export function GlazeSelect({ index, glazes, defaultEntry }: Props) {
         <option value="">None</option>
         <optgroup label="Build a Mug glazes">
           {glazes.map(g => (
-            <option key={g.id} value={g.slug}>{g.name}</option>
+            <option key={g.id} value={g.slug}>{g.name}{g.note ? ` — ${g.note}` : ''}</option>
           ))}
         </optgroup>
         <option value="__custom__">Custom (not in Build a Mug)</option>

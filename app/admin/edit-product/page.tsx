@@ -54,7 +54,16 @@ async function getAdminProducts(): Promise<AdminProduct[]> {
   return adminProducts;
 }
 
-export default async function EditProductPage() {
-  const [products, shapes, glazes] = await Promise.all([getAdminProducts(), getMugShapes(), getGlazes()]);
-  return <EditProductClient products={products} shapes={shapes} glazes={glazes} />;
+export default async function EditProductPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ id?: string }>;
+}) {
+  const [products, shapes, glazes, params] = await Promise.all([
+    getAdminProducts(),
+    getMugShapes(),
+    getGlazes(),
+    searchParams,
+  ]);
+  return <EditProductClient products={products} shapes={shapes} glazes={glazes} initialId={params.id ?? null} />;
 }

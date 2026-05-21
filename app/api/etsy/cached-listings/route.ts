@@ -18,6 +18,7 @@ export interface CachedListing {
   video_url: string | null;
   etsy_url: string;
   already_imported: boolean;
+  product_id: string | null;
 }
 
 export async function GET() {
@@ -31,14 +32,15 @@ export async function GET() {
 
   const [{ data: cacheSetting }, { data: imported }] = await Promise.all([
     supabase.from('settings').select('value').eq('key', 'etsy_listings_cache').maybeSingle(),
-    supabase.from('products').select('etsy_listing_id').not('etsy_listing_id', 'is', null),
+    supabase.from('products').select('id, etsy_listing_id').not('etsy_listing_id', 'is', null),
   ]);
 
   if (!cacheSetting?.value) {
     return NextResponse.json({ listings: [], cached_at: null });
   }
 
-  const importedIds = new Set((imported ?? []).map((p) => String(p.etsy_listing_id)));
+  const importedMap = new Map((imported ?? []).map((p) => [String(p.etsy_listing_id), String(p.id)]));
+  const importedIds = new Set(importedMap.keys());
 
   let listings: CachedListing[] = [];
   try {
@@ -48,6 +50,7 @@ export async function GET() {
       image_urls: l.image_urls ?? (l.image_url ? [l.image_url] : []),
       video_url: l.video_url ?? null,
       already_imported: importedIds.has(String(l.listing_id)),
+      product_id: importedMap.get(String(l.listing_id)) ?? null,
     }));
   } catch {
     return NextResponse.json({ error: 'Cache parse error' }, { status: 500 });
