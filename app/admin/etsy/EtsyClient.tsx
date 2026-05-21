@@ -259,7 +259,12 @@ function ListingTable({
             />
           )}
           <div className="flex-1 min-w-0">
-            <p className="font-medium truncate">{listing.title}</p>
+            <p className="font-medium truncate">
+              {listing.title}
+              {listing.video_url && (
+                <span className="ml-2 text-xs text-muted-foreground font-normal">🎬 video</span>
+              )}
+            </p>
             <p className="text-base text-muted-foreground">
               £{(listing.price_pence / 100).toFixed(2)} · Stock: {listing.quantity}
             </p>
