@@ -52,5 +52,5 @@ export async function updateCategoriesVisible(visible: boolean) {
     .upsert({ key: 'categories_visible', value: String(visible) }, { onConflict: 'key' });
   if (error) throw new Error(error.message);
   revalidatePath('/admin/settings');
-  revalidatePath('/work');
+  revalidatePath('/shop');
 }

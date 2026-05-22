@@ -266,13 +266,13 @@ export default function CheckoutClient({ allowedCountries }: { allowedCountries?
   useEffect(() => {
     const stored = sessionStorage.getItem(CHECKOUT_STORAGE_KEY);
     if (!stored) {
-      router.replace('/work');
+      router.replace('/shop');
       return;
     }
     try {
       JSON.parse(stored);
     } catch {
-      router.replace('/work');
+      router.replace('/shop');
     }
   }, [router]);
 

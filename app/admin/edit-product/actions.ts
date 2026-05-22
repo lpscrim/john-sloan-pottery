@@ -231,7 +231,7 @@ export async function updateProduct(
     }
 
     revalidatePath('/');
-    revalidatePath('/work');
+    revalidatePath('/shop');
     revalidatePath('/admin/edit-product');
 
     return { success: true };
@@ -303,7 +303,7 @@ export async function deleteProduct(
     }
 
     revalidatePath('/');
-    revalidatePath('/work');
+    revalidatePath('/shop');
     revalidatePath('/admin/edit-product');
 
     return { success: true };

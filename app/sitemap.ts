@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/work`,
+      url: `${baseUrl}/shop`,
       lastModified,
       changeFrequency: 'weekly',
       priority: 0.9,
@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .single();
 
       if (data?.updated_at) {
-        // Update /work entry with actual last modified date
+        // Update /shop entry with actual last modified date
         entries[1].lastModified = new Date(data.updated_at);
       }
     } catch {

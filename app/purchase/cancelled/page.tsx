@@ -12,7 +12,7 @@ export default function CancelledPage() {
       </p>
 
       <Link
-        href="/work"
+        href="/shop"
         className="inline-block mt-8 text-muted-foreground hover:text-foreground transition-colors"
       >
         ← Back to gallery

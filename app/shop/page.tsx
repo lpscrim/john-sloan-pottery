@@ -5,7 +5,7 @@ import WorkGallery from "../_components/Sections/Work/WorkGallery";
 import { getCategoriesVisible } from "../_lib/shippingSettings";
 
 export const metadata: Metadata = {
-  title: "Work",
+  title: "Shop",
   // TODO: Replace with a description of your gallery / shop
   description:
     "Browse original artworks available to purchase from the gallery.",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 
 
-export default async function WorkPage() {
+export default async function ShopPage() {
   const [projects, showCategories] = await Promise.all([
     getProjects(),
     getCategoriesVisible(),

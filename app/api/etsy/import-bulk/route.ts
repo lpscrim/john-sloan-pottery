@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
 
   if (imported > 0) {
     revalidatePath('/');
-    revalidatePath('/work');
+    revalidatePath('/shop');
   }
 
   return NextResponse.json({ imported, skipped, errors });

@@ -1,6 +1,6 @@
 export function ProjectsSkeleton() {
   return (
-    <section id="work" className="py-8 lg:py-12 xl:py-16">
+    <section id="shop" className="py-8 lg:py-12 xl:py-16">
       <div className="px-12 lg:px-16">
         <div className="flex gap-6 overflow-hidden animate-pulse">
           {[...Array(3)].map((_, i) => (

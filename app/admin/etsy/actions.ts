@@ -80,7 +80,7 @@ export async function deleteAllProducts(): Promise<{ success: boolean; error?: s
     if (deleteError) return { success: false, error: deleteError.message };
 
     revalidatePath('/');
-    revalidatePath('/work');
+    revalidatePath('/shop');
     revalidatePath('/admin/edit-product');
 
     return { success: true };

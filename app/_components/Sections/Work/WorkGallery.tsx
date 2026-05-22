@@ -208,7 +208,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
     router.push(`${pathname}?${next.toString()}`, { scroll: false });
   };
 
-  // Deep link: /work?project={project.id}
+  // Deep link: /shop?project={project.id}
   useEffect(() => {
     const fromQuery = Array.from(
       new Set(
@@ -287,7 +287,7 @@ export default function WorkGallery({ projects, categoryCounts, showCategories }
   };
 
   return (
-    <section id="work" className="min-h-[75svh] px-6 pt-2 w-full">
+    <section id="shop" className="min-h-[75svh] px-6 pt-2 w-full">
       {!modalOpen && <MainGallery
         getStockLevel={getStock}
         selectedCategories={selectedCategories}

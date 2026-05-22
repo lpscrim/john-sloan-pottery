@@ -12,7 +12,7 @@ interface SuccessPageProps {
 export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const { payment_intent } = await searchParams;
 
-  if (!payment_intent) redirect("/work");
+  if (!payment_intent) redirect("/shop");
 
   const stripe = getStripe();
 
@@ -128,7 +128,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
       </div>
 
       <Link
-        href="/work"
+        href="/shop"
         className="inline-block mt-8 text-muted-foreground hover:text-foreground transition-colors"
       >
         ← Back to gallery

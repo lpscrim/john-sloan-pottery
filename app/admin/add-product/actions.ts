@@ -193,7 +193,7 @@ export async function addProduct(
 
     // ---------- Revalidate ----------
     revalidatePath('/');
-    revalidatePath('/work');
+    revalidatePath('/shop');
 
     return { success: true, productId: product.id };
   } catch (err: unknown) {

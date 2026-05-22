@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   await supabase.from('products').select('id').limit(1);
 
   revalidatePath('/');
-  revalidatePath('/work');
+  revalidatePath('/shop');
 
   return NextResponse.json({ revalidated: true });
 }

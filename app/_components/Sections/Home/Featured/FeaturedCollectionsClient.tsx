@@ -56,7 +56,7 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
                   {slide.text}
                 </p>
                 <Button size="xl" light>
-                  <Link href={`/work?category=${encodeURIComponent(slide.category)}`}>
+                  <Link href={`/shop?category=${encodeURIComponent(slide.category)}`}>
                     {slide.buttonLabel}
                   </Link>
                 </Button>

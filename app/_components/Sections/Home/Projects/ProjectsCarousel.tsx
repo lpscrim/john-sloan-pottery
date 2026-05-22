@@ -96,7 +96,7 @@ export function ProjectsCarousel({ projects }: Props) {
   }
 
   return (
-    <section id="work" className="py-8 lg:py-12 xl:py-16">
+    <section id="shop" className="py-8 lg:py-12 xl:py-16">
       <div className="px-4">
 
 
@@ -110,7 +110,7 @@ export function ProjectsCarousel({ projects }: Props) {
             {projects.map((project, idx) => (
               <Link
                 key={project.id}
-                href={`/work?project=${project.id}`}
+                href={`/shop?project=${project.id}`}
                 onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
                 className="group snap-start shrink-0"
               >

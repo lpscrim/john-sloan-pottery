@@ -13,7 +13,7 @@ export function Header() {
   const pathname = usePathname();
   const [onHero, setOnHero] = useState(pathname === "/");
 
-  const isWorkPage = pathname === "/work";
+  const isShopPage = pathname === "/shop";
   const isAdminPage = pathname.startsWith("/admin");
   const { count, toggleCart } = useCart();
 
@@ -44,7 +44,7 @@ export function Header() {
     }
   };
 
-  const isLight = !isWorkPage && !isAdminPage && onHero;
+  const isLight = !isShopPage && !isAdminPage && onHero;
 
   return (
     <header className={`fixed text-2xl top-0 left-0 right-0 z-999 px-6 py-2`}>
@@ -92,7 +92,7 @@ export function Header() {
             <button
               className={`relative nav text-2xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
-              <Link href="/work" className="cursor-pointer">
+              <Link href="/shop" className="cursor-pointer">
                 <span
                   className={`text-foreground transition-all duration-500 ${
                     isLight
@@ -100,7 +100,7 @@ export function Header() {
                       : "opacity-100 pointer-events-auto"
                   }`}
                 >
-                  Work
+                  Shop
                 </span>
                 <span
                   className={`text-card absolute left-0 top-0 transition-all duration-500 ${
@@ -109,7 +109,7 @@ export function Header() {
                       : "opacity-0 pointer-events-none"
                   }`}
                 >
-                  Work
+                  Shop
                 </span>
               </Link>
             </button>
@@ -224,8 +224,8 @@ export function Header() {
                 isLight ? "text-card " : "text-foreground "
               }`}
             >
-              <Link href="/work" className="cursor-pointer">
-                Work
+              <Link href="/shop" className="cursor-pointer">
+                Shop
               </Link>
             </button>
             <button
