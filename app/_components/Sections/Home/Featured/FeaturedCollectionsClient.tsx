@@ -23,7 +23,7 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
   }, [visibleSlides.length]);
 
   return (
-    <section id="featured-collections" className="relative w-full h-[85svh] overflow-hidden">
+    <section id="featured-collections" className="relative w-full h-[95svh] overflow-hidden">
       {visibleSlides.map((slide, index) => {
         const isActive = index === activeIndex;
         return (

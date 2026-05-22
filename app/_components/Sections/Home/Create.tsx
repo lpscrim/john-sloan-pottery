@@ -6,7 +6,7 @@ export function Create() {
   return (
     <section id="create" className="">
       
-      <div className="flex w-full h-[80svh] relative overflow-hidden justify-center items-center">
+      <div className="flex w-full h-[95svh] relative overflow-hidden justify-center items-center">
         <video
           src="/Pottery2.mp4"
           autoPlay

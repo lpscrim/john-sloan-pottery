@@ -9,7 +9,7 @@ export async function About() {
   const { text, images } = await getHomeAboutContent();
 
   return (
-    <section id="about" className="min-h-[80svh] px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
+    <section id="about" className=" px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
       <div className="w-full mx-auto">
 
         <div className="grid md:grid-cols-2 gap-16 xl:gap-32 px-8 lg:px-16 xl:px-64 mx-auto">
@@ -25,7 +25,7 @@ export async function About() {
             <SwipeGallery
               images={images}
               alt="Artist portrait"
-              className="w-full rounded-sm aspect-4/3 overflow-hidden"
+              className="w-full xl:w-5/6 rounded-sm aspect-4/3 overflow-hidden"
             />
           </div>
         </div>
