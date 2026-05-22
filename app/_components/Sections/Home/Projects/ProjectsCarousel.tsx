@@ -114,7 +114,7 @@ export function ProjectsCarousel({ projects }: Props) {
                 onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
                 className="group snap-start shrink-0"
               >
-                <div className="relative h-[50vh] sm:h-[65vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
+                <div className="relative h-[55vh] sm:h-[65vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
                   <ImageWithFallback
                     src={project.imageUrl}
                     alt={project.title}
