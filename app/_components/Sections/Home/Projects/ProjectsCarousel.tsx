@@ -96,7 +96,7 @@ export function ProjectsCarousel({ projects }: Props) {
   }
 
   return (
-    <section id="shop" className="py-8 lg:py-12 xl:py-24">
+    <section id="shop" className="min-h-[95svh] py-8 lg:py-16 xl:py-32">
       <div className="px-4">
 
 
@@ -114,7 +114,7 @@ export function ProjectsCarousel({ projects }: Props) {
                 onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
                 className="group snap-start shrink-0"
               >
-                <div className="relative h-[50vh] sm:h-[75vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
+                <div className="relative h-[50vh] sm:h-[65vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
                   <ImageWithFallback
                     src={project.imageUrl}
                     alt={project.title}
