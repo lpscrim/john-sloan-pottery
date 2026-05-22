@@ -12,9 +12,9 @@ export async function About() {
     <section id="about" className="min-h-[80svh] px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
       <div className="w-full mx-auto">
 
-        <div className="grid md:grid-cols-2 gap-16 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 xl:gap-32 px-8 lg:px-16 xl:px-64 mx-auto">
           <div>
-            <h2 className="text-3xl md:text-4xl tracking-tight text-left mb-4 ">Behind the Kiln</h2>
+            <h2 className="text-3xl md:text-4xl tracking-tight text-left mb-8 ">Behind the Kiln</h2>
             <div className="space-y-6 text-xl xl:text-2xl">
               {text.split(/\r?\n\r?\n+/).filter(Boolean).map((para, i) => (
                 <p key={i}>{para}</p>
@@ -25,7 +25,7 @@ export async function About() {
             <SwipeGallery
               images={images}
               alt="Artist portrait"
-              className="w-full lg:w-4/5 rounded-sm aspect-4/3 overflow-hidden"
+              className="w-full rounded-sm aspect-4/3 overflow-hidden"
             />
           </div>
         </div>
