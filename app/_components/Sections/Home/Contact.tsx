@@ -28,16 +28,16 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-[90svh] px-6 py-16 md:py-24 flex items-center"
+      className="min-h-[85vh] px-6 py-16 md:py-24 flex items-center"
     >
       <div className=" mx-auto w-full">
-        <div className="mb-16 lg:mb-32 ">
+        <div className="mb-8 sm:mb-16 lg:mb-32 ">
           <h2 className="text-3xl md:text-4xl  tracking-tight text-center">
             Stay in touch
           </h2>
         </div>
 
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-16 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
           <div className="space-y-8 lg:col-span-2">
             <p className="text-lg xl:text-xl textforeground">
               Available for commissioned work, collaborations, and inquiries.

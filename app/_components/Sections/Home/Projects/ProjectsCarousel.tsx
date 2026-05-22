@@ -96,7 +96,7 @@ export function ProjectsCarousel({ projects }: Props) {
   }
 
   return (
-    <section id="shop" className="min-h-[95svh] py-8 lg:py-16 xl:py-32">
+    <section id="shop" className=" py-8 lg:py-16 xl:py-40">
       <div className="px-4">
 
 
