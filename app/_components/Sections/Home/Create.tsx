@@ -8,7 +8,7 @@ export function Create() {
       
       <div className="flex w-full h-[80svh] relative overflow-hidden justify-center items-center">
         <video
-          src="/pottery2.mp4"
+          src="/Pottery2.mp4"
           autoPlay
           muted
           loop
