@@ -14,7 +14,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="home" className="min-h-lvh flex flex-col justify-center items-center">
+    <section id="home" className="min-h-svh flex flex-col justify-center items-center">
       {/* Top image strip - Desktop */}
       <div className='absolute bg-black/10 backdrop-blur-md w-full h-full z-9'></div>
       <div className="hidden md:flex w-full h-svh relative overflow-hidden justify-center items-center">
