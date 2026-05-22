@@ -28,7 +28,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-[80svh] px-6 py-24 flex items-center"
+      className=" px-6 py-24 flex items-center"
     >
       <div className=" mx-auto w-full">
         <div className="mb-16 lg:mb-32 ">
@@ -37,7 +37,7 @@ export function Contact() {
           </h2>
         </div>
 
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
           <div className="space-y-8 lg:col-span-2">
             <p className="text-lg xl:text-xl textforeground">
               Available for commissioned work, collaborations, and inquiries.
