@@ -9,7 +9,7 @@ export async function About() {
   const { text, images } = await getHomeAboutContent();
 
   return (
-    <section id="about" className=" px-6 py-20 xl:py-32 bg-muted/30 items-center flex">
+    <section id="about" className=" px-4 py-20 xl:py-32 bg-muted/30 items-center flex">
       <div className="w-full mx-auto">
 
         <div className="grid md:grid-cols-2 gap-16 xl:gap-32 px-8 lg:px-16 xl:px-64 mx-auto">

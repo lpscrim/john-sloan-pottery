@@ -29,7 +29,7 @@ function OrganizationJsonLd() {
 
 export default function Home() {
   return (
-    <main className="min-h-lvh">
+    <main className="min-h-svh">
       <OrganizationJsonLd />
       <Hero />
       <Suspense fallback={<ProjectsSkeleton />}>
