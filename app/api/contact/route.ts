@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 export async function POST(req: NextRequest) {
   let name: string, email: string, message: string;
   try {
@@ -43,8 +52,7 @@ export async function POST(req: NextRequest) {
       replyTo: email,
       subject: `New enquiry from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-      html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p><hr/><p>${message.replace(/\n/g, '<br/>')}</p>`,
-    });
+      html: `<p><strong>Name:</strong> ${escapeHtml(name)}</p><p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p><hr/><p>${escapeHtml(message).replace(/\n/g, '<br/>')}</p>`,    });
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('[CONTACT] Resend error:', err);

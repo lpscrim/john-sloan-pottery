@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic';
 
+import { requireAdminUser } from '@/app/_lib/adminAuth';
 import { getStripe } from '@/app/_lib/stripe';
 import { createServerSupabase } from '@/app/_lib/supabase';
 import Image from 'next/image';
@@ -43,6 +44,7 @@ interface Order {
 }
 
 async function getOrders(): Promise<Order[]> {
+  await requireAdminUser();
   const stripe = getStripe();
   const supabase = createServerSupabase();
   const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
@@ -94,7 +96,7 @@ async function getOrders(): Promise<Order[]> {
     const shippingCost = parseInt(pi.metadata?.shipping_amount ?? '0', 10);
     const amountTotal = pi.amount;
     const stripeFee = balanceTx?.fee ?? null;
-    const myFee = Math.round(amountTotal * 0.01);
+    const myFee = Math.round(amountTotal * 0.05);
 
     const shipping = charge?.shipping;
     const shippingAddress: ShippingAddress | null = shipping?.address
