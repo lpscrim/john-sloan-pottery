@@ -132,9 +132,9 @@ export function ProjectsCarousel({ projects }: Props) {
             onClick={() => scrollBy(-1)}
             disabled={!canPrev}
             aria-label="Previous project"
-            className="text-foreground/25 hover:text-foreground visible absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0  hover:shadow-sm transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
+            className="text-background/80 hover:text-background visible absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0  hover:shadow-sm transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 12L6 8l4-4" />
             </svg>
           </button>
@@ -144,9 +144,9 @@ export function ProjectsCarousel({ projects }: Props) {
             onClick={() => scrollBy(1)}
             disabled={!canNext}
             aria-label="Next project"
-            className="text-foreground/50 hover:text-foreground visible absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0  hover:shadow-sm transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
+            className="text-background/80 hover:text-background visible absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-background/0  hover:shadow-sm transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 4l4 4-4 4" />
             </svg>
           </button>
