@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import type { HomeFeaturedCollectionSlide } from '@/app/_lib/homeFeaturedCollections';
 import Button from '../../../UI/Layout/Button';
 
@@ -13,6 +14,13 @@ interface Props {
 export default function FeaturedCollectionsClient({ slides }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const visibleSlides = slides.slice(0, 3);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [-120, 120]);
 
   useEffect(() => {
     if (visibleSlides.length <= 1) return;
@@ -23,7 +31,7 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
   }, [visibleSlides.length]);
 
   return (
-    <section id="featured-collections" className="relative w-full h-[95svh] overflow-hidden">
+    <section ref={sectionRef} id="featured-collections" className="relative w-full h-[95svh] overflow-hidden">
       {visibleSlides.map((slide, index) => {
         const isActive = index === activeIndex;
         return (
@@ -31,7 +39,10 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
             key={`${slide.title}-${index}`}
             className={`absolute inset-0 transition-opacity duration-700 ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           >
-            <div className="absolute inset-0 bg-muted/20">
+            <motion.div
+              className="absolute inset-x-0 -top-[10%] -bottom-[10%] bg-muted/20"
+              style={{ y }}
+            >
               {slide.imageUrl ? (
                 <Image
                   src={slide.imageUrl}
@@ -42,7 +53,7 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
                 />
               ) : null}
               <div className="absolute inset-0 bg-black/25" />
-            </div>
+            </motion.div>
 
             <div className="relative z-10 h-full w-full flex items-end px-6 py-12 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
               <div className="max-w-2xl text-background space-y-5">
