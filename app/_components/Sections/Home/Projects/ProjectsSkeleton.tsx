@@ -1,11 +1,11 @@
 export function ProjectsSkeleton() {
   return (
-    <section id="shop" className="py-8 lg:py-12 xl:py-16">
-      <div className="px-12 lg:px-16">
+    <section id="shop" className="py-16 xl:py-40">
+      <div className="px-4">
         <div className="flex gap-6 overflow-hidden animate-pulse">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="shrink-0 h-[80vh] aspect-4/5">
-              <div className="h-full bg-muted rounded-sm" />
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="shrink-0 h-[55vh] sm:h-[65vh] aspect-4/5">
+              <div className="h-full bg-stone-200 rounded-sm" />
             </div>
           ))}
         </div>

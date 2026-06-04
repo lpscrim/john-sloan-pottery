@@ -99,7 +99,6 @@ export function ProjectsCarousel({ projects }: Props) {
     <section id="shop" className=" py-16 xl:py-40">
       <div className="px-4">
 
-
         <div className="relative">
           <div
             ref={trackRef}
@@ -114,7 +113,7 @@ export function ProjectsCarousel({ projects }: Props) {
                 onClick={(e) => { if (dragRef.current.moved) e.preventDefault(); }}
                 className="group snap-start shrink-0"
               >
-                <div className="relative h-[55vh] sm:h-[65vh] aspect-4/5 bg-muted overflow-hidden rounded-xs">
+                <div className="relative h-[55vh] sm:h-[65vh] aspect-4/5 bg-stone-200 overflow-hidden rounded-xs">
                   <ImageWithFallback
                     src={project.imageUrl}
                     alt={project.title}
