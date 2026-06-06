@@ -31,7 +31,7 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
   }, [visibleSlides.length]);
 
   return (
-    <section ref={sectionRef} id="featured-collections" className="relative w-full h-[95svh] overflow-hidden">
+    <section ref={sectionRef} id="featured-collections" className="relative w-full h-[105svh] overflow-hidden">
       {visibleSlides.map((slide, index) => {
         const isActive = index === activeIndex;
         return (
@@ -55,7 +55,7 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
               <div className="absolute inset-0 bg-black/25" />
             </motion.div>
 
-            <div className="relative z-10 h-full w-full flex items-end px-6 py-12 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
+            <div className="relative z-10 h-full w-full flex items-end px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-48">
               <div className="max-w-2xl text-background space-y-5">
                 <p className="text-sm sm:text-base tracking-[0.18em] uppercase text-background/80">
                   Featured collection
