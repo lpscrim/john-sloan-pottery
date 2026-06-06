@@ -81,16 +81,16 @@ export function CartDrawer() {
 
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 z-999 h-full w-full max-w-md bg-background border-l border-muted shadow-lg flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-999 h-full w-full max-w-md bg-background border-l border-primary shadow-lg flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 ">
-          <h2 className="text-lg font-semibold tracking-tight">CART [{count}]</h2>
+        <div className="flex items-center justify-between px-6 py-2 -mt-1.5">
+          <h2 className="text-2xl font-bold tracking-tight nav">Cart ({count})</h2>
           <button
             onClick={closeCart}
-            className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors text-2xl leading-none"
+            className="cursor-pointer text-muted-foreground hover:text-foreground p-2 transition-colors text-4xl leading-none"
             aria-label="Close cart"
           >
             &times;
