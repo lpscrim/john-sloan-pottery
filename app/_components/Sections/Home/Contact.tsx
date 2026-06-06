@@ -37,7 +37,7 @@ export function Contact() {
           </h2>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-8 sm:px-8 lg:px-16">
+        <div className="max-w-3xl mx-auto space-y-12 sm:px-8 lg:px-16">
           <div className="space-y-8">
             <p className="text-lg xl:text-xl textforeground">
               Available for commissioned work, collaborations, and inquiries.
@@ -104,7 +104,7 @@ export function Contact() {
                 <textarea
                   placeholder="Message"
                   required
-                  rows={5}
+                  rows={6}
                   value={form.message}
                   onChange={(e) =>
                     setForm((f) => ({ ...f, message: e.target.value }))
