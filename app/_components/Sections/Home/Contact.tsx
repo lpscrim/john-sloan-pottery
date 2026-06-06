@@ -59,7 +59,7 @@ export function Contact() {
                 </div>
                 <div className="flex gap-3 space-y-4 text-lg">
                   <a
-                    href="https://www.instagram.com/yourhandle/"
+                    href="https://www.instagram.com/johnsloanpottery/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center cursor-pointer gap-3 hover:opacity-70 transition-opacity"
