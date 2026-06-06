@@ -31,47 +31,43 @@ export function Contact() {
       className="min-h-[90vh] px-6 py-16 md:py-24 flex items-start"
     >
       <div className=" mx-auto w-full h-full">
-        <div className="mb-16 md:mb-32 lg:mb-32 ">
+        <div className="mb-16 lg:mb-24 ">
           <h2 className="text-3xl md:text-4xl tracking-tight text-center">
             Stay in touch
           </h2>
         </div>
 
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-16 md:gap-32 lg:gap-48 lg:mb-32 xl:gap-80">
-          <div className="space-y-8 lg:col-span-2">
+        <div className="max-w-3xl mx-auto space-y-8 sm:px-8 lg:px-16">
+          <div className="space-y-8">
             <p className="text-lg xl:text-xl textforeground">
               Available for commissioned work, collaborations, and inquiries.
               Each piece is made to order and can be tailored to your
               requirements — get in touch to discuss.
             </p>
 
-            <div className="flex flex-col gap-4 items-start">
-              {/* TODO: Replace href and span text with contact email */}
+            <div className="flex flex-row flex-wrap gap-4 items-start">
               <a
                 href="mailto:Johnsloanpottery@gmail.com"
                 className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor-pointer group text-lg"
               >
                 <Mail size={20} className="text-foreground " />
                 <span>Johnsloanpottery@gmail.com</span>{" "}
-                {/* TODO: Replace with contact email */}
               </a>
-
-              <div className="flex items-center gap-3 text-lg text-foreground">
-                <Globe size={20} className="text-foreground " />
-                <span>Isle of Skye, Scotland</span>
-              </div>
-              <div className="flex flex-row gap-3 space-y-0 text-lg">
-                {/* TODO: Replace with Instagram URL */}
-                <a
-                  href="https://www.instagram.com/yourhandle/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center cursor-pointer gap-3 hover:opacity-70 transition-opacity"
-                >
-                  <Instagram size={20} className="text-foreground" />
-                  <span>Instagram</span>
-                </a>
-              </div>
+                <div className="flex items-center gap-3 text-lg text-foreground">
+                  <Globe size={20} className="text-foreground " />
+                  <span>Isle of Skye, Scotland</span>
+                </div>
+                <div className="flex gap-3 space-y-4 text-lg">
+                  <a
+                    href="https://www.instagram.com/yourhandle/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center cursor-pointer gap-3 hover:opacity-70 transition-opacity"
+                  >
+                    <Instagram size={20} className="text-foreground" />
+                    <span>Instagram</span>
+                  </a>
+                </div>
             </div>
               
           </div>
@@ -82,7 +78,7 @@ export function Contact() {
                 Message sent — I&apos;ll be in touch.
               </p>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="text"
