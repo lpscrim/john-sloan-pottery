@@ -213,7 +213,7 @@ html {
 }
 
 
-h1, h2, h3, h4 {
+ h3, h4 {
   font-family: 'TAY Bigbird', sans-serif;
   text-transform: none;
    font-weight: 200;
@@ -231,6 +231,12 @@ button {
   font-weight: 200;
 }
 
+h1, h2{
+  font-family: 'Futura PT', sans-serif;
+  text-transform: uppercase;
+  font-weight: 400;
+  letter-spacing: 0.085em;
+}
 .nav {
   font-family: 'Futura PT', sans-serif;
   text-transform: none;

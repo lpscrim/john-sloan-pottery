@@ -33,8 +33,8 @@ export function Create() {
         <div className="absolute bg-black/10 w-full h-full z-9" />
 
         <div className="absolute sm:right-16 w-full sm:w-2/3 flex -mt-28 sm:flex-end font-medium justify-center tracking-wide z-20 flex-col">
-            <p className="text-base sm:text-lg md:text-xl text-background text-center sm:text-right tracking-wide ">Handmade on the Isle of Skye</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl text-background text-center sm:text-right tracking-tight mt-12">Each piece is unique</h2>
+            <p className="ttext-sm sm:text-base tracking-[0.18em] uppercase text-background/90 text-center sm:text-right ">Handmade on the Isle of Skye</p>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl text-background text-center sm:text-right tracking-tight mt-12">Each piece is unique</h3>
             <div className="relative self-center sm:self-end mt-12 sm:mt-16"> 
                 <Button size="xl" light>
                   <Link href="/custom-mug">Build Your Own</Link>

@@ -60,9 +60,9 @@ export default function FeaturedCollectionsClient({ slides }: Props) {
                 <p className="text-sm sm:text-base tracking-[0.18em] uppercase text-background/80">
                   Featured collection
                 </p>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight">
+                <h3 className="text-4xl sm:text-5xl lg:text-6xl tracking-tight">
                   {slide.title}
-                </h2>
+                </h3>
                 <p className="text-lg sm:text-xl max-w-xl text-background/90">
                   {slide.text}
                 </p>
