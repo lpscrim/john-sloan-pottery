@@ -28,11 +28,11 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-[90vh] px-6 py-16 md:py-24 flex items-center"
+      className="min-h-[90vh] px-6 py-16 md:py-24 flex items-start"
     >
-      <div className=" mx-auto w-full">
-        <div className="mb-8 sm:mb-16 lg:mb-32 ">
-          <h2 className="text-3xl md:text-4xl  tracking-tight text-center">
+      <div className=" mx-auto w-full h-full">
+        <div className="mb-16 md:mb-32 lg:mb-32 ">
+          <h2 className="text-3xl md:text-4xl tracking-tight text-center">
             Stay in touch
           </h2>
         </div>
