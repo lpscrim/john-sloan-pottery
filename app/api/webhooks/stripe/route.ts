@@ -222,9 +222,14 @@ async function syncEtsyStockAfterSale(
     .in('stripe_price_id', priceIds)
     .not('etsy_listing_id', 'is', null);
 
-  if (!products || products.length === 0) return;
+  if (!products || products.length === 0) {
+    console.warn('[ETSY SYNC] No Etsy-linked products matched the sold price IDs — skipping Etsy sync');
+    return;
+  }
 
   for (const product of products) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
     try {
       await fetch(makeWebhookUrl, {
         method: 'POST',
@@ -233,10 +238,13 @@ async function syncEtsyStockAfterSale(
           listing_id: product.etsy_listing_id,
           quantity: product.stock_level ?? 0,
         }),
+        signal: controller.signal,
       });
       console.log(`[ETSY SYNC] Triggered Make for listing ${product.etsy_listing_id} → qty ${product.stock_level}`);
     } catch (err) {
       console.error(`[ETSY SYNC] Failed to trigger Make for listing ${product.etsy_listing_id}:`, err);
+    } finally {
+      clearTimeout(timeout);
     }
   }
 }

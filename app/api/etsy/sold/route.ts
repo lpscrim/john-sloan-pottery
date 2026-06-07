@@ -41,6 +41,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  if (!data || data.length === 0) {
+    console.warn(`[ETSY SOLD] No product found for listing ${listingId} — may have been deleted or never imported`);
+    return NextResponse.json({ warning: 'No matching product found', updated: 0 }, { status: 404 });
+  }
+
   console.log(`[ETSY SOLD] listing ${listingId} → stock set to 0`, data);
-  return NextResponse.json({ updated: data?.length ?? 0 });
+  return NextResponse.json({ updated: data.length });
 }
