@@ -187,7 +187,7 @@ Environment variable:
 
 All payments are **direct charges** on the connected account (`STRIPE_CONNECT_CLIENT_ACCOUNT_ID`). This means:
 - Stripe fees come out of the artist's balance (not the platform's)
-- Platform retains 5% as `application_fee_amount`
+- Platform retains 6.5% as `application_fee_amount`
 - The artist receives the remainder automatically
 
 If `STRIPE_CONNECT_CLIENT_ACCOUNT_ID` is not set, no fee splitting occurs.
@@ -205,7 +205,7 @@ If `STRIPE_CONNECT_CLIENT_ACCOUNT_ID` is not set, no fee splitting occurs.
 3. Fetches Stripe price/product metadata
 4. Fetches product `type` from Supabase
 5. Calculates shipping at UK rate (country not yet known)
-6. Creates PI as a direct charge on the connected account with 5% `application_fee_amount`
+6. Creates PI as a direct charge on the connected account with 6.5% `application_fee_amount`
 7. Stores `reserved_items`, `shipping_amount`, `cancel_token` (and `collection: 'true'` if applicable) in PI metadata
 8. Returns `{ clientSecret, paymentIntentId, cancelToken, total, shippingRate, stripeAccount, collect }`
 
@@ -269,7 +269,7 @@ Email contents:
 - **Collection orders:** amber banner "Customer has chosen to collect from Edinburgh — no shipping required"
 - **Standard orders:** shipping address
 - Items: thumbnail, title, type (Artwork/Print), quantity, price
-- Financial table: Subtotal / Shipping / Total / Platform fee (5%) / Stripe fee (or "See dashboard") / Net to you
+- Financial table: Subtotal / Shipping / Total / Platform fee (6.5%) / Stripe fee (or "See dashboard") / Net to you
 
 ---
 
@@ -445,7 +445,7 @@ Environment variable:
 
 **Fee logic** (`app/api/payment-intent/route.ts`):
 ```ts
-applicationFeeAmount = Math.round(totalAmount * 0.05);
+applicationFeeAmount = Math.round(totalAmount * 0.065);
 ```
 
 If `STRIPE_CONNECT_CLIENT_ACCOUNT_ID` is not set, no fee splitting occurs — the full payment stays on the platform account.

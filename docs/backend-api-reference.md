@@ -289,7 +289,7 @@ Uses `STRIPE_SECRET_KEY`. The API version is pinned to `'2026-01-28.clover'` so 
 
 All payments are **direct charges** on the artist's connected account (`STRIPE_CONNECT_CLIENT_ACCOUNT_ID`).
 
-- The platform retains **5%** as `application_fee_amount` on every PaymentIntent.
+- The platform retains **6.5%** as `application_fee_amount` on every PaymentIntent.
 - Stripe fees come out of the artist's balance.
 - Every Stripe API call that relates to orders passes `{ stripeAccount: clientAccountId }` as a request option.
 - If `STRIPE_CONNECT_CLIENT_ACCOUNT_ID` is not set, the app falls back to a single-account setup (no fee splitting, no `stripeAccount` option).
@@ -312,7 +312,7 @@ This is the most complex route. Here's what it does in order:
 6. **Resolves custom mug prices** from the `mug_shapes` table (server-authoritative — client price is ignored).
 7. **Calculates shipping** at GB rate (country unknown at this stage).
 8. **Creates the PaymentIntent** on the connected account with:
-   - `application_fee_amount` = 5% of total
+   - `application_fee_amount` = 6.5% of total
    - `metadata.reserved_items` = JSON snapshot of all items (title, qty, price, image, type/glaze notes)
    - `metadata.shipping_amount` = shipping in pence
    - `metadata.cancel_token` = a UUID used to authenticate cancel/update calls
@@ -435,7 +435,7 @@ Implemented inside `notifyClientFromCharge()` in the webhook handler.
   - Subtotal (total − shipping)
   - Shipping
   - **Total**
-  - Platform fee (5%)
+  - Platform fee (6.5%)
   - Stripe processing fee (from `balance_transaction.fee`, or "See dashboard" if unavailable)
   - **Net to you** (Total − platform fee − Stripe fee)
 - Charge ID and PI ID in the footer

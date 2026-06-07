@@ -109,7 +109,7 @@ async function notifyClientFromCharge(charge: Stripe.Charge, stripe: ReturnType<
     ? parseInt(pi.metadata.shipping_amount, 10)
     : null;
   const subtotal = shippingCost !== null ? amountTotal - shippingCost : null;
-  const platformFee = Math.round(amountTotal * 0.05);
+  const platformFee = Math.round(amountTotal * 0.065);
   const stripeFee = balanceTx?.fee ?? null;
   const netToClient = stripeFee !== null ? amountTotal - platformFee - stripeFee : null;
 
@@ -158,7 +158,7 @@ async function notifyClientFromCharge(charge: Stripe.Charge, stripe: ReturnType<
       ${subtotal !== null ? `<tr><td style="color:#555;padding:3px 0">Subtotal</td><td style="text-align:right">${fmt(subtotal)}</td></tr>` : ''}
       ${shippingCost !== null ? `<tr><td style="color:#555;padding:3px 0">Shipping</td><td style="text-align:right">${shippingCost === 0 ? 'Free' : fmt(shippingCost)}</td></tr>` : ''}
       <tr><td style="padding:3px 0;font-weight:600">Total</td><td style="text-align:right;font-weight:600">${fmt(amountTotal)}</td></tr>
-      <tr><td style="color:#555;padding:3px 0;border-top:1px solid #eee">Platform fee (5%)</td><td style="text-align:right;border-top:1px solid #eee">−${fmt(platformFee)}</td></tr>
+      <tr><td style="color:#555;padding:3px 0;border-top:1px solid #eee">Platform fee (6.5%)</td><td style="text-align:right;border-top:1px solid #eee">−${fmt(platformFee)}</td></tr>
       <tr><td style="color:#555;padding:3px 0">Stripe processing fee</td><td style="text-align:right">${stripeFee !== null ? `−${fmt(stripeFee)}` : 'See dashboard'}</td></tr>
       <tr><td style="padding:3px 0;font-weight:600;border-top:1px solid #eee">Net to you</td><td style="text-align:right;font-weight:600;border-top:1px solid #eee">${netToClient !== null ? fmt(netToClient) : 'See dashboard'}</td></tr>
     </table>

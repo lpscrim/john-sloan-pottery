@@ -170,7 +170,7 @@ export async function POST(req: NextRequest) {
 
     // ── Create PaymentIntent ────────────────────────────────────────
     const applicationFeeAmount = clientAccountId
-      ? Math.round(totalAmount * 0.05)
+      ? Math.round(totalAmount * 0.065)
       : undefined;
 
     const cancelToken = crypto.randomUUID();
