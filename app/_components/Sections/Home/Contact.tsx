@@ -28,24 +28,24 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-[90vh] px-6 py-16 md:py-24 flex items-start"
+      className="min-h-[90vh] px-6 py-16 md:py-24 flex items-start justify-center mx-auto"
     >
-      <div className=" mx-auto w-full h-full">
+      <div className="max-w-3xl lg:max-w-4xl mx-auto w-full h-full">
         <div className="mb-16 lg:mb-24 ">
           <h2 className="text-3xl md:text-4xl tracking-tight text-center">
             Stay in touch
           </h2>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-12 sm:px-8 lg:px-16">
-          <div className="space-y-8">
-            <p className="text-lg xl:text-xl textforeground">
+        <div className=" mx-auto space-y-12 sm:px-8 lg:px-16">
+          <div className="space-y-12">
+            <p className="text-lg xl:text-xl textforeground text-center">
               Available for commissioned work, collaborations, and inquiries.
               Each piece is made to order and can be tailored to your
               requirements — get in touch to discuss.
             </p>
 
-            <div className="flex flex-row flex-wrap gap-4 items-start">
+            <div className="max-w-3xl mx-auto  flex flex-row flex-wrap gap-4 items-center justify-center">
               <a
                 href="mailto:Johnsloanpottery@gmail.com"
                 className="flex items-center gap-3 hover:opacity-70 transition-opacity cursor-pointer group text-lg"
@@ -72,13 +72,13 @@ export function Contact() {
               
           </div>
 
-          <div className="space-y-8 lg:col-start-3 lg:col-span-2 text-lg">
+          <div className=" mx-auto space-y-8 lg:col-start-3 lg:col-span-2 text-lg">
             {status === "sent" ? (
-              <p className="text-foreground text-base">
-                Message sent — I&apos;ll be in touch.
+              <p className="text-foreground mt-16 text-2xl text-center">
+                Message sent — We&apos;ll be in touch.
               </p>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-8 max-w-3xl mx-auto">
                 <div className="grid grid-cols-2 gap-4">
                   <input
                     type="text"
@@ -111,7 +111,7 @@ export function Contact() {
                   }
                   className="bg-muted/40 rounded-sm p-2 border-b border-foreground/30 focus:border-foreground/60 outline-none py-2 text-base placeholder:text-foreground transition-colors w-full resize-none"
                 />
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center justify-between">
                   {status === "error" && (
                     <p className="text-base text-red-500">
                       Something went wrong — please try again.
