@@ -220,9 +220,11 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: unknown) {
     if (activeReservations.length > 0) {
-      await supabase.rpc('restore_stock', { items: activeReservations }).catch((restoreErr) => {
+      try {
+        await supabase.rpc('restore_stock', { items: activeReservations });
+      } catch (restoreErr) {
         console.error('[PAYMENT-INTENT] Failed to restore stock after error:', restoreErr);
-      });
+      }
     }
     const message = err instanceof Error ? err.message : 'Failed to create payment';
     return NextResponse.json({ error: message }, { status: 500 });
