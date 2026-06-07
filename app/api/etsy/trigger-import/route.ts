@@ -12,11 +12,16 @@ export async function POST() {
     return NextResponse.json({ error: 'MAKE_ETSY_IMPORT_WEBHOOK_URL not configured' }, { status: 500 });
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
   try {
-    await fetch(makeImportUrl, { method: 'POST' });
+    await fetch(makeImportUrl, { method: 'POST', signal: controller.signal });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: `Failed to trigger import: ${msg}` }, { status: 502 });
+    const status = err instanceof Error && err.name === 'AbortError' ? 504 : 502;
+    return NextResponse.json({ error: `Failed to trigger import: ${msg}` }, { status });
+  } finally {
+    clearTimeout(timeout);
   }
 
   return NextResponse.json({ message: 'Import triggered — new Etsy listings will appear shortly' });

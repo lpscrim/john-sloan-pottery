@@ -8,6 +8,21 @@ import { getAdminUser } from '@/app/_lib/adminAuth';
  *
  * Etsy API is accessed via Make.com (intermediary) rather than directly.
  */
+async function triggerMakeSync(url: string): Promise<{ status: number; error?: string }> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    await fetch(url, { method: 'POST', signal: controller.signal });
+    return { status: 200 };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    const status = err instanceof Error && err.name === 'AbortError' ? 504 : 502;
+    return { status, error: `Failed to trigger Make sync: ${msg}` };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function POST() {
   const user = await getAdminUser();
   if (!user) {
@@ -19,11 +34,9 @@ export async function POST() {
     return NextResponse.json({ error: 'MAKE_ETSY_SYNC_WEBHOOK_URL not configured' }, { status: 500 });
   }
 
-  try {
-    await fetch(makeSyncUrl, { method: 'POST' });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: `Failed to trigger Make sync: ${msg}` }, { status: 502 });
+  const result = await triggerMakeSync(makeSyncUrl);
+  if (result.error) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
   return NextResponse.json({ synced: 0, message: 'Sync triggered via Make.com — stock will update shortly' });
@@ -44,11 +57,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'MAKE_ETSY_SYNC_WEBHOOK_URL not configured' }, { status: 500 });
   }
 
-  try {
-    await fetch(makeSyncUrl, { method: 'POST' });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: `Failed to trigger Make sync: ${msg}` }, { status: 502 });
+  const result = await triggerMakeSync(makeSyncUrl);
+  if (result.error) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
   return NextResponse.json({ synced: 0, message: 'Sync triggered via Make.com — stock will update shortly' });

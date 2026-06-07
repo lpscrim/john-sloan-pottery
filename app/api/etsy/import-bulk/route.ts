@@ -23,6 +23,26 @@ interface EtsyListing {
   url: string;
 }
 
+function validateListing(listing: unknown): string | null {
+  if (!listing || typeof listing !== 'object') return 'Not an object';
+  const l = listing as Record<string, unknown>;
+
+  if (typeof l.listing_id !== 'number' || !Number.isFinite(l.listing_id) || l.listing_id <= 0)
+    return 'Invalid listing_id';
+  if (typeof l.title !== 'string' || l.title.trim().length === 0)
+    return 'Invalid title';
+  if (typeof l.quantity !== 'number' || !Number.isFinite(l.quantity) || l.quantity < 0)
+    return 'Invalid quantity';
+
+  const price = (l.price ?? {}) as Record<string, unknown>;
+  if (typeof price.amount !== 'number' || !Number.isFinite(price.amount) || price.amount < 0 || price.amount > 10_000_000)
+    return 'Invalid price.amount';
+  if (typeof price.divisor !== 'number' || price.divisor === 0)
+    return 'Invalid price.divisor';
+
+  return null;
+}
+
 export async function POST(req: NextRequest) {
   const secret = process.env.ETSY_WEBHOOK_SECRET;
   if (!secret) {
@@ -66,6 +86,12 @@ export async function POST(req: NextRequest) {
     const listingId = String(listing.listing_id);
     if (importedIds.has(listingId)) {
       skipped++;
+      continue;
+    }
+
+    const validationError = validateListing(listing);
+    if (validationError) {
+      errors.push(`${listingId}: ${validationError}`);
       continue;
     }
 
