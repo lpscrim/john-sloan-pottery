@@ -96,7 +96,7 @@ async function getOrders(): Promise<Order[]> {
     const shippingCost = parseInt(pi.metadata?.shipping_amount ?? '0', 10);
     const amountTotal = pi.amount;
     const stripeFee = balanceTx?.fee ?? null;
-    const myFee = Math.round(amountTotal * 0.05);
+    const myFee = Math.round(amountTotal * 0.065);
 
     const shipping = charge?.shipping;
     const shippingAddress: ShippingAddress | null = shipping?.address
@@ -205,7 +205,7 @@ export default async function OrdersPage() {
               <p className="text-base font-medium mt-0.5">{formatMoney(totalRevenue, currency)}</p>
             </div>
             <div className="rounded-md border border-muted px-4 py-3">
-              <p className="text-base text-muted-foreground">Platform fees (5%)</p>
+              <p className="text-base text-muted-foreground">Platform fees (6.5%)</p>
               <p className="text-base font-medium mt-0.5">{formatMoney(totalMyFees, currency)}</p>
             </div>
             <div className="rounded-md border border-muted px-4 py-3">
@@ -300,7 +300,7 @@ export default async function OrdersPage() {
                     <span>{formatMoney(order.amountTotal, order.currency)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Platform fee (5%)</span>
+                    <span className="text-muted-foreground">Platform fee (6.5%)</span>
                     <span>−{formatMoney(order.myFee, order.currency)}</span>
                   </div>
                   {order.stripeFee !== null && (
