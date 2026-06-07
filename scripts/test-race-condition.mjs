@@ -48,9 +48,9 @@ await supabase
 console.log("Stock set to 1");
 console.log("\nFiring 5 concurrent reserve_stock(qty=1) calls...\n");
 
-const reserveItems = JSON.stringify([
+const reserveItems = [
   { stripe_price_id: product.stripe_price_id, qty: 1 },
-]);
+];
 
 // --- Fire 5 concurrent reserve_stock calls ---
 const results = await Promise.all(
