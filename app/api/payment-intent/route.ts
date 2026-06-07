@@ -12,6 +12,9 @@ interface CartLineItem {
 }
 
 export async function POST(req: NextRequest) {
+  const supabase = createServerSupabase();
+  let activeReservations: { stripe_price_id: string; qty: number }[] = [];
+
   try {
     const body = await req.json();
 
@@ -41,7 +44,6 @@ export async function POST(req: NextRequest) {
 
     const clientAccountId = process.env.STRIPE_CONNECT_CLIENT_ACCOUNT_ID?.trim() || undefined;
     const stripe = getStripe();
-    const supabase = createServerSupabase();
 
     // ── Reserve stock atomically (regular items only) ───────────────
     type ReservedRow = { stripe_price_id: string; title: string; reserved: boolean };
@@ -65,15 +67,6 @@ export async function POST(req: NextRequest) {
       const failed = (result as ReservedRow[]).filter((r) => !r.reserved);
 
       if (failed.length > 0) {
-        const succeeded = (result as ReservedRow[]).filter((r) => r.reserved);
-        if (succeeded.length > 0) {
-          await supabase.rpc('restore_stock', {
-            items: succeeded.map((s) => ({
-              stripe_price_id: s.stripe_price_id,
-              qty: reservations.find((r) => r.stripe_price_id === s.stripe_price_id)!.qty,
-            })),
-          });
-        }
         return NextResponse.json(
           {
             error: `Out of stock: ${failed.map((f) => f.title).join(', ')}`,
@@ -82,6 +75,9 @@ export async function POST(req: NextRequest) {
           { status: 409 }
         );
       }
+
+      // Track reserved items so stock can be restored if a later step throws
+      activeReservations = reservations;
 
       // ── Fetch Stripe price + product data for regular items ─────────
       const prices = await Promise.all(
@@ -223,6 +219,11 @@ export async function POST(req: NextRequest) {
       stripeAccount: clientAccountId ?? null,
     });
   } catch (err: unknown) {
+    if (activeReservations.length > 0) {
+      await supabase.rpc('restore_stock', { items: activeReservations }).catch((restoreErr) => {
+        console.error('[PAYMENT-INTENT] Failed to restore stock after error:', restoreErr);
+      });
+    }
     const message = err instanceof Error ? err.message : 'Failed to create payment';
     return NextResponse.json({ error: message }, { status: 500 });
   }

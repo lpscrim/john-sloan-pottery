@@ -84,37 +84,56 @@ security definer
 set search_path = public, pg_temp
 as $$
 declare
-  item jsonb;
-  result jsonb := '[]';
-  current_stock integer;
-  reserved boolean;
+  item       jsonb;
+  result     jsonb := '[]';
+  qty_needed integer;
+  cur_stock  integer;
+  available  boolean;
+  all_ok     boolean := true;
 begin
+  -- Lock all target rows in a consistent order (prevents deadlocks under concurrency)
+  perform 1
+  from public.products
+  where stripe_price_id = any(
+    array(select value->>'stripe_price_id' from jsonb_array_elements(items))
+  )
+  order by stripe_price_id
+  for update;
+
+  -- First pass: check availability for every item and build the result
   for item in select * from jsonb_array_elements(items)
   loop
-    select stock_level into current_stock
-    from public.products
-    where stripe_price_id = item->>'stripe_price_id'
-    for update;
+    qty_needed := (item->>'qty')::integer;
 
-    if current_stock >= (item->>'qty')::integer then
-      update public.products
-      set stock_level = stock_level - (item->>'qty')::integer
-      where stripe_price_id = item->>'stripe_price_id';
-      reserved := true;
-    else
-      reserved := false;
+    select stock_level into cur_stock
+    from public.products
+    where stripe_price_id = item->>'stripe_price_id';
+
+    available := cur_stock is not null and cur_stock >= qty_needed;
+
+    if not available then
+      all_ok := false;
     end if;
 
     result := result || jsonb_build_object(
       'stripe_price_id', item->>'stripe_price_id',
       'title', (
-        select name
-        from public.products
+        select name from public.products
         where stripe_price_id = item->>'stripe_price_id'
       ),
-      'reserved', reserved
+      'reserved', available
     );
   end loop;
+
+  -- Second pass: decrement stock only if every item is available (all-or-nothing)
+  if all_ok then
+    for item in select * from jsonb_array_elements(items)
+    loop
+      update public.products
+      set stock_level = stock_level - (item->>'qty')::integer
+      where stripe_price_id = item->>'stripe_price_id';
+    end loop;
+  end if;
 
   return result;
 end;
