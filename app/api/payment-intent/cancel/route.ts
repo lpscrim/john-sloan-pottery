@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/app/_lib/stripe';
-import { createServerSupabase } from '@/app/_lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,16 +30,8 @@ export async function POST(req: NextRequest) {
 
     await stripe.paymentIntents.cancel(paymentIntentId, {}, stripeOpts);
 
-    // Restore reserved stock immediately (webhook also handles this as safety net)
-    try {
-      const reserved = JSON.parse(pi.metadata?.reserved_items ?? '[]') as { stripe_price_id: string; qty: number }[];
-      if (reserved.length > 0) {
-        const supabase = createServerSupabase();
-        await supabase.rpc('restore_stock', { items: reserved });
-      }
-    } catch (err) {
-      console.error('Failed to restore stock on PI cancel:', err);
-    }
+    // Stock is restored by the payment_intent.canceled webhook — do not restore here
+    // to avoid double-restoring (which would inflate stock counts).
 
     return NextResponse.json({ cancelled: true });
   } catch (err: unknown) {

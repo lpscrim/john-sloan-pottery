@@ -232,7 +232,7 @@ Collection orders are skipped (shipping always 0).
 
 ### Step 4 — Back / cancel (`POST /api/payment-intent/cancel`)
 
-Verifies `cancelToken`, cancels the PI in Stripe, which triggers the `payment_intent.canceled` webhook to restore stock.
+Verifies `cancelToken`, cancels the PI in Stripe. The `payment_intent.canceled` webhook then fires and restores stock. Stock is **not** restored in the cancel endpoint itself — doing so would double-restore alongside the webhook.
 
 ---
 

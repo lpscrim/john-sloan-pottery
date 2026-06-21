@@ -267,9 +267,10 @@ Decrements `stock_level` for each item in the array. Called at PaymentIntent cre
 
 #### `restore_stock(items)`
 
-Increments `stock_level` back. Called in two places:
-1. `POST /api/payment-intent/cancel` — when the customer clicks Back in checkout
-2. `payment_intent.canceled` webhook — safety net for timed-out sessions
+Increments `stock_level` back. Called in one place only:
+1. `payment_intent.canceled` webhook — fired for all cancellations (user clicking Back, session timeout, etc.)
+
+> **Note:** The cancel endpoint (`POST /api/payment-intent/cancel`) does **not** call `restore_stock` directly. It only cancels the PaymentIntent in Stripe, which triggers the webhook. Calling restore in both places would double-restore stock.
 
 ---
 
