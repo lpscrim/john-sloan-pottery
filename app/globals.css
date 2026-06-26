@@ -239,7 +239,7 @@ h1, h2{
 }
 .nav {
   font-family: 'Futura PT', sans-serif;
-  text-transform: none;
+  text-transform: uppercase;
   font-weight: 400;
   letter-spacing: 0.05em;
 }
