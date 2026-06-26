@@ -47,7 +47,7 @@ export function Header() {
   const isLight = !isShopPage && !isAdminPage && onHero;
 
   return (
-    <header className={`fixed text-xl top-0 left-0 right-0 z-999 px-6 py-2`}>
+    <header className={`fixed text-lg lg:text-xl top-0 left-0 right-0 z-999 px-6 py-2`}>
       {!isLight && (
         <div className="absolute inset-0 w-full h-full  bg-background z-0 pointer-events-none transition-all duration-500" />
       )}
@@ -90,7 +90,7 @@ export function Header() {
           {/* Desktop Navigation — centred */}
           <nav className="hidden md:flex gap-8 absolute left-1/2 -translate-x-1/2">
             <button
-              className={`relative nav text-xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-lg lg:text-xl nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/shop" className="cursor-pointer">
                 <span
@@ -114,7 +114,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative nav text-xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-lg lg:text-xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/about">
                 <span
@@ -138,7 +138,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative nav text-xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-lg lg:text-xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
             >
               <Link href="/custom-mug">
                 <span
@@ -162,7 +162,7 @@ export function Header() {
               </Link>
             </button>
             <button
-              className={`relative nav text-xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
+              className={`relative nav text-lg lg:text-xl cursor-pointer nav-underline transition-colors duration-500 ${isLight ? "text-card" : "text-foreground"}`}
               onClick={() => conditionalScrollTo("#contact")}
             >
               <span
