@@ -314,7 +314,7 @@ export const PhotoModal: React.FC<PhotoModalProps> = ({
         </div>
       </div>
       {showLoadProgress && (
-        <div className="relative mx-6 z-100 h-0.5 bg-foreground/20 overflow-hidden">
+        <div className="relative mx-6 z-100 h-0.5 bg-foreground/20 mt-1 overflow-hidden">
           <div
             className="h-full bg-foreground transition-[width] duration-150 ease-out"
             style={{ width: `${loadProgress}%` }}
