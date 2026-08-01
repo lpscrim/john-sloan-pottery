@@ -28,7 +28,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="min-h-[90vh] px-6 py-16 md:py-24 flex items-start justify-center mx-auto"
+      className="min-h-[92vh] px-6 py-16 md:py-24 flex items-start justify-center mx-auto"
     >
       <div className="max-w-3xl lg:max-w-4xl mx-auto w-full h-full">
         <div className="mb-16 lg:mb-24 ">
