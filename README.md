@@ -1,6 +1,6 @@
-# Shop Gallery Boilerplate
+# John Sloan Pottery
 
-An artist portfolio and e-commerce boilerplate. Built with **Next.js 16**, **Tailwind CSS 4**, **Framer Motion**, **Supabase**, and **Stripe**.
+A fully featured artist shop and portfolio site for John Sloan Pottery, built with **Next.js 16**, **Tailwind CSS 4**, **Framer Motion**, **Supabase**, and **Stripe**.
 
 ## Features
 
@@ -165,6 +165,14 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 
 # Revalidation secret (optional)
 REVALIDATE_SECRET=some-long-random-string
+
+# Etsy sync (optional)
+ETSY_API_KEY=your-etsy-api-key
+ETSY_API_SECRET=your-etsy-api-secret
+ETSY_SHOP_ID=your-etsy-shop-id
+ETSY_WEBHOOK_SECRET=some-random-string
+CRON_SECRET=some-random-string
+MAKE_ETSY_SYNC_WEBHOOK_URL=https://hook.make.com/your-webhook
 ```
 
 ## Supabase Schema
@@ -226,6 +234,7 @@ The live checkout flow reserves stock before payment intent creation and restore
 - [ ] Update copyright name in `app/_components/Sections/Footer.tsx`
 - [ ] Replace favicons in `public/`
 - [ ] Set `NEXT_PUBLIC_SITE_URL` for correct SEO URLs
+- [ ] If using Etsy sync, configure `ETSY_API_KEY`, `ETSY_API_SECRET`, `ETSY_SHOP_ID`, `ETSY_WEBHOOK_SECRET`, `CRON_SECRET`, and `MAKE_ETSY_SYNC_WEBHOOK_URL`
 
 ## Admin Dashboard
 
@@ -272,6 +281,20 @@ A GitHub Actions workflow (`.github/workflows/keep-alive.yml`) pings this endpoi
 3. Add environment variables in project settings
 4. Deploy with `npm run build`
 5. Set up the Stripe webhook(s) pointing to your Vercel URL
+6. If using Etsy sync, add the same Etsy-related environment variables in Vercel and GitHub Actions secrets
+
+### GitHub Actions / Etsy Sync
+
+The repository includes a scheduled workflow in [.github/workflows/etsy-sync.yml](.github/workflows/etsy-sync.yml) that calls the Etsy poll endpoint every 4 hours.
+
+To make it work reliably, set these GitHub Actions secrets:
+
+- `SITE_URL` — your public deployment URL
+- `CRON_SECRET` — a shared secret for the cron endpoint
+
+The endpoint itself is protected by the `CRON_SECRET` header and will trigger the Make.com webhook configured by `MAKE_ETSY_SYNC_WEBHOOK_URL`.
+
+> GitHub-hosted Actions runners can occasionally queue behind other jobs or hit transient infrastructure issues. If a run is delayed or shows “queued”, that is usually a GitHub runner availability problem rather than an Etsy misconfiguration.
 
 ### Self-Hosted
 
